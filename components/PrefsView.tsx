@@ -77,6 +77,10 @@ export function PrefsView() {
 				</section>
 
 				<section>
+					<div className="prefsView__optionsListSectionInfo">
+						<h2>Query options</h2>
+					</div>
+
 					<PrefsOption>{{
 						label: "Query separator",
 						description: "Use this to chain multiple queries together.",
