@@ -56,7 +56,7 @@ export function Barcode(props: {
 	function renderBarcode(elem: HTMLElement, value: string, jsBarcodeOpts = {}) {
 		if (value.match(PLU_REGEX)) {
 			// Target supports QR codes.
-			if (context.dbInfo?.organization === 'TARGET') {
+			if ((context.overrideOrganizationId || context.dbInfo?.organization) === 'TARGET') {
 				QRCode.toCanvas(elem, value, err => {
 					if (err) console.error(err)
 				})

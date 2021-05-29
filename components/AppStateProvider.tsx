@@ -20,6 +20,7 @@ const DEFAULT_PREFS = {
 	appNavViewLeftKey: '[',
 	appNavViewRightKey: ']',
 	noCheat: false,
+	overrideOrganizationId: '',
 }
 
 type IPrefs = typeof DEFAULT_PREFS

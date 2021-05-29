@@ -170,6 +170,14 @@ export function PrefsView() {
 					</div>
 
 					<PrefsOption>{{
+						label: "📇 Organization ID", description: "Override organization id defined in database.",
+						controlNode: <input type="text"
+							className="prefsView__optionTextInput"
+							value={context.overrideOrganizationId}
+							onChange={e => context.provider.setState({ overrideOrganizationId: e.target.value })} />,
+					}}</PrefsOption>
+
+					<PrefsOption>{{
 						label: "🔎 Tokenize search", description: "Use alternate search algorithm which compares individual terms instead of the full string.",
 						controlNode: <input
 							className="prefsView__optionCheckbox"
