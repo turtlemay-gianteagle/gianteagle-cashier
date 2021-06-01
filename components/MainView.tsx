@@ -183,24 +183,6 @@ export const MainView = (props: {
 		return arr.filter(v => v.length > 0)
 	}
 
-	function tryMath(query: string): number | null {
-		let result: unknown
-		if (query.match(/^\d+$/))
-			return null
-		try { result = mathjs.evaluate(query) } catch { }
-		if (typeof result === 'number')
-			return result
-		return null
-	}
-
-	function tryRoundUp(query: string): number | null {
-		if (query.match(/^\d{1,2}$/)) {
-			const n = Number(query)
-			return lodash.inRange(n, 1, 100) ? 100 - n : 0
-		}
-		return null
-	}
-
 	function focusInputField() {
 		const elem = inputElemRef.current
 		if (elem && elem !== document.activeElement)
@@ -322,4 +304,22 @@ export const MainView = (props: {
 
 		</div>
 	)
+}
+
+function tryMath(query: string): number | null {
+	let result: unknown
+	if (query.match(/^\d+$/))
+		return null
+	try { result = mathjs.evaluate(query) } catch { }
+	if (typeof result === 'number')
+		return result
+	return null
+}
+
+function tryRoundUp(query: string): number | null {
+	if (query.match(/^\d{1,2}$/)) {
+		const n = Number(query)
+		return lodash.inRange(n, 1, 100) ? 100 - n : 0
+	}
+	return null
 }
