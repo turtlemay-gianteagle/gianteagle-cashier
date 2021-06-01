@@ -55,6 +55,16 @@ export const MainView = (props: {
 			if (!props.active)
 				return
 
+			// Use Ctrl + Number to switch active view
+			const matchedNumKey = e.key.match(/^\d$/)?.[0]
+			if (e.ctrlKey && matchedNumKey) {
+				e.preventDefault()
+				const selectIndex = matchedNumKey === '0' ? 10 : Number(matchedNumKey) - 1
+				const clampedIndex = lodash.clamp(selectIndex, 0, splitQueries.length - 1)
+				setActiveQueryIndex(clampedIndex)
+				return
+			}
+
 			if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey)
 				return
 
