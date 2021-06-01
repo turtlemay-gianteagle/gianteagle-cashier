@@ -170,7 +170,7 @@ export function PrefsView() {
 
 				<section>
 					<div className="prefsView__optionsListSectionInfo">
-						<h2>Experimental</h2>
+						<h2>Debug</h2>
 					</div>
 
 					<PrefsOption>{{
