@@ -20,7 +20,6 @@ export const InfoView = () => (
 				<h2>📅 Recent Changes</h2>
 				<ul>
 					<li>Now supporting multiple organizations. Set your database in settings.</li>
-					<li>Initial build (May 2021).</li>
 				</ul>
 			</section>
 			<section>
