@@ -22,6 +22,7 @@ export const MainView = (props: {
 	const [query, setQuery] = React.useState(context.defaultQuery)
 	const [splitQueries, setSplitQueries] = React.useState([query])
 	const [activeQueryIndex, setActiveQueryIndex] = React.useState(0)
+	const [highlightQuery, setHighlightQuery] = React.useState<string | null>(null)
 	const [showThrobber, setThrobber] = React.useState(false)
 	const [mathResult, setMathResult] = React.useState(0)
 	const [showMathResult, setShowMathResult] = React.useState(false)
@@ -38,7 +39,9 @@ export const MainView = (props: {
 	React.useEffect(updateQueryParams)
 	React.useEffect(onChangedQuery, [query])
 	React.useEffect(onChangedSplitQueries, [splitQueries])
+	React.useEffect(onChangedActiveQueryIndex, [activeQueryIndex])
 	React.useEffect(onChangedActiveView, [props.active])
+	React.useEffect(updateHighlightedQuery, [highlightQuery, context.querySeparator, activeQueryIndex])
 
 	function initSelectInput() {
 		inputElemRef.current?.select()
@@ -62,6 +65,7 @@ export const MainView = (props: {
 				const selectIndex = matchedNumKey === '0' ? 9 : Number(matchedNumKey) - 1
 				const clampedIndex = lodash.clamp(selectIndex, 0, splitQueries.length - 1)
 				setActiveQueryIndex(clampedIndex)
+				setHighlightQuery(splitQueries[clampedIndex])
 				return
 			}
 
@@ -158,13 +162,32 @@ export const MainView = (props: {
 
 	function onChangedSplitQueries() {
 		setActiveQueryIndex(0)
+		setHighlightQuery(null)
 		
 		if (query === context.defaultQuery)
 			inputElemRef.current?.select()
 	}
 
+	function onChangedActiveQueryIndex() {
+		setHighlightQuery(splitQueries[activeQueryIndex])
+	}
+	
+	function updateHighlightedQuery() {
+		if (!highlightQuery) { return }
+		const [fullStr, subStr] = [query, highlightQuery]
+		const [s, n] = [context.querySeparator, activeQueryIndex]
+		const regex = new RegExp(`^((?:[^${s}]+${s}){${n}})${subStr}`, '')
+		const match = fullStr.match(regex)
+		if (!match) { return }
+		const start = match[1].length
+		const end = start + subStr.length
+		inputElemRef.current?.select()
+		inputElemRef.current?.setSelectionRange(start, end)
+	}
+
 	function resetQuery() {
 		onResetQueryDelegate.forEach(fn => fn?.())
+		setHighlightQuery(null)
 		setActiveQueryIndex(0)
 		setQuery(context.defaultQuery)
 		setThrobber(false)
