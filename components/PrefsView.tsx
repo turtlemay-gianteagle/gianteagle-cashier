@@ -178,6 +178,7 @@ export function PrefsView() {
 						controlNode: <input type="text"
 							className="prefsView__optionTextInput"
 							value={context.overrideOrganizationId}
+							placeholder={context.dbInfo?.organization}
 							onChange={e => context.provider.setState({ overrideOrganizationId: e.target.value })} />,
 					}}</PrefsOption>
 				</section>
