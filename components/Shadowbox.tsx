@@ -14,7 +14,9 @@ export function Shadowbox(props: React.PropsWithChildren<{
 	const history = useHistory()
 	const location = useLocation()
 
-	React.useEffect(function init() {
+	React.useEffect(updateKeyListener)
+
+	function updateKeyListener() {
 		addEventListener('keydown', handleKeyDown)
 		return function cleanup() {
 			removeEventListener('keydown', handleKeyDown)
@@ -25,7 +27,7 @@ export function Shadowbox(props: React.PropsWithChildren<{
 			if (context.appNavBackKey && [e.key, e.code].includes(context.appNavBackKey))
 				handleClose()
 		}
-	})
+	}
 
 	function handleClose() {
 		const queryParams = new URLSearchParams(location.search)
