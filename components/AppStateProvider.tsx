@@ -3,6 +3,7 @@ import * as lodash from 'lodash'
 import * as yaml from 'js-yaml'
 import FuseJs from 'fuse.js'
 import { loadCacheDb, validateDb, saveCacheDb, getRemoteDb, clearCacheDb } from '../src/db'
+import * as dbUrls from '../data/db-urls.json'
 
 const LOCAL_STORAGE_KEY = 'user-prefs'
 
@@ -190,13 +191,13 @@ function getDefaultDbUrl() {
 	}
 	// Fall back to checking host location.
 	if (location.host.includes('gianteagle')) {
-		return 'https://db.gianteagle.turtlemay.us/'
+		return dbUrls['default_gianteagle']
 	}
 	if (location.host.includes('target')) {
-		return 'https://db.target.turtlemay.us/'
+		return dbUrls['default_target']
 	}
 	// Default to Giant Eagle.
-	return 'https://db.gianteagle.turtlemay.us/'
+	return dbUrls['default_gianteagle']
 }
 
 interface IUserItemData {
