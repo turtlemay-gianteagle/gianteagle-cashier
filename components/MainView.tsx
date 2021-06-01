@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as lodash from 'lodash'
+import lodash from 'lodash'
 import * as mathjs from 'mathjs'
 import c from 'classnames'
 import { focusInputAtEnd } from '../lib/dom'

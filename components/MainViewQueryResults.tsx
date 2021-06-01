@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as lodash from 'lodash'
+import lodash from 'lodash'
 import c from 'classnames'
 import { AppStateContext } from './AppStateProvider'
 import { usePrevious } from '../lib/react'

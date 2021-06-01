@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as lodash from 'lodash'
+import lodash from 'lodash'
 import * as yaml from 'js-yaml'
 import FuseJs from 'fuse.js'
 import { loadCacheDb, validateDb, saveCacheDb, getRemoteDb, clearCacheDb } from '../src/db'
