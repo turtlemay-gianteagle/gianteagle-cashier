@@ -29,6 +29,10 @@ export function MainViewQueryResults(props: {
 
 	React.useEffect(updateQuery, [
 		props.query,
+		context.defaultQuery,
+		context.itemTagPrefix,
+		context.organicModifier,
+		context.itemsPerPage,
 		context.dbInfo?.version,
 		context.dbUrl,
 		context.compiledItemData,
