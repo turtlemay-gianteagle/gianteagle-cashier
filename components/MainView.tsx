@@ -59,7 +59,7 @@ export const MainView = (props: {
 			const matchedNumKey = e.key.match(/^\d$/)?.[0]
 			if (e.ctrlKey && matchedNumKey) {
 				e.preventDefault()
-				const selectIndex = matchedNumKey === '0' ? 10 : Number(matchedNumKey) - 1
+				const selectIndex = matchedNumKey === '0' ? 9 : Number(matchedNumKey) - 1
 				const clampedIndex = lodash.clamp(selectIndex, 0, splitQueries.length - 1)
 				setActiveQueryIndex(clampedIndex)
 				return
