@@ -15,7 +15,6 @@ const DEFAULT_PREFS = {
 	organicModifier: '!',
 	querySeparator: ';',
 	defaultQuery: '',
-	tokenizeSearch: false,
 	resetQueryKey: '`',
 	appNavBackKey: 'Escape',
 	appNavViewLeftKey: '[',
@@ -100,9 +99,6 @@ export class AppStateProvider extends React.Component<{}, IState> {
 
 		if (this.state.compiledItemData !== prevState.compiledItemData)
 			this._fuse = this._createFuse(this.state.compiledItemData)
-
-		if (this.state.tokenizeSearch !== prevState.tokenizeSearch)
-			this._fuse = this._createFuse(this.state.compiledItemData)
 	}
 
 	search = (query: string): IItemData[] => {
@@ -170,7 +166,6 @@ export class AppStateProvider extends React.Component<{}, IState> {
 	_createFuse(data: IItemData[]) {
 		return new FuseJs(data, {
 			shouldSort: true,
-			tokenize: this.state.tokenizeSearch,
 			findAllMatches: true,
 			maxPatternLength: 32,
 			keys: [

@@ -180,15 +180,6 @@ export function PrefsView() {
 							value={context.overrideOrganizationId}
 							onChange={e => context.provider.setState({ overrideOrganizationId: e.target.value })} />,
 					}}</PrefsOption>
-
-					<PrefsOption>{{
-						label: "🔎 Tokenize search", description: "Use alternate search algorithm which compares individual terms instead of the full string.",
-						controlNode: <input
-							className="prefsView__optionCheckbox"
-							type="checkbox"
-							checked={context.tokenizeSearch}
-							onChange={e => context.provider.setState({ tokenizeSearch: e.target.checked })} />,
-					}}</PrefsOption>
 				</section>
 
 			</div>

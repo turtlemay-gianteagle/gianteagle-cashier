@@ -32,7 +32,6 @@ export function MainViewQueryResults(props: {
 		context.dbInfo?.version,
 		context.dbUrl,
 		context.compiledItemData,
-		context.tokenizeSearch,
 	])
 
 	function initResetQueryCallback() {
