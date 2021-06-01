@@ -12,7 +12,7 @@ export function WeightCalcView() {
 			<div className="weightCalcView__mainContainer">
 				<h1 className="weightCalcView__headingText">Weight Calculator</h1>
 				<p>This tool helps you subtract container weights.</p>
-				<p>Enter the bundle weight (including container) according to your scale, then the container's weight in either pounds or ounces to calculate the item weight.</p>
+				<p>Enter the total bundle weight (including container) according to your scale, then the container's weight in either pounds or ounces to calculate the item weight.</p>
 				<div className="weightCalcView__columnContainer">
 					<div className={c([
 						'weightCalcView__inputLabel',
