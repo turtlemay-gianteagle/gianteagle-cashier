@@ -139,7 +139,7 @@ export class AppStateProvider extends React.Component<{}, IState> {
 	_buildUserItemsData(userInput: string): IItemData[] {
 		let userData: IUserItemData
 		try {
-			userData = yaml.safeLoad(userInput) as {}
+			userData = yaml.load(userInput) as {}
 		} catch (error) {
 			console.error(error)
 			return []
