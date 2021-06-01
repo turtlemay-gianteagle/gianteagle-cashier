@@ -27,11 +27,17 @@ export function Barcode(props: {
 		flat: true,
 	}
 
-	React.useEffect(updateValue, [props.value])
+	React.useEffect(updateValue, [
+		props.value,
+		context.dbInfo,
+		context.overrideOrganizationId,
+	])
 
 	function updateValue() {
-		if (canvasElemRef.current)
-			renderBarcode(canvasElemRef.current, props.value, jsBarcodeOpts)
+		if (canvasElemRef.current) {
+			const org = context.overrideOrganizationId || context.dbInfo?.organization || ''
+			renderBarcode(org, canvasElemRef.current, props.value, jsBarcodeOpts)
+		}
 	}
 
 	function handleKeyDown(e: React.KeyboardEvent<HTMLElement>) {
@@ -44,7 +50,7 @@ export function Barcode(props: {
 
 	return (
 		<div role="button" className={props.className}
-			key={props.value}
+			key={`${props.value};${context.dbInfo?.organization};${context.overrideOrganizationId}`}
 			tabIndex={tabIndex}
 			onClick={props.onClickBarcode}
 			onKeyDown={handleKeyDown}
@@ -53,10 +59,10 @@ export function Barcode(props: {
 		</div>
 	)
 
-	function renderBarcode(elem: HTMLElement, value: string, jsBarcodeOpts = {}) {
+	function renderBarcode(org: string, elem: HTMLElement, value: string, jsBarcodeOpts = {}) {
 		if (value.match(PLU_REGEX)) {
 			// Target supports QR codes.
-			if ((context.overrideOrganizationId || context.dbInfo?.organization) === 'TARGET') {
+			if (org === 'TARGET') {
 				QRCode.toCanvas(elem, value, err => {
 					if (err) console.error(err)
 				})
