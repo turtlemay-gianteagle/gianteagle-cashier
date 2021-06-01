@@ -2,7 +2,7 @@ import * as React from 'react'
 import c from 'classnames'
 import { ConditionalRenderer } from './ConditionalRenderer'
 
-export const PrefsOption: React.StatelessComponent<{
+export const PrefsOption: React.FunctionComponent<{
 	className?: string
 	children: {
 		label: string
