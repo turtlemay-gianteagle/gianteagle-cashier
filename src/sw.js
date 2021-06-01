@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gianteagle-cashier'
+const CACHE_NAME = 'turtlemay-cashier'
 const urlsToCache = ['/', ...serviceWorkerOption.assets]
 
 self.addEventListener('install', event => {
