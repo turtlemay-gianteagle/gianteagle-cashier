@@ -61,6 +61,7 @@ module.exports = {
 	},
 	plugins: [
 		new webpack.DefinePlugin({
+			__BUILD_DATE__: JSON.stringify(getBuildDate()),
 			'process.env': {
 				'DEFAULT_DB_URL': JSON.stringify(process.env.CASHIER_APP_DEFAULT_DB_URL),
 			},
@@ -77,4 +78,9 @@ module.exports = {
 		}),
 		new webpack.HotModuleReplacementPlugin(),
 	],
+}
+
+function getBuildDate() {
+	const today = new Date()
+	return `${today.toLocaleDateString()} ${today.toLocaleTimeString()}`
 }
