@@ -3,7 +3,6 @@ import lodash from 'lodash'
 import c from 'classnames'
 import { AppStateContext } from './AppStateProvider'
 import { usePrevious } from '../lib/react'
-import { ConditionalRenderer } from './ConditionalRenderer'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { StoreItemCard, GeneratedItemCard } from './item-cards'
 import { useTabIndex } from '../lib/tabindex'
@@ -102,20 +101,20 @@ export function MainViewQueryResults(props: {
 		<div className={c('mainView__queryResultList', props.className)}
 			ref={scrollUpElemRef as React.RefObject<HTMLDivElement>}>
 			<TransitionGroup>
-				<ConditionalRenderer condition={showTypedCode}>
+				{showTypedCode && (
 					<CSSTransition classNames="mainView__resultItemTransition" timeout={250}>
 						<div className="mainView__queryResultNode">
 							<GeneratedItemCard value={typedCode} onPick={props.onPickShadowBoxElem} />
 						</div>
 					</CSSTransition>
-				</ConditionalRenderer>
-				<ConditionalRenderer condition={renderSearchResults.length === 0}>
+				)}
+				{renderSearchResults.length === 0 && (
 					<CSSTransition classNames="mainView__resultItemTransition" timeout={250}>
 						<div className="mainView__queryResultNone">
 							<span>No items found.</span>
 						</div>
 					</CSSTransition>
-				</ConditionalRenderer>
+				)}
 				{renderSearchResults.map((v, i) => (
 					<CSSTransition classNames="mainView__resultItemTransition" key={`${v.value}.${v.name}.${i}`} timeout={250}>
 						<div className="mainView__queryResultNode">
@@ -123,9 +122,11 @@ export function MainViewQueryResults(props: {
 						</div>
 					</CSSTransition>
 				))}
-				<ConditionalRenderer condition={renderShowMoreButton}>
-					<button className="mainView__showMoreButton" onClick={showMore} tabIndex={tabIndex}>+</button>
-				</ConditionalRenderer>
+				{renderShowMoreButton && (
+					<React.Fragment>
+						<button className="mainView__showMoreButton" onClick={showMore} tabIndex={tabIndex}>+</button>
+					</React.Fragment>
+				)}
 			</TransitionGroup>
 		</div>
 	)

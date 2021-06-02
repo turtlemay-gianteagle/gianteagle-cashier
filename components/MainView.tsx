@@ -5,7 +5,6 @@ import c from 'classnames'
 import { focusInputAtEnd } from '../lib/dom'
 import { AppStateContext } from './AppStateProvider'
 import { DelayedTextInput } from './DelayedTextInput'
-import { ConditionalRenderer } from './ConditionalRenderer'
 import { Shadowbox } from './Shadowbox'
 import { useHistory, useLocation } from 'react-router-dom'
 import { MainViewQueryResults } from './MainViewQueryResults'
@@ -246,8 +245,7 @@ export const MainView = (props: {
 			<div className="mainView__mainLayoutTop mainView__mainInputContainer">
 				<div className="mainView__queryNumInputToggleButton" role="button">
 					<div className="mainView__queryNumInputToggleButtonText" onClick={onClickToggleKbButton}>
-						<ConditionalRenderer condition={useNumInput} children="⌨️" />
-						<ConditionalRenderer condition={!useNumInput} children="🔢" />
+						{useNumInput ? '⌨️' : '🔢'}
 					</div>
 				</div>
 				<DelayedTextInput className={c('mainView__mainInput', { 'mainView__mainInput--numType': useNumInput })}

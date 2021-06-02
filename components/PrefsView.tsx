@@ -4,7 +4,6 @@ import c from 'classnames'
 import { AppStateContext } from './AppStateProvider'
 import { PrefsOption } from './PrefsOptions'
 import { DelayedTextInput } from './DelayedTextInput'
-import { ConditionalRenderer } from './ConditionalRenderer'
 
 export function PrefsView() {
 	const context = React.useContext(AppStateContext)
@@ -36,9 +35,9 @@ export function PrefsView() {
 							context.dbInfo ? (
 								<React.Fragment>
 									<div>Loaded remote database "{context.dbInfo.name}" {context.dbInfo.version}.</div>
-									<ConditionalRenderer condition={Boolean(context.dbInfo.organization)}>
+									{context.dbInfo.organization && (
 										<div>Organization: <code>{context.dbInfo.organization}</code></div>
-									</ConditionalRenderer>
+									)}
 								</React.Fragment>
 							) : (
 								<React.Fragment>
