@@ -25,8 +25,7 @@ export function MainViewQueryResults(props: {
 	const prevQuery = usePrevious(props.query)
 	const scrollUpElemRef = React.useRef<HTMLDivElement>()
 
-	React.useEffect(initResetQueryCallback, [])
-
+	React.useEffect(updateResetQueryCallback)
 	React.useEffect(updateQuery, [
 		props.query,
 		context.defaultQuery,
@@ -38,7 +37,7 @@ export function MainViewQueryResults(props: {
 		context.compiledItemData,
 	])
 
-	function initResetQueryCallback() {
+	function updateResetQueryCallback() {
 		props.onResetQueryDelegate.add(onResetQuery)
 		return function cleanup() {
 			props.onResetQueryDelegate.delete(onResetQuery)
