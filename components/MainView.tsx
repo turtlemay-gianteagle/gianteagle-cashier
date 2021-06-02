@@ -38,7 +38,6 @@ export const MainView = (props: {
 	React.useEffect(updateKeyListener)
 	React.useEffect(updateQueryParams)
 	React.useEffect(onChangedQuery, [query])
-	React.useEffect(onChangedActiveQueryIndex, [activeQueryIndex])
 	React.useEffect(onChangedActiveView, [props.active])
 	React.useEffect(updateChangedSplitQueries, [splitQueries, query, context.defaultQuery])
 	React.useEffect(updateHighlightedQuery, [highlightQuery, context.querySeparator, activeQueryIndex])
@@ -62,10 +61,7 @@ export const MainView = (props: {
 			const matchedNumKey = e.key.match(/^\d$/)?.[0]
 			if (e.ctrlKey && matchedNumKey) {
 				e.preventDefault()
-				const selectIndex = matchedNumKey === '0' ? 9 : Number(matchedNumKey) - 1
-				const clampedIndex = lodash.clamp(selectIndex, 0, splitQueries.length - 1)
-				setActiveQueryIndex(clampedIndex)
-				setHighlightQuery(splitQueries[clampedIndex])
+				setActiveQueryTo(matchedNumKey === '0' ? 9 : Number(matchedNumKey) - 1)
 				return
 			}
 
@@ -168,10 +164,6 @@ export const MainView = (props: {
 			inputElemRef.current?.select()
 	}
 
-	function onChangedActiveQueryIndex() {
-		setHighlightQuery(splitQueries[activeQueryIndex])
-	}
-	
 	function updateHighlightedQuery() {
 		if (!highlightQuery) { return }
 		const [fullStr, subStr] = [query, highlightQuery]
@@ -232,12 +224,18 @@ export const MainView = (props: {
 		history.push('?sb')
 	}
 
+	function setActiveQueryTo(index: number) {
+		const clampedIndex = lodash.clamp(index, 0, splitQueries.length - 1)
+		setActiveQueryIndex(clampedIndex)
+		setHighlightQuery(splitQueries[clampedIndex])
+	}
+
 	function setActiveQueryLeft() {
-		setActiveQueryIndex(lodash.clamp(activeQueryIndex - 1, 0, splitQueries.length - 1))
+		setActiveQueryTo(activeQueryIndex - 1)
 	}
 
 	function setActiveQueryRight() {
-		setActiveQueryIndex(lodash.clamp(activeQueryIndex + 1, 0, splitQueries.length - 1))
+		setActiveQueryTo(activeQueryIndex + 1)
 	}
 
 	const showViewLeftButton = activeQueryIndex > 0
