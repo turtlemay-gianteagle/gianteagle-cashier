@@ -176,7 +176,8 @@ export const MainView = (props: {
 		if (!highlightQuery) { return }
 		const [fullStr, subStr] = [query, highlightQuery]
 		const [s, n] = [context.querySeparator, activeQueryIndex]
-		const regex = new RegExp(`^((?:[^${s}]+${s}){${n}})${subStr}`, '')
+		const ss = lodash.escapeRegExp(subStr)
+		const regex = new RegExp(`^((?:[^${s}]+${s}){${n}})${ss}`, '')
 		const match = fullStr.match(regex)
 		if (!match) { return }
 		const start = match[1].length
