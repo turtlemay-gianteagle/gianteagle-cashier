@@ -258,6 +258,7 @@ export const MainView = (props: {
 					onStartInput={() => setThrobber(true)}
 					onStopInput={() => setThrobber(false)}
 					onCommit={v => { if (v.length > 0) setQuery(v) }}
+					onResetDelegate={onResetQueryDelegate}
 					commitDelay={300}
 					disabled={!props.active}
 					passProps={{ spellCheck: false }} />

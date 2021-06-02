@@ -15,14 +15,22 @@ export function DelayedTextInput(props: {
 	onStartInput?: VoidFunction
 	onStopInput?: VoidFunction
 	onCommit: (v: string) => void
+	onResetDelegate?: Set<VoidFunction>
 	passProps?: Object
 }) {
 	const [value, setValue] = React.useState(props.committedValue)
 	const [commitTimeout, setCommitTimeout] = React.useState<number | null>(null)
 	const [active, setActive] = React.useState(false)
 
+	React.useEffect(updateOnResetDelegate)
 	React.useEffect(updateClearTimeout)
 	React.useEffect(onChangeCommitedValue, [props.committedValue])
+
+	function updateOnResetDelegate() {
+		const onReset = () => setValue(props.committedValue)
+		props.onResetDelegate?.add(onReset)
+		return () => void props.onResetDelegate?.delete(onReset)
+	}
 
 	function updateClearTimeout() {
 		return () => {
