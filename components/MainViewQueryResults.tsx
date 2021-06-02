@@ -95,6 +95,7 @@ export function MainViewQueryResults(props: {
 		scrollUpElemRef.current?.scrollTo(scrollToOptions)
 	}
 
+	const renderSearchResults = enablePaging ? searchResults.slice(0, numRenderResultItems) : searchResults
 	const renderShowMoreButton = enablePaging && numRenderResultItems < searchResults.length
 
 	return (
@@ -108,26 +109,20 @@ export function MainViewQueryResults(props: {
 						</div>
 					</CSSTransition>
 				</ConditionalRenderer>
-				{Function.call.call(() => {
-					let arr = searchResults
-					if (arr.length === 0)
-						return (
-							<CSSTransition classNames="mainView__resultItemTransition" timeout={250}>
-								<div className="mainView__queryResultNone">
-									<span>No items found.</span>
-								</div>
-							</CSSTransition>
-						)
-					if (enablePaging)
-						arr = arr.slice(0, numRenderResultItems)
-					return arr.map((v, i) => (
-						<CSSTransition classNames="mainView__resultItemTransition" key={`${v.value}.${v.name}.${i}`} timeout={250}>
-							<div className="mainView__queryResultNode">
-								<StoreItemCard data={v} onPick={props.onPickShadowBoxElem} query={props.query} />
-							</div>
-						</CSSTransition>
-					))
-				})}
+				<ConditionalRenderer condition={renderSearchResults.length === 0}>
+					<CSSTransition classNames="mainView__resultItemTransition" timeout={250}>
+						<div className="mainView__queryResultNone">
+							<span>No items found.</span>
+						</div>
+					</CSSTransition>
+				</ConditionalRenderer>
+				{renderSearchResults.map((v, i) => (
+					<CSSTransition classNames="mainView__resultItemTransition" key={`${v.value}.${v.name}.${i}`} timeout={250}>
+						<div className="mainView__queryResultNode">
+							<StoreItemCard data={v} onPick={props.onPickShadowBoxElem} query={props.query} />
+						</div>
+					</CSSTransition>
+				))}
 				<ConditionalRenderer condition={renderShowMoreButton}>
 					<button className="mainView__showMoreButton" onClick={showMore} tabIndex={tabIndex}>+</button>
 				</ConditionalRenderer>
