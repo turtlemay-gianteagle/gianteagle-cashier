@@ -1,11 +1,11 @@
 import * as React from 'react'
 
-export function ConditionalRenderer(props: React.PropsWithChildren<{
+export const ConditionalRenderer: React.FunctionComponent<{
 	condition: boolean
-}>) {
-	return (
-		<React.Fragment>
-			{props.condition ? props.children : null}
-		</React.Fragment>
-	)
+}> = props => {
+	if (props.condition) {
+		return <>{props.children}</>
+	} else {
+		return null
+	}
 }
