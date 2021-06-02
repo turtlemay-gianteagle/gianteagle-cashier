@@ -43,13 +43,13 @@ export function Shadowbox(props: React.PropsWithChildren<{
 			</div>
 			<div className="shadowbox__layoutbottom">
 				<div className="shadowbox__itemcontainer">
-					<Untabbable>
-						{props.item ?? (
-							<div className="shadowbox__noitem">
-								There's nothing here.
-							</div>
-						)}
-					</Untabbable>
+					{props.item ? (
+						<Untabbable>{props.item}</Untabbable>
+					) : (
+						<div className="shadowbox__noitem">
+							There's nothing here.
+						</div>
+					)}
 				</div>
 			</div>
 		</div>
