@@ -4,6 +4,7 @@ import c from 'classnames'
 import { AppStateContext } from './AppStateProvider'
 import { PrefsOption } from './PrefsOptions'
 import { DelayedTextInput } from './DelayedTextInput'
+import { ConditionalRenderer } from './ConditionalRenderer'
 
 export function PrefsView() {
 	const context = React.useContext(AppStateContext)
@@ -31,15 +32,20 @@ export function PrefsView() {
 								if (document.activeElement !== e?.target)
 									e?.target?.select?.()
 							} }} />,
-						stateInfo: Function.call.call(() => {
-							if (context.dbInfo)
-								return <>
+						stateInfo: React.createElement(() => (
+							context.dbInfo ? (
+								<React.Fragment>
 									<div>Loaded remote database "{context.dbInfo.name}" {context.dbInfo.version}.</div>
-									{context.dbInfo.organization ?
-										<div>Organization: <code>{context.dbInfo.organization}</code></div> : null}
-								</>
-							return "No database found."
-						}),
+									<ConditionalRenderer condition={Boolean(context.dbInfo.organization)}>
+										<div>Organization: <code>{context.dbInfo.organization}</code></div>
+									</ConditionalRenderer>
+								</React.Fragment>
+							) : (
+								<React.Fragment>
+									No database found.
+								</React.Fragment>
+							)
+						)),
 					}}</PrefsOption>
 				</section>
 
