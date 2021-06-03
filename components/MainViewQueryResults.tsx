@@ -100,7 +100,7 @@ export function MainViewQueryResults(props: {
 	return (
 		<div className={c('mainView__queryResultList', props.className)}
 			ref={scrollUpElemRef as React.RefObject<HTMLDivElement>}>
-			<TransitionGroup>
+			<TransitionGroup component={null}>
 				{showTypedCode && (
 					<CSSTransition classNames="mainView__resultItemTransition" timeout={250}>
 						<div className="mainView__queryResultNode">
@@ -122,12 +122,10 @@ export function MainViewQueryResults(props: {
 						</div>
 					</CSSTransition>
 				))}
-				{renderShowMoreButton && (
-					<React.Fragment>
-						<button className="mainView__showMoreButton" onClick={showMore} tabIndex={tabIndex}>+</button>
-					</React.Fragment>
-				)}
 			</TransitionGroup>
+			{renderShowMoreButton && (
+				<button className="mainView__showMoreButton" onClick={showMore} tabIndex={tabIndex}>+</button>
+			)}
 		</div>
 	)
 }
