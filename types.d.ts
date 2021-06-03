@@ -15,7 +15,6 @@ interface IItemDb {
 
 interface IItemData {
 	'priority-keywords'?: string[]
-	alwaysShowBarcode?: boolean
 	duplicate?: boolean
 	ignore?: boolean
 	keywords?: string[]
