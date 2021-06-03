@@ -31,20 +31,18 @@ export function PrefsView() {
 								if (document.activeElement !== e?.target)
 									e?.target?.select?.()
 							} }} />,
-						stateInfo: React.createElement(() => (
-							context.dbInfo ? (
-								<React.Fragment>
-									<div>Loaded remote database "{context.dbInfo.name}" {context.dbInfo.version}.</div>
-									{context.dbInfo.organization && (
-										<div>Organization: <code>{context.dbInfo.organization}</code></div>
-									)}
-								</React.Fragment>
-							) : (
-								<React.Fragment>
-									No database found.
-								</React.Fragment>
-							)
-						)),
+						stateInfo: context.dbInfo ? (
+							<React.Fragment>
+								<div>Loaded remote database "{context.dbInfo.name}" {context.dbInfo.version}.</div>
+								{context.dbInfo.organization && (
+									<div>Organization: <code>{context.dbInfo.organization}</code></div>
+								)}
+							</React.Fragment>
+						) : (
+							<React.Fragment>
+								No database found.
+							</React.Fragment>
+						),
 					}}</PrefsOption>
 				</section>
 
