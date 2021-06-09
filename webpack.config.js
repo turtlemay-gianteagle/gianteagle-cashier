@@ -82,5 +82,5 @@ module.exports = {
 
 function getBuildDate() {
 	const today = new Date()
-	return `${today.toLocaleDateString()} ${today.toLocaleTimeString()}`
+	return today.toUTCString()
 }
