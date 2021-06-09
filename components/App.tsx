@@ -54,6 +54,6 @@ const AppMainRouteComponent = (props: RouteComponentProps) => {
 				</div>
 			</div>
 
-		</div >
+		</div>
 	)
 }
