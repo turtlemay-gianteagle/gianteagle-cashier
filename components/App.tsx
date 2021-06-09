@@ -38,7 +38,7 @@ const AppMainRouteComponent = (props: RouteComponentProps) => {
 			</AppStateProvider>
 
 			<div className="app__layoutBottom app__navbarContainer">
-				<div className="app__navbar">
+				<nav className="app__navbar">
 					<NavLink className="app__navItem" activeClassName="app__navItem--active" to="/l">
 						<span className="app__navItemIcon">️🛍️</span>
 						<span className="app__navItemLabel">Query</span>
@@ -51,7 +51,7 @@ const AppMainRouteComponent = (props: RouteComponentProps) => {
 						<span className="app__navItemIcon">️⚙️</span>
 						<span className="app__navItemLabel">Settings</span>
 					</NavLink>
-				</div>
+				</nav>
 			</div>
 
 		</div>
