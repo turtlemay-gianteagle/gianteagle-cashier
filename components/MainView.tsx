@@ -31,6 +31,7 @@ export const MainView = (props: {
 	const [showShadowbox, setShowShadowbox] = React.useState(false)
 	const [useNumInput, setUseNumInput] = React.useState(false)
 	const [onResetQueryDelegate] = React.useState(new Set<VoidFunction>())
+	const rootElemRef = React.useRef<HTMLDivElement>(null)
 	const inputElemRef = React.useRef<HTMLInputElement>(null)
 
 	React.useEffect(initSelectInput, [])
@@ -55,6 +56,19 @@ export const MainView = (props: {
 		function handleKeyDown(e: KeyboardEvent) {
 			if (!props.active)
 				return
+
+			// Use function keys to select result by index
+			if (e.key.match(/^F\d{1,2}$/)?.[0]) {
+				e.preventDefault()
+				const n = Number(e.key.match(/^F(\d{1,2})$/)?.[1])
+				if (!isNaN(n)) {
+					const index = n - 1
+					const elems = rootElemRef.current?.querySelectorAll('.mainView__queryResultNode')
+					const clickEl: HTMLElement | null | undefined = elems?.[index]?.querySelector('[role="button"]')
+					clickEl?.click()
+				}
+				return
+			}
 
 			// Use Ctrl + Number to switch active view
 			const matchedNumKey = e.key.match(/^\d$/)?.[0]
@@ -241,7 +255,7 @@ export const MainView = (props: {
 	const showViewRightButton = activeQueryIndex < splitQueries.length - 1
 
 	return (
-		<div className={c('mainView__root mainView__mainLayout', props.className)}>
+		<div className={c('mainView__root mainView__mainLayout', props.className)} ref={rootElemRef}>
 			<div className="mainView__mainLayoutTop mainView__mainInputContainer">
 				<div className="mainView__queryNumInputToggleButton" role="button">
 					<div className="mainView__queryNumInputToggleButtonText" onClick={onClickToggleKbButton}>
