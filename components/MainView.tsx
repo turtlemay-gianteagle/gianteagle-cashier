@@ -187,7 +187,13 @@ export const MainView = (props: {
 		if (!match) { return }
 		const start = match[1].length
 		const end = start + subStr.length
-		inputElemRef.current?.select()
+
+		// Hack to scroll to selection.
+		inputElemRef.current?.setSelectionRange(start, start)
+		inputElemRef.current?.blur()
+		inputElemRef.current?.focus()
+
+		// Select text.
 		inputElemRef.current?.setSelectionRange(start, end)
 	}
 
