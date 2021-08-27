@@ -18,8 +18,8 @@ interface IItemData {
 	duplicate?: boolean
 	ignore?: boolean
 	keywords?: string[]
-	name: string
+	name?: string
 	tags?: string[]
 	uiColor?: string
-	value: number | string
+	value?: number | string
 }

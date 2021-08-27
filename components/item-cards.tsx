@@ -14,7 +14,7 @@ export function StoreItemCard(props: {
 	let value = String(props.data.value)
 
 	// Add organic prefix.
-	if (context.organicModifier && props.query?.endsWith(context.organicModifier) && value.length === 4 && !name.includes('organic')) {
+	if (context.organicModifier && props.query?.endsWith(context.organicModifier) && value.length === 4 && !name?.includes('organic')) {
 		name = `[Organic] ${name}`
 		value = '9' + value
 	}
