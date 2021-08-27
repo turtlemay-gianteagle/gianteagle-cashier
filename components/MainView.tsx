@@ -57,8 +57,8 @@ export const MainView = (props: {
 			if (!props.active)
 				return
 
-			// Use function keys to select result by index
-			if (e.key.match(/^F\d{1,2}$/)?.[0]) {
+			// Use Ctrl + Alt + Function keys to select result by index
+			if (e.ctrlKey && e.altKey && e.key.match(/^F\d{1,2}$/)?.[0]) {
 				e.preventDefault()
 				const n = Number(e.key.match(/^F(\d{1,2})$/)?.[1])
 				if (!isNaN(n)) {
