@@ -10,11 +10,13 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { MainViewQueryResults } from './MainViewQueryResults'
 import { Untabbable } from '../lib/tabindex'
 import { isTabbable } from 'tabbable'
+import { useIsFirstRender } from '../lib/react'
 
 export const MainView = (props: {
 	className?: string
 	active: boolean
 }) => {
+	const isFirstRender = useIsFirstRender()
 	const context = React.useContext(AppStateContext)
 	const history = useHistory()
 	const location = useLocation()
@@ -146,10 +148,12 @@ export const MainView = (props: {
 
 		setSplitQueries(splitQuery(query))
 
-		const queryParams = new URLSearchParams(location.search)
-		if (queryParams.has('sb')) {
-			queryParams.delete('sb')
-			history.push(`?${queryParams.toString()}`)
+		if (!isFirstRender) {
+			const queryParams = new URLSearchParams(location.search)
+			if (queryParams.has('sb')) {
+				queryParams.delete('sb')
+				history.push(`?${queryParams.toString()}`)
+			}
 		}
 
 		const gotMathResult = tryMath(query)

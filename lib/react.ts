@@ -5,3 +5,9 @@ export function usePrevious<T>(value: T): T | undefined {
 	useEffect(() => { ref.current = value }, [value])
 	return ref.current
 }
+
+export const useIsFirstRender = () => {
+	const ref = useRef(true)
+	useEffect(() => { ref.current = false }, [])
+	return ref.current
+}
