@@ -29,7 +29,6 @@ export const MainView = (props: {
 	const [showMathResult, setShowMathResult] = React.useState(false)
 	const [roundUpResult, setRoundUpResult] = React.useState(0)
 	const [showRoundUpResult, setShowRoundUpResult] = React.useState(false)
-	const [shadowBoxElem, setShadowBoxElem] = React.useState<React.ReactNode>(null)
 	const [showShadowbox, setShowShadowbox] = React.useState(false)
 	const [useNumInput, setUseNumInput] = React.useState(false)
 	const [onResetQueryDelegate] = React.useState(new Set<VoidFunction>())
@@ -243,8 +242,9 @@ export const MainView = (props: {
 	}
 
 	function onPickShadowBoxElem(jsx: JSX.Element) {
-		setShadowBoxElem(React.cloneElement(jsx))
-		history.push('?sb')
+		const queryParams = new URLSearchParams(location.search)
+		queryParams.set('sb', jsx.props['data-json'])
+		history.push(`?${queryParams.toString()}`)
 	}
 
 	function setActiveQueryTo(index: number) {
@@ -342,7 +342,7 @@ export const MainView = (props: {
 				</div>
 
 				<Untabbable active={!showShadowbox}>
-					<Shadowbox className="mainView__shadowbox" active={showShadowbox} item={shadowBoxElem} />
+					<Shadowbox className="mainView__shadowbox" active={showShadowbox} />
 				</Untabbable>
 
 			</div>

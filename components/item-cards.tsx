@@ -25,7 +25,10 @@ export function StoreItemCard(props: {
 		props.data.tags?.includes("produce"))
 
 	const jsx = (
-		<div className="itemCards__storeItemCard" data-name={name} data-color={props.data.uiColor}>
+		<div className="itemCards__storeItemCard"
+			data-name={name}
+			data-color={props.data.uiColor}
+			data-json={JSON.stringify(props.data)}>
 			<div className="itemCards__storeItemName">{name}</div>
 			<Barcode className={c("itemCards__storeItemBarcode", { "itemCards__storeItemBarcode--disabled": disableBarcode })}
 				value={value}
@@ -41,7 +44,8 @@ export function GeneratedItemCard(props: {
 	onPick?: (jsx: JSX.Element) => void
 }) {
 	const jsx = (
-		<div className="itemCards__generatedBarcodeCard">
+		<div className="itemCards__generatedBarcodeCard"
+			data-json={JSON.stringify({value: props.value})}>
 			<Barcode className="itemCards__generatedBarcode"
 				value={props.value}
 				onClickBarcode={() => props.onPick?.(jsx)} />

@@ -3,6 +3,7 @@ import c from 'classnames'
 import { useLocation, useHistory } from 'react-router-dom'
 import { AppStateContext } from './AppStateProvider'
 import { Untabbable, useTabIndex } from '../lib/tabindex'
+import { GeneratedItemCard, StoreItemCard } from './item-cards'
 
 export function Shadowbox(props: React.PropsWithChildren<{
 	className?: string
@@ -35,6 +36,22 @@ export function Shadowbox(props: React.PropsWithChildren<{
 		history.push(`?${queryParams.toString()}`)
 	}
 
+	function renderItem() {
+		if (props.item) {
+			return props.item
+		}
+		const queryParams = new URLSearchParams(location.search)
+		const data: IItemData = JSON.parse(queryParams.get('sb') ?? '{}')
+		if (data?.name) {
+			return <StoreItemCard data={data} />
+		} else if (data?.value) {
+			return <GeneratedItemCard value={String(data.value)} />
+		}
+		return null
+	}
+
+	const renderedItem = renderItem()
+
 	return (
 		<div className={c('shadowbox__root', props.className, { 'shadowbox__root--active': props.active })}>
 			<div className="shadowbox__topbar">
@@ -43,8 +60,8 @@ export function Shadowbox(props: React.PropsWithChildren<{
 			</div>
 			<div className="shadowbox__layoutbottom">
 				<div className="shadowbox__itemcontainer">
-					{props.item ? (
-						<Untabbable>{props.item}</Untabbable>
+					{renderedItem ? (
+						<Untabbable>{renderedItem}</Untabbable>
 					) : (
 						<div className="shadowbox__noitem">
 							There's nothing here.
