@@ -43,6 +43,7 @@ export function MainViewQueryResults(props: {
 		}
 		function onResetQuery() {
 			resetScroll({ smooth: props.query === context.defaultQuery })
+			setNumRenderResultItems(context.itemsPerPage)
 		}
 	}
 
