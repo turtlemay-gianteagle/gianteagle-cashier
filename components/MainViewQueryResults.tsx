@@ -124,7 +124,7 @@ export function MainViewQueryResults(props: {
 				))}
 			</TransitionGroup>
 			{renderShowMoreButton && (
-				<button className="mainView__showMoreButton" onClick={showMore} tabIndex={tabIndex}>+</button>
+				<button className="mainView__showMoreButton" onClick={showMore} tabIndex={tabIndex} key={numRenderResultItems}>+</button>
 			)}
 		</div>
 	)
