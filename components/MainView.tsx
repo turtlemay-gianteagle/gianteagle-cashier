@@ -233,6 +233,7 @@ export const MainView = (props: {
 	}
 
 	function onClickToggleKbButton() {
+		inputElemRef.current?.select()
 		setUseNumInput(!useNumInput)
 		setQuery('')
 	}
