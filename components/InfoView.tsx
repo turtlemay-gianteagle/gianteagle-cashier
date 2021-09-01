@@ -20,6 +20,8 @@ export const InfoView = () => (
 				<h2>📅 Recent Changes</h2>
 				<ul>
 					<li>Now supporting multiple organizations. Set your database in settings.</li>
+					<li>Support key combinations in settings.</li>
+					<li>Use modifier in settings to generate organic produce results.</li>
 				</ul>
 			</section>
 			<section>
