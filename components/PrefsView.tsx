@@ -135,7 +135,7 @@ export function PrefsView() {
 				<section>
 					<div className="prefsView__optionsListSectionInfo">
 						<h2>Key Bindings</h2>
-						<p>JavaScript event key names or keycodes. (No modifiers.)</p>
+						<p>JavaScript event key names or keycodes. Include any combination of modifier keys by prepending "^" for Ctrl, "!" for Alt, "+" for Shift, and "#" for Meta. (e.g. "+Space" means Shift and Space)</p>
 					</div>
 
 					<PrefsOption>{{
@@ -168,6 +168,14 @@ export function PrefsView() {
 							className="prefsView__optionTextInput"
 							value={context.appNavBackKey}
 							onChange={e => context.provider.setState({ appNavBackKey: e.target.value })} />,
+					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "🔄 Restart app key",
+						controlNode: <input type="text"
+							className="prefsView__optionTextInput"
+							value={context.appRestartKey}
+							onChange={e => context.provider.setState({ appRestartKey: e.target.value })} />,
 					}}</PrefsOption>
 				</section>
 

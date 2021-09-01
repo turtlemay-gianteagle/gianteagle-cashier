@@ -19,6 +19,7 @@ const DEFAULT_PREFS = {
 	appNavBackKey: 'Escape',
 	appNavViewLeftKey: '[',
 	appNavViewRightKey: ']',
+	appRestartKey: '+Space',
 	noCheat: false,
 	overrideOrganizationId: '',
 }

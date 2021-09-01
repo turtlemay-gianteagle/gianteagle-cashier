@@ -11,6 +11,7 @@ import { MainViewQueryResults } from './MainViewQueryResults'
 import { Untabbable } from '../lib/tabindex'
 import { isTabbable } from 'tabbable'
 import { useIsFirstRender } from '../lib/react'
+import { matchKeyCombo } from '../src/keys'
 
 export const MainView = (props: {
 	className?: string
@@ -79,10 +80,7 @@ export const MainView = (props: {
 				return
 			}
 
-			if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey)
-				return
-
-			if (context.resetQueryKey && [e.key, e.code].includes(context.resetQueryKey)) {
+			if (matchKeyCombo(e, context.resetQueryKey)) {
 				e.preventDefault()
 				resetQuery()
 				return
@@ -90,13 +88,13 @@ export const MainView = (props: {
 
 			if (!showShadowbox) {
 				if (splitQueries.length > 1) {
-					if (context.appNavViewLeftKey && [e.key, e.code].includes(context.appNavViewLeftKey)) {
+					if (matchKeyCombo(e, context.appNavViewLeftKey)) {
 						e.preventDefault()
 						setThrobber(false)
 						setActiveQueryLeft()
 						return
 					}
-					if (context.appNavViewRightKey && [e.key, e.code].includes(context.appNavViewRightKey)) {
+					if (matchKeyCombo(e, context.appNavViewRightKey)) {
 						e.preventDefault()
 						setThrobber(false)
 						setActiveQueryRight()
@@ -104,6 +102,9 @@ export const MainView = (props: {
 					}
 				}
 			}
+
+			if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey)
+				return
 
 			if (e.key === 'Enter') {
 				handleCommand(inputElemRef.current?.value ?? '')
