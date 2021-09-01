@@ -106,6 +106,7 @@ export const MainView = (props: {
 			}
 
 			if (e.key === 'Enter') {
+				handleCommand(inputElemRef.current?.value ?? '')
 				const el = document.activeElement
 				const isInputFocused = el === inputElemRef.current
 				const isTabbableFocused = el ? isTabbable(el) : false
@@ -139,11 +140,6 @@ export const MainView = (props: {
 	function onChangedQuery() {
 		if (query.length === 0)
 			return
-
-		if (query === 'wc') {
-			history.push('/wcalc')
-			return
-		}
 
 		setSplitQueries(splitQuery(query))
 
@@ -260,6 +256,13 @@ export const MainView = (props: {
 
 	function setActiveQueryRight() {
 		setActiveQueryTo(activeQueryIndex + 1)
+	}
+
+	function handleCommand(str: string) {
+		resetQuery()
+		if (str === 'wc') {
+			history.push('/wcalc')
+		}
 	}
 
 	const showViewLeftButton = activeQueryIndex > 0
