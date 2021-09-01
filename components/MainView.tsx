@@ -65,7 +65,7 @@ export const MainView = (props: {
 				const n = Number(e.key.match(/^F(\d{1,2})$/)?.[1])
 				if (!isNaN(n)) {
 					const index = n - 1
-					const elems = rootElemRef.current?.querySelectorAll('.mainView__queryResultNode')
+					const elems = rootElemRef.current?.querySelectorAll('.mainView__queryResultListView.active .mainView__queryResultNode')
 					const clickEl: HTMLElement | null | undefined = elems?.[index]?.querySelector('[role="button"]')
 					clickEl?.click()
 				}
