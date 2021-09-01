@@ -1,6 +1,6 @@
 import * as React from 'react'
 import c from 'classnames'
-import { HashRouter, NavLink, Route, Switch, RouteComponentProps, matchPath, Redirect } from 'react-router-dom'
+import { HashRouter, NavLink, Route, Switch, RouteComponentProps, matchPath, Redirect, useHistory } from 'react-router-dom'
 import { MainView } from './MainView'
 import { PrefsView } from './PrefsView'
 import { AppStateProvider } from './AppStateProvider'
@@ -18,7 +18,26 @@ export const App = () => (
 )
 
 const AppMainRouteComponent = (props: RouteComponentProps) => {
+	const history = useHistory()
 	const matchedMainView = Boolean(matchPath(props.location.pathname, { path: '/l' }))
+
+	React.useEffect(updateKeyListener)
+
+	function updateKeyListener() {
+		addEventListener('keydown', handleKeyDown)
+
+		return function cleanup() {
+			removeEventListener('keydown', handleKeyDown)
+		}
+
+		function handleKeyDown(e: KeyboardEvent) {
+			if (e.shiftKey && e.code === 'Space') {
+				e.preventDefault()
+				history.push('/')
+			}
+		}
+	}
+
 	return (
 		<div className="app__layout">
 
