@@ -22,7 +22,7 @@ export function MainViewQueryResults(props: {
 	const [showTypedCode, setShowTypedCode] = React.useState(false)
 	const [enablePaging, setEnablePaging] = React.useState(true)
 	const prevQuery = usePrevious(props.query)
-	const scrollUpElemRef = React.useRef<HTMLDivElement>()
+	const scrollElemRef = React.useRef<HTMLDivElement>()
 
 	React.useEffect(updateResetQueryCallback)
 	React.useEffect(updateQuery, [
@@ -92,7 +92,7 @@ export function MainViewQueryResults(props: {
 		const scrollToOptions: ScrollToOptions = { top: 0 }
 		if (opts.smooth)
 			Object.assign(scrollToOptions, { behavior: 'smooth' })
-		scrollUpElemRef.current?.scrollTo(scrollToOptions)
+		scrollElemRef.current?.scrollTo(scrollToOptions)
 	}
 
 	const renderSearchResults = enablePaging ? searchResults.slice(0, numRenderResultItems) : searchResults
@@ -100,7 +100,7 @@ export function MainViewQueryResults(props: {
 
 	return (
 		<div className={c('mainView__queryResultList', props.className)}
-			ref={scrollUpElemRef as React.RefObject<HTMLDivElement>}>
+			ref={scrollElemRef as React.RefObject<HTMLDivElement>}>
 			<TransitionGroup component={null}>
 				{showTypedCode && (
 					<CSSTransition classNames="mainView__resultItemTransition" timeout={250}>
