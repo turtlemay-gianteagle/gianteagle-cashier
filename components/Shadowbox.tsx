@@ -42,12 +42,19 @@ export function Shadowbox(props: React.PropsWithChildren<{
 			return props.item
 		}
 		const queryParams = new URLSearchParams(location.search)
-		const data: IItemData = JSON.parse(queryParams.get('sb') ?? '{}')
-		if (data?.name) {
-			return <StoreItemCard data={data} />
-		} else if (data?.value) {
-			return <GeneratedItemCard value={String(data.value)} />
+
+		let data: IItemData | undefined
+		try {
+			data = JSON.parse(queryParams.get('sb') || '{}')
+			if (data?.name) {
+				return <StoreItemCard data={data} />
+			} else if (data?.value) {
+				return <GeneratedItemCard value={String(data.value)} />
+			}
+		} catch (err) {
+			console.error(err)
 		}
+
 		return null
 	}
 
