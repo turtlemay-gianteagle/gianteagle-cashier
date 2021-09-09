@@ -137,7 +137,9 @@ export class AppStateProvider extends React.Component<{}, IState> {
 	_buildUserItemsData(userInput: string): IItemData[] {
 		let userData: IUserItemData
 		try {
-			userData = yaml.load(userInput) as {}
+			// Using schema with no number type to ensure numbers with leading zeros are parsed correctly.
+			const schema = yaml.FAILSAFE_SCHEMA
+			userData = yaml.load(userInput, { schema }) as {}
 		} catch (error) {
 			console.error(error)
 			return []
