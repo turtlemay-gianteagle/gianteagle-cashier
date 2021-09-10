@@ -190,7 +190,7 @@ export function PrefsView() {
 							className="prefsView__optionTextInput"
 							value={context.overrideOrganizationId}
 							placeholder={context.dbInfo?.organization}
-							onChange={e => context.provider.setState({ overrideOrganizationId: e.target.value })} />,
+							onChange={e => context.provider.setState({ overrideOrganizationId: e.target.value.toUpperCase() })} />,
 					}}</PrefsOption>
 				</section>
 
