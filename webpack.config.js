@@ -1,7 +1,6 @@
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 
 module.exports = {
 	mode: 'development',
@@ -10,14 +9,14 @@ module.exports = {
 	},
 	output: {
 		path: `${__dirname}/dist`,
-		filename: '[name].[hash].js',
+		filename: '[name].[contenthash].js',
 	},
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
 	},
 	devtool: 'inline-source-map',
 	devServer: {
-		contentBase: './dist',
+		static: './dist',
 		hot: true,
 	},
 	module: {
@@ -33,27 +32,12 @@ module.exports = {
 			},
 			{
 				test: /\.webmanifest$/i,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name].[ext]',
-						},
-					},
-					{
-						loader: 'app-manifest-loader',
-					},
-				],
+				type: 'asset/resource',
+				generator: { filename: 'manifest.webmanifest' }
 			},
 			{
 				test: /\.(png|jpe?g|gif)$/i,
-				use: {
-					loader: 'file-loader',
-					options: {
-						name: '[name].[contenthash].[ext]',
-						esModule: false,
-					},
-				},
+				type: 'asset/resource',
 			},
 		],
 	},
@@ -70,11 +54,8 @@ module.exports = {
 			favicon: './resources/icon.png',
 			inject: 'head',
 			scriptLoading: 'defer',
+			hash: true,
 		}),
-		new ServiceWorkerWebpackPlugin({
-			entry: `${__dirname}/src/sw.js`,
-		}),
-		new webpack.HotModuleReplacementPlugin(),
 	],
 }
 
