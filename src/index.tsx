@@ -42,6 +42,4 @@ render(jsx, reactroot, () => {
 
 const sw = swruntime.register()
 
-if (module['hot']) {
-	module['hot'].accept()
-}
+module['hot']?.accept()
