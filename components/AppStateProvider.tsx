@@ -150,13 +150,15 @@ export class AppStateProvider extends React.Component<{}, IState> {
 	}
 
 	_updateRemoteItemDataState = async () => {
-		const db = await getRemoteDb(this.state.dbUrl)
-		if (db) {
-			this.setState({
-				dbInfo: { name: db.name, version: db.version, organization: db.organization },
-				remoteItemData: db.items,
-			})
-			saveCacheDb(db)
+		if (this.state.dbUrl) {
+			const db = await getRemoteDb(this.state.dbUrl)
+			if (db) {
+				this.setState({
+					dbInfo: { name: db.name, version: db.version, organization: db.organization },
+					remoteItemData: db.items,
+				})
+				saveCacheDb(db)
+			}
 		} else {
 			clearCacheDb()
 			this.setState({
