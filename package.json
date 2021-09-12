@@ -3,7 +3,7 @@
 	"name": "turtlemay-cashier",
 	"version": "0.11.1",
 	"scripts": {
-		"start": "webpack-dev-server --mode development --host 0.0.0.0",
+		"start": "webpack-dev-server --mode development --host 0.0.0.0 --stats-children",
 		"build": "webpack --mode production"
 	},
 	"browserslist": [
