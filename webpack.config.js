@@ -29,9 +29,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/i,
-				use: [
-					{ loader: 'css-loader' },
-				],
+				use: 'css-loader',
 			},
 			{
 				test: /\.webmanifest$/i,
