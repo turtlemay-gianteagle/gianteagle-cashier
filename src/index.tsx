@@ -2,6 +2,7 @@ import * as React from 'react'
 import { render } from 'react-dom'
 import { App } from '../components/App'
 import { Helmet } from 'react-helmet'
+import * as offlinePluginRuntime from '@lcdp/offline-plugin/runtime'
 
 // @ts-expect-error
 import manifest from '../resources/manifest.webmanifest'
@@ -36,6 +37,23 @@ render(jsx, reactroot, () => {
 	reactroot?.classList.add('reactstarted')
 	if (preloadroot)
 		document.body.removeChild(preloadroot)
+})
+
+offlinePluginRuntime.install({
+	onUpdating() {
+		console.log('SW Event:', 'onUpdating')
+	},
+	onUpdateReady() {
+		console.log('SW Event:', 'onUpdateReady')
+		offlinePluginRuntime.applyUpdate()
+	},
+	onUpdated() {
+		console.log('SW Event:', 'onUpdated')
+		location.reload()
+	},
+	onUpdateFailed() {
+		console.log('SW Event:', 'onUpdateFailed')
+	},
 })
 
 module['hot']?.accept()

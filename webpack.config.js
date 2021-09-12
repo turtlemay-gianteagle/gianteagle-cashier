@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const OfflinePlugin = require('@lcdp/offline-plugin')
 
 module.exports = {
 	mode: 'development',
@@ -56,6 +57,7 @@ module.exports = {
 			scriptLoading: 'defer',
 			hash: true,
 		}),
+		new OfflinePlugin({ ServiceWorker: { events: true } }),
 	],
 }
 

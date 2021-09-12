@@ -27,6 +27,7 @@
 		"turtlemay-cashier-db-schema": "turtlemay/cashier-db-schema"
 	},
 	"devDependencies": {
+		"@lcdp/offline-plugin": "^5.1.0",
 		"@types/classnames": "^2.3.1",
 		"@types/js-yaml": "^4.0.3",
 		"@types/lodash": "^4.14.172",
