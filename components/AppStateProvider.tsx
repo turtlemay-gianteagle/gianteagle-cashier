@@ -3,7 +3,7 @@ import lodash from 'lodash'
 import * as yaml from 'js-yaml'
 import FuseJs from 'fuse.js'
 import { loadCacheDb, validateDb, saveCacheDb, getRemoteDb, clearCacheDb } from '../src/db'
-import * as dbUrls from '../data/db-urls.json'
+import dbUrls from '../data/db-urls.json'
 
 const LOCAL_STORAGE_KEY = 'user-prefs'
 
