@@ -21,7 +21,7 @@ export function Barcode(props: {
 		lineColor: 'black',
 		background: 'transparent',
 		width: 2,
-		height: 80,
+		height: context.compactBarcodes ? 20 : 80,
 		displayValue: false,
 		margin: 0,
 		flat: true,
@@ -31,6 +31,7 @@ export function Barcode(props: {
 		props.value,
 		context.dbInfo,
 		context.overrideOrganizationId,
+		context.compactBarcodes,
 	])
 
 	function updateValue() {

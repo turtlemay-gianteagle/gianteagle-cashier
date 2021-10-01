@@ -66,6 +66,14 @@ export function PrefsView() {
 
 				<section>
 					<PrefsOption>{{
+						label: "🤏 Compact barcodes", description: "Decrease barcode height.",
+						controlNode: <input
+							className="prefsView__optionCheckbox"
+							type="checkbox"
+							checked={context.compactBarcodes}
+							onChange={e => context.provider.setState({ compactBarcodes: e.target.checked })} />,
+					}}</PrefsOption>
+					<PrefsOption>{{
 						label: "#️⃣ Items per page", description: "Number of query results to load at a time.",
 						controlNode: <input type="number"
 							className="prefsView__optionTextInput"

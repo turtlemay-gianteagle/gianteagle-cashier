@@ -22,6 +22,7 @@ const DEFAULT_PREFS = {
 	appRestartKey: '+Space',
 	noCheat: false,
 	overrideOrganizationId: '',
+	compactBarcodes: false,
 }
 
 type IPrefs = typeof DEFAULT_PREFS
