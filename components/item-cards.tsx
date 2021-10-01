@@ -7,6 +7,7 @@ export function StoreItemCard(props: {
 	query?: string
 	data: IItemData
 	onPick?: (jsx: JSX.Element) => void
+	compact?: boolean
 }) {
 	const context = React.useContext(AppStateContext)
 
@@ -31,7 +32,7 @@ export function StoreItemCard(props: {
 			data-json={JSON.stringify(props.data)}>
 			<div className="itemCards__storeItemName">{name}</div>
 			<Barcode className={c("itemCards__storeItemBarcode", { "itemCards__storeItemBarcode--disabled": disableBarcode })}
-				value={value}
+				value={value} compact={props.compact}
 				onClickBarcode={() => props.onPick?.(jsx)} />
 			<div className="itemCards__storeItemId">{value}</div>
 		</div>

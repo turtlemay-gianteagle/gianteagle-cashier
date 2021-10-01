@@ -12,6 +12,7 @@ export function Barcode(props: {
 	className?: string
 	value: string
 	onClickBarcode?: VoidFunction
+	compact?: boolean
 }) {
 	const context = React.useContext(AppStateContext)
 	const tabIndex = useTabIndex(0)
@@ -21,7 +22,7 @@ export function Barcode(props: {
 		lineColor: 'black',
 		background: 'transparent',
 		width: 2,
-		height: context.compactBarcodes ? 20 : 80,
+		height: props.compact ? 20 : 80,
 		displayValue: false,
 		margin: 0,
 		flat: true,
@@ -29,9 +30,9 @@ export function Barcode(props: {
 
 	React.useEffect(updateValue, [
 		props.value,
+		props.compact,
 		context.dbInfo,
 		context.overrideOrganizationId,
-		context.compactBarcodes,
 	])
 
 	function updateValue() {

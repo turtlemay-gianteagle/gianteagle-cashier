@@ -47,7 +47,7 @@ export function Shadowbox(props: React.PropsWithChildren<{
 		try {
 			data = JSON.parse(queryParams.get('sb') || '{}')
 			if (data?.name) {
-				return <StoreItemCard data={data} />
+				return <StoreItemCard data={data} compact={false} />
 			} else if (data?.value) {
 				return <GeneratedItemCard value={String(data.value)} />
 			}
