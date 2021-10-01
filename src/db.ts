@@ -9,6 +9,8 @@ export async function getRemoteDb(url?: string, opts?: { forceFetch: boolean }):
 	if (!url)
 		return null
 
+	console.info(`Looking for database at "${url}".`)
+
 	if (!opts?.forceFetch && url === cachedRemoteDb?.url) {
 		console.info("Already have remote data in memory, skipping fetch.")
 		return cachedRemoteDb.db
@@ -17,6 +19,7 @@ export async function getRemoteDb(url?: string, opts?: { forceFetch: boolean }):
 	let fetchRes: Response | undefined
 
 	try {
+		console.info(`Fetching remote database from "${url}".`)
 		fetchRes = await fetch(url)
 	} catch (error) {
 		console.error(error)
