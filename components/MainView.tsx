@@ -260,9 +260,9 @@ export const MainView = (props: {
 	}
 
 	function handleCommand(str: string) {
-		resetQuery()
 		if (str === 'wc') {
 			history.push('/wcalc')
+			resetQuery()
 		}
 	}
 
