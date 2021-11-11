@@ -175,9 +175,9 @@ export class AppStateProvider extends React.Component<{}, IState> {
 			findAllMatches: true,
 			maxPatternLength: 32,
 			keys: [
-				{ name: 'priority-keywords', weight: 0.4 },
-				{ name: 'keywords', weight: 0.3 },
-				{ name: 'name', weight: 0.2 },
+				{ name: 'name', weight: 2 },
+				{ name: 'priority-keywords', weight: 1 },
+				{ name: 'keywords', weight: 0.5 },
 				{ name: 'value', weight: 0.1 },
 			],
 		})
