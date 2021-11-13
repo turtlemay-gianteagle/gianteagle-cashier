@@ -13,7 +13,7 @@ export const App = () => (
 	<HashRouter>
 		<Switch>
 			<Redirect exact from="/" to="/l" />
-			<Route component={AppMainRouteComponent} />
+			<Route><AppMainRouteComponent /></Route>
 		</Switch>
 	</HashRouter>
 )
@@ -30,9 +30,9 @@ function AppMainRouteComponent() {
 							<MainView className={c('app__viewTransition', { 'active': matchedMainView })} active={matchedMainView} />
 							<CSSTransition classNames="appViewTransitionAnimation" timeout={250} key={location.pathname}>
 								<Switch location={location}>
-									<Route exact path="/prefs" component={PrefsView} />
-									<Route exact path="/info" component={InfoView} />
-									<Route exact path="/wcalc" component={WeightCalcView} />
+									<Route exact path="/prefs"><PrefsView /></Route>
+									<Route exact path="/info"><InfoView /></Route>
+									<Route exact path="/wcalc"><WeightCalcView /></Route>
 								</Switch>
 							</CSSTransition>
 						</TransitionGroup>
