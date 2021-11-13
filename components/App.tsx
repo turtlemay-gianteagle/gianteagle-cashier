@@ -1,6 +1,6 @@
 import * as React from 'react'
 import c from 'classnames'
-import { HashRouter, NavLink, Route, Switch, RouteComponentProps, matchPath, Redirect, useHistory } from 'react-router-dom'
+import { HashRouter, NavLink, Route, Switch, RouteComponentProps, matchPath, Redirect, useHistory, useLocation } from 'react-router-dom'
 import { MainView } from './MainView'
 import { PrefsView } from './PrefsView'
 import { AppStateContext, AppStateProvider } from './AppStateProvider'
@@ -18,8 +18,9 @@ export const App = () => (
 	</HashRouter>
 )
 
-const AppMainRouteComponent = (props: RouteComponentProps) => {
-	const matchedMainView = Boolean(matchPath(props.location.pathname, { path: '/l' }))
+function AppMainRouteComponent() {
+	const location = useLocation()
+	const matchedMainView = Boolean(matchPath(location.pathname, { path: '/l' }))
 	return (
 		<div className="app__layout">
 			<AppStateProvider>
@@ -27,8 +28,8 @@ const AppMainRouteComponent = (props: RouteComponentProps) => {
 					<div className="app__layoutMain app__viewContainer">
 						<TransitionGroup component={null}>
 							<MainView className={c('app__viewTransition', { 'active': matchedMainView })} active={matchedMainView} />
-							<CSSTransition classNames="appViewTransitionAnimation" timeout={250} key={props.location.pathname}>
-								<Switch location={props.location}>
+							<CSSTransition classNames="appViewTransitionAnimation" timeout={250} key={location.pathname}>
+								<Switch location={location}>
 									<Route exact path="/prefs" component={PrefsView} />
 									<Route exact path="/info" component={InfoView} />
 									<Route exact path="/wcalc" component={WeightCalcView} />
