@@ -1,6 +1,6 @@
 import * as React from 'react'
 import c from 'classnames'
-import { HashRouter, NavLink, Route, Switch, RouteComponentProps, matchPath, Redirect, useHistory, useLocation } from 'react-router-dom'
+import { HashRouter, NavLink, Route, Switch, matchPath, Redirect, useHistory, useLocation } from 'react-router-dom'
 import { MainView } from './MainView'
 import { PrefsView } from './PrefsView'
 import { AppStateContext, AppStateProvider } from './AppStateProvider'
