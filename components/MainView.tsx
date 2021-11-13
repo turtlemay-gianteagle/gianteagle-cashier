@@ -6,7 +6,7 @@ import { focusInputAtEnd } from '../lib/dom'
 import { AppStateContext } from './AppStateProvider'
 import { DelayedTextInput } from './DelayedTextInput'
 import { Shadowbox } from './Shadowbox'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { MainViewQueryResults } from './MainViewQueryResults'
 import { Untabbable } from '../lib/tabindex'
 import { isTabbable } from 'tabbable'
@@ -19,7 +19,7 @@ export const MainView = (props: {
 }) => {
 	const isFirstRender = useIsFirstRender()
 	const context = React.useContext(AppStateContext)
-	const history = useHistory()
+	const navigate = useNavigate()
 	const location = useLocation()
 	const [query, setQuery] = React.useState(context.defaultQuery)
 	const [splitQueries, setSplitQueries] = React.useState([query])
@@ -148,7 +148,7 @@ export const MainView = (props: {
 			const queryParams = new URLSearchParams(location.search)
 			if (queryParams.has('sb')) {
 				queryParams.delete('sb')
-				history.push(`?${queryParams.toString()}`)
+				navigate(`?${queryParams.toString()}`)
 			}
 		}
 
@@ -207,7 +207,7 @@ export const MainView = (props: {
 		const queryParams = new URLSearchParams(location.search)
 		if (queryParams.has('sb')) {
 			queryParams.delete('sb')
-			history.push(`?${queryParams.toString()}`)
+			navigate(`?${queryParams.toString()}`)
 		}
 		inputElemRef.current?.select()
 	}
@@ -242,7 +242,7 @@ export const MainView = (props: {
 	function onPickShadowBoxElem(jsx: JSX.Element) {
 		const queryParams = new URLSearchParams(location.search)
 		queryParams.set('sb', jsx.props['data-json'])
-		history.push(`?${queryParams.toString()}`)
+		navigate(`?${queryParams.toString()}`)
 	}
 
 	function setActiveQueryTo(index: number) {
@@ -261,7 +261,7 @@ export const MainView = (props: {
 
 	function handleCommand(str: string) {
 		if (str === 'wc') {
-			history.push('/wcalc')
+			navigate('/wcalc')
 			resetQuery()
 		}
 	}

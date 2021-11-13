@@ -1,6 +1,6 @@
 import * as React from 'react'
 import c from 'classnames'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AppStateContext } from './AppStateProvider'
 import { Untabbable, useTabIndex } from '../lib/tabindex'
 import { GeneratedItemCard, StoreItemCard } from './item-cards'
@@ -13,7 +13,7 @@ export function Shadowbox(props: React.PropsWithChildren<{
 }>) {
 	const context = React.useContext(AppStateContext)
 	const tabIndex = useTabIndex(0)
-	const history = useHistory()
+	const navigate = useNavigate()
 	const location = useLocation()
 
 	React.useEffect(updateKeyListener)
@@ -34,7 +34,7 @@ export function Shadowbox(props: React.PropsWithChildren<{
 	function handleClose() {
 		const queryParams = new URLSearchParams(location.search)
 		queryParams.delete('sb')
-		history.push(`?${queryParams.toString()}`)
+		navigate(`?${queryParams.toString()}`)
 	}
 
 	function renderItem() {
