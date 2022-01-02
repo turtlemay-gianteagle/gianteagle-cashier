@@ -1,8 +1,7 @@
-html {
-  --COLOR_TARGET_RED: #CC0000;
-}
-
+/* Default item color. */
 .itemCards__storeItemCard { --item-ui-color: #555; }
+
+/* Get colors from item name. */
 .itemCards__storeItemCard[data-name*=Red] { --item-ui-color: Red; }
 .itemCards__storeItemCard[data-name*=Orange] { --item-ui-color: Orange; }
 .itemCards__storeItemCard[data-name*=Yellow] { --item-ui-color: Yellow; }
@@ -12,15 +11,19 @@ html {
 .itemCards__storeItemCard[data-name*=Pink] { --item-ui-color: Pink; }
 .itemCards__storeItemCard[data-name*=White] { --item-ui-color: #ccc; }
 .itemCards__storeItemCard[data-name*=Black] { --item-ui-color: #222; }
-.itemCards__storeItemCard[data-color=red] { --item-ui-color: Red; }
-.itemCards__storeItemCard[data-color=orange] { --item-ui-color: Orange; }
-.itemCards__storeItemCard[data-color=yellow] { --item-ui-color: Yellow; }
-.itemCards__storeItemCard[data-color=green] { --item-ui-color: Green; }
-.itemCards__storeItemCard[data-color=aqua] { --item-ui-color: DeepSkyBlue; }
-.itemCards__storeItemCard[data-color=blue] { --item-ui-color: DodgerBlue; }
-.itemCards__storeItemCard[data-color=purple] { --item-ui-color: Purple; }
-.itemCards__storeItemCard[data-color=pink] { --item-ui-color: Pink; }
-.itemCards__storeItemCard[data-color=white] { --item-ui-color: #ccc; }
-.itemCards__storeItemCard[data-color=black] { --item-ui-color: #222; }
-.itemCards__storeItemCard[data-color=brown] { --item-ui-color: burlywood; }
-.itemCards__storeItemCard[data-color=target] { --item-ui-color: var(--COLOR_TARGET_RED); }
+
+/* Override colors. */
+.itemCards__storeItemCard[data-color=red] { --item-ui-color: Red !important; }
+.itemCards__storeItemCard[data-color=orange] { --item-ui-color: Orange !important; }
+.itemCards__storeItemCard[data-color=yellow] { --item-ui-color: Yellow !important; }
+.itemCards__storeItemCard[data-color=green] { --item-ui-color: Green !important; }
+.itemCards__storeItemCard[data-color=aqua] { --item-ui-color: DeepSkyBlue !important; }
+.itemCards__storeItemCard[data-color=blue] { --item-ui-color: DodgerBlue !important; }
+.itemCards__storeItemCard[data-color=purple] { --item-ui-color: Purple !important; }
+.itemCards__storeItemCard[data-color=pink] { --item-ui-color: Pink !important; }
+.itemCards__storeItemCard[data-color=white] { --item-ui-color: #ccc !important; }
+.itemCards__storeItemCard[data-color=black] { --item-ui-color: #222 !important; }
+.itemCards__storeItemCard[data-color=brown] { --item-ui-color: burlywood !important; }
+
+/* Brand colors. */
+.itemCards__storeItemCard[data-color=target] { --item-ui-color: var(#CC0000); }

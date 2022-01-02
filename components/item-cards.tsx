@@ -29,7 +29,8 @@ export function StoreItemCard(props: {
 		<div className="itemCards__storeItemCard"
 			data-name={name}
 			data-color={props.data.uiColor}
-			data-json={JSON.stringify(props.data)}>
+			data-json={JSON.stringify(props.data)}
+			style={{ "--item-ui-color": props.data.uiColor } as React.CSSProperties}>
 			<div className="itemCards__storeItemName">{name}</div>
 			<Barcode className={c("itemCards__storeItemBarcode", { "itemCards__storeItemBarcode--disabled": disableBarcode })}
 				value={value} compact={props.compact}
