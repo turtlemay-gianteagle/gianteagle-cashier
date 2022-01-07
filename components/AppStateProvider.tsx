@@ -66,7 +66,7 @@ export class AppStateProvider extends React.Component<{}, IState> {
 			defaultPrefs: DEFAULT_PREFS,
 			userItemData: userItemData,
 			compiledItemData: compiledItemData,
-			search: this.search,
+			search: this._search,
 		}
 
 		this.state = Object.assign({}, DEFAULT_PREFS, localPrefs, cachedDbState, initialState)
@@ -103,7 +103,7 @@ export class AppStateProvider extends React.Component<{}, IState> {
 			this._fuse = this._createFuse(this.state.compiledItemData)
 	}
 
-	search = (query: string): IItemData[] => {
+	_search = (query: string): IItemData[] => {
 		return this._fuse.search(query).map(v => v.item)
 	}
 
