@@ -35,7 +35,7 @@ export const MainView = (props: {
 	const [onResetQueryDelegate] = React.useState(new Set<VoidFunction>())
 	const rootElemRef = React.useRef<HTMLDivElement>(null)
 	const inputElemRef = React.useRef<HTMLInputElement>(null)
-	const speechRec = React.useRef<any>(null)
+	const speechRec = React.useRef<SpeechRecognition | null>(null)
 	const [startedSpeechRec, setStartedSpeechRec] = React.useState(false)
 
 	React.useEffect(initSelectInput, [])
@@ -61,7 +61,7 @@ export const MainView = (props: {
 	}
 
 	function updateSpeechRecognition() {
-		if (!context.speechEnabled()) {
+		if (!context.speechEnabled() || !speechRec.current) {
 			return
 		}
 		speechRec.current.onstart = () => {
@@ -79,10 +79,10 @@ export const MainView = (props: {
 			setStartedSpeechRec(false)
 		}
 		speechRec.current.onspeechend = () => {
-			speechRec.current.stop()
+			speechRec.current?.stop()
 		}
 		speechRec.current.onresult = (event) => {
-			const transcript: string = event.results[0][0].transcript
+			const transcript = event.results[0][0].transcript
 			console.info(`"${transcript}"`)
 			setQuery(sanitizeSpokenNumbers(transcript))
 			focusInputField()

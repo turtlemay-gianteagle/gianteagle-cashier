@@ -53,6 +53,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@types/dom-speech-recognition@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@types/dom-speech-recognition/-/dom-speech-recognition-0.0.0.tgz#c4ac39834e0a88423d98905c25e7377067fd8f69"
+  integrity sha512-oIR5mAijKbvT3dcQGz9ntuKG4zC+Ew976PC+8vwe7BF+SlyEH0B6GKSHwyl2hVUjf4Uyr+0JIUkDP359AGkPFQ==
+
 "@types/eslint-scope@^3.7.0":
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.1.tgz#8dc390a7b4f9dd9f1284629efce982e41612116e"
