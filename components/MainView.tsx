@@ -366,6 +366,7 @@ export const MainView = (props: {
 				'mainView__throbberPositioner',
 				'mainView__mathResultPositioner',
 				'mainView__roundUpResultPositioner',
+				'mainView__listeningIndicatorPositioner',
 				'mainView__viewNavContainerPositionRoot',
 				'mainView__shadowboxPositionroot',
 			)}>
@@ -394,6 +395,10 @@ export const MainView = (props: {
 
 				<div className={c('mainView__mathResult', { 'active': showMathResult })}>
 					<span className="mainView__mathResultEqualSign">=</span>{mathResult}
+				</div>
+
+				<div className={c('mainView__listeningIndicator', { 'active': startedSpeechRec })}>
+					<span className="mainView__listeningIndicatorText">Listening…</span>
 				</div>
 
 				<div className={c('mainView__throbberBackdrop', { 'active': showThrobber })}>

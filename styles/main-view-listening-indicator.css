@@ -1,0 +1,24 @@
+.mainView__listeningIndicatorPositioner {
+	position: relative;
+}
+
+.mainView__listeningIndicator {
+	position: absolute;
+	top: 0;
+	right: 1em;
+	padding: 0.5em 1em;
+	width: auto;
+	height: auto;
+	font: 1.2em monospace;
+	color: white;
+	background: #222;
+	transition-duration: 200ms;
+	transition-property: transform;
+	text-align: center;
+	z-index: 4;
+}
+
+.mainView__listeningIndicator:not(.active) {
+	transform: translateY(-100%);
+	pointer-events: none;
+}
