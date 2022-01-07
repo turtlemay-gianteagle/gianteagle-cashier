@@ -82,7 +82,7 @@ export const MainView = (props: {
 			speechRec.current.stop()
 		}
 		speechRec.current.onresult = (event) => {
-			const transcript = event.results[0][0].transcript
+			const transcript: string = event.results[0][0].transcript
 			console.info(`"${transcript}"`)
 			setQuery(transcript)
 			focusInputField()
