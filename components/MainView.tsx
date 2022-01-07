@@ -70,13 +70,24 @@ export const MainView = (props: {
 			setStartedSpeechRec(true)
 		}
 		speechRec.current.onend = () => {
-			console.info("Stopped listening.")
-			setThrobber(false)
-			setStartedSpeechRec(false)
+			if (startedSpeechRec) {
+				console.info("Stopped listening.")
+				setThrobber(false)
+				setStartedSpeechRec(false)
+			}
 		}
-		speechRec.current.onerror = () => {
+		speechRec.current.onerror = (err) => {
 			setThrobber(false)
 			setStartedSpeechRec(false)
+			if (err.error === 'not-allowed') {
+				context.provider.setState({ enableSpeech: false })
+			} else if (err.error === 'aborted') {
+				console.info("Listening canceled.")
+			} else if (err.error === 'no-speech') {
+				console.info("No speech detected.")
+			} else {
+				console.error(err)
+			}
 		}
 		speechRec.current.onspeechend = () => {
 			speechRec.current?.stop()
