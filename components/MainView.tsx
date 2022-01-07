@@ -84,7 +84,7 @@ export const MainView = (props: {
 		speechRec.current.onresult = (event) => {
 			const transcript: string = event.results[0][0].transcript
 			console.info(`"${transcript}"`)
-			setQuery(transcript)
+			setQuery(sanitizeSpokenNumbers(transcript))
 			focusInputField()
 		}
 	}
@@ -449,4 +449,12 @@ function tryRoundUp(query: string): number | null {
 		return lodash.inRange(n, 1, 100) ? 100 - n : 0
 	}
 	return null
+}
+
+function sanitizeSpokenNumbers(str: string) {
+	if (str.match(/^[\d\s-]*$/g)) {
+		return str.replace(/\D/g, '')
+	} else {
+		return str
+	}
 }
