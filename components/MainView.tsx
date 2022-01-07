@@ -43,7 +43,7 @@ export const MainView = (props: {
 	React.useEffect(updateKeyListener)
 	React.useEffect(updateQueryParams)
 	React.useEffect(updateSpeechRecognition)
-	React.useEffect(cancelSpeech, [props.active, query, activeQueryIndex, useNumInput])
+	React.useEffect(cancelSpeech, [props.active, query, activeQueryIndex, useNumInput, showShadowbox])
 	React.useEffect(onChangedQuery, [query])
 	React.useEffect(onChangedActiveView, [props.active])
 	React.useEffect(updateChangedSplitQueries, [splitQueries, query, context.defaultQuery])
