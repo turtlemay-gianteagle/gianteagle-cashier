@@ -185,6 +185,14 @@ export function PrefsView() {
 							value={context.appRestartKey}
 							onChange={e => context.provider.setState({ appRestartKey: e.target.value })} />,
 					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "🎙️ Voice input key",
+						controlNode: <input type="text"
+							className="prefsView__optionTextInput"
+							value={context.speechStartKey}
+							onChange={e => context.provider.setState({ speechStartKey: e.target.value })} />,
+					}}</PrefsOption>
 				</section>
 
 				<section>
@@ -199,6 +207,15 @@ export function PrefsView() {
 							value={context.overrideOrganizationId}
 							placeholder={context.dbInfo?.organization}
 							onChange={e => context.provider.setState({ overrideOrganizationId: e.target.value.toUpperCase() })} />,
+					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "🎙️ Enable voice", description: "Enable voice input in supported browsers.",
+						controlNode: <input
+							className="prefsView__optionCheckbox"
+							type="checkbox"
+							checked={context.enableSpeech}
+							onChange={e => context.provider.setState({ enableSpeech: e.target.checked })} />,
 					}}</PrefsOption>
 				</section>
 

@@ -13,6 +13,8 @@ import { isTabbable } from 'tabbable'
 import { useIsFirstRender } from '../lib/react'
 import { matchKeyCombo } from '../src/keys'
 
+const SpeechRecognition = window['SpeechRecognition'] ?? window['webkitSpeechRecognition']
+
 export const MainView = (props: {
 	className?: string
 	active: boolean
@@ -35,10 +37,14 @@ export const MainView = (props: {
 	const [onResetQueryDelegate] = React.useState(new Set<VoidFunction>())
 	const rootElemRef = React.useRef<HTMLDivElement>(null)
 	const inputElemRef = React.useRef<HTMLInputElement>(null)
+	const speechRec = React.useRef(context.speechEnabled() ? new SpeechRecognition() : null)
+	const [startedSpeechRec, setStartedSpeechRec] = React.useState(false)
 
 	React.useEffect(initSelectInput, [])
 	React.useEffect(updateKeyListener)
 	React.useEffect(updateQueryParams)
+	React.useEffect(updateSpeechRecognition)
+	React.useEffect(cancelSpeech, [props.active, query, activeQueryIndex, useNumInput])
 	React.useEffect(onChangedQuery, [query])
 	React.useEffect(onChangedActiveView, [props.active])
 	React.useEffect(updateChangedSplitQueries, [splitQueries, query, context.defaultQuery])
@@ -46,6 +52,36 @@ export const MainView = (props: {
 
 	function initSelectInput() {
 		inputElemRef.current?.select()
+	}
+
+	function updateSpeechRecognition() {
+		if (!context.speechEnabled()) {
+			return
+		}
+
+		speechRec.current.onstart = () => {
+			console.info("Listening for speech…")
+			setThrobber(true)
+			setStartedSpeechRec(true)
+		}
+		speechRec.current.onend = () => {
+			console.info("Stopped listening.")
+			setThrobber(false)
+			setStartedSpeechRec(false)
+		}
+		speechRec.current.onerror = () => {
+			setThrobber(false)
+			setStartedSpeechRec(false)
+		}
+		speechRec.current.onspeechend = () => {
+			speechRec.current.stop()
+		}
+		speechRec.current.onresult = (event) => {
+			const transcript = event.results[0][0].transcript
+			console.info(`"${transcript}"`)
+			setQuery(transcript)
+			focusInputField()
+		}
 	}
 
 	function updateKeyListener() {
@@ -77,6 +113,12 @@ export const MainView = (props: {
 			if (e.ctrlKey && matchedNumKey) {
 				e.preventDefault()
 				setActiveQueryTo(matchedNumKey === '0' ? 9 : Number(matchedNumKey) - 1)
+				return
+			}
+
+			if (context.speechEnabled() && matchKeyCombo(e, context.speechStartKey)) {
+				e.preventDefault()
+				if (!startedSpeechRec) speechRec.current?.start()
 				return
 			}
 
@@ -116,6 +158,13 @@ export const MainView = (props: {
 					focusInputField()
 					clearInputField()
 					return
+				}
+			}
+
+			if (e.key === 'Escape') {
+				if (context.speechEnabled()) {
+					e.preventDefault()
+					speechRec.current?.abort()
 				}
 			}
 
@@ -169,6 +218,10 @@ export const MainView = (props: {
 		}
 	}
 
+	function cancelSpeech() {
+		speechRec.current?.abort()
+	}
+
 	function updateChangedSplitQueries() {
 		setActiveQueryIndex(0)
 		setHighlightQuery(null)
@@ -198,6 +251,7 @@ export const MainView = (props: {
 	}
 
 	function resetQuery() {
+		speechRec.current?.abort()
 		onResetQueryDelegate.forEach(fn => fn?.())
 		setHighlightQuery(null)
 		setActiveQueryIndex(0)
@@ -237,6 +291,14 @@ export const MainView = (props: {
 
 	function onClickResetButton() {
 		resetQuery()
+	}
+
+	function onClickVoiceInputButton() {
+		if (startedSpeechRec) {
+			speechRec.current?.abort()
+		} else {
+			speechRec.current?.start()
+		}
 	}
 
 	function onPickShadowBoxElem(jsx: JSX.Element) {
@@ -289,6 +351,11 @@ export const MainView = (props: {
 					commitDelay={300}
 					disabled={!props.active}
 					passProps={{ spellCheck: false }} />
+				{context.speechEnabled() && (
+					<div className={c('mainView__queryVoiceInputButton', { 'mainView__queryVoiceInputButton--active': startedSpeechRec })} role="button" onClick={onClickVoiceInputButton}>
+						<span className="mainview__queryVoiceInputButtonText">🎙️</span>
+					</div>
+				)}
 				<div className="mainView__queryResetButton" role="button" onClick={onClickResetButton}>
 					<span className="mainView__queryResetButtonText">↶</span>
 				</div>

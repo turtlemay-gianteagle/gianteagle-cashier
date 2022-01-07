@@ -5,6 +5,8 @@ import FuseJs from 'fuse.js'
 import { loadCacheDb, validateDb, saveCacheDb, getRemoteDb, clearCacheDb } from '../src/db'
 import dbUrls from '../data/db-urls.json'
 
+const BROWSER_SUPPORT_SPEECH = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window
+
 const LOCAL_STORAGE_KEY = 'user-prefs'
 
 const DEFAULT_PREFS = {
@@ -16,6 +18,7 @@ const DEFAULT_PREFS = {
 	querySeparator: ';',
 	defaultQuery: '',
 	resetQueryKey: '`',
+	speechStartKey: '^Space',
 	appNavBackKey: 'Escape',
 	appNavViewLeftKey: '[',
 	appNavViewRightKey: ']',
@@ -23,6 +26,7 @@ const DEFAULT_PREFS = {
 	noCheat: false,
 	overrideOrganizationId: '',
 	compactBarcodes: false,
+	enableSpeech: true,
 }
 
 type IPrefs = typeof DEFAULT_PREFS
@@ -35,6 +39,7 @@ type IState = IPrefs & {
 	userItemData: IItemData[]
 	compiledItemData: IItemData[]
 	search: Function,
+	speechEnabled: () => boolean
 }
 
 // @ts-expect-error
@@ -67,6 +72,8 @@ export class AppStateProvider extends React.Component<{}, IState> {
 			userItemData: userItemData,
 			compiledItemData: compiledItemData,
 			search: this._search,
+			enableSpeech: BROWSER_SUPPORT_SPEECH && DEFAULT_PREFS.enableSpeech,
+			speechEnabled: this._speechEnabled,
 		}
 
 		this.state = Object.assign({}, DEFAULT_PREFS, localPrefs, cachedDbState, initialState)
@@ -101,10 +108,17 @@ export class AppStateProvider extends React.Component<{}, IState> {
 
 		if (this.state.compiledItemData !== prevState.compiledItemData)
 			this._fuse = this._createFuse(this.state.compiledItemData)
+
+		if (this.state.enableSpeech && !BROWSER_SUPPORT_SPEECH)
+			this.setState({ enableSpeech: false })
 	}
 
 	_search = (query: string): IItemData[] => {
 		return this._fuse.search(query).map(v => v.item)
+	}
+
+	_speechEnabled = () => {
+		return BROWSER_SUPPORT_SPEECH && this.state.enableSpeech
 	}
 
 	resetAll = () => {

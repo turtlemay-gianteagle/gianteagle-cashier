@@ -83,6 +83,38 @@
 
 /* -------------------------------------------------------------------------------- */
 
+.mainView__queryVoiceInputButton {
+	display: flex;
+	--size: 3.5em;
+	height: var(--size);
+	width: var(--size);
+	color: #666;
+	overflow: hidden;
+	border-radius: 50%;
+	transition-duration: .2s;
+	transition-property: transform, background;
+	user-select: none;
+	cursor: pointer;
+	z-index: 1;
+}
+
+.mainView__queryVoiceInputButton:active {
+	transform: scale(0.8);
+}
+
+.mainView__queryVoiceInputButtonText {
+	margin: auto;
+	font: 2em monospace;
+	user-select: none;
+}
+
+.mainView__queryVoiceInputButton--active {
+	background:rgba(100, 100, 100, .2);
+	transform: scale(1.2);
+}
+
+/* -------------------------------------------------------------------------------- */
+
 .mainView__queryResetButton {
 	display: flex;
 	--size: 3.5em;
