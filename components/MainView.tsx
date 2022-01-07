@@ -13,8 +13,6 @@ import { isTabbable } from 'tabbable'
 import { useIsFirstRender } from '../lib/react'
 import { matchKeyCombo } from '../src/keys'
 
-const SpeechRecognition = window['SpeechRecognition'] ?? window['webkitSpeechRecognition']
-
 export const MainView = (props: {
 	className?: string
 	active: boolean
@@ -37,10 +35,11 @@ export const MainView = (props: {
 	const [onResetQueryDelegate] = React.useState(new Set<VoidFunction>())
 	const rootElemRef = React.useRef<HTMLDivElement>(null)
 	const inputElemRef = React.useRef<HTMLInputElement>(null)
-	const speechRec = React.useRef(context.speechEnabled() ? new SpeechRecognition() : null)
+	const speechRec = React.useRef<any>(null)
 	const [startedSpeechRec, setStartedSpeechRec] = React.useState(false)
 
 	React.useEffect(initSelectInput, [])
+	React.useEffect(initSpeechRecognition, [])
 	React.useEffect(updateKeyListener)
 	React.useEffect(updateQueryParams)
 	React.useEffect(updateSpeechRecognition)
@@ -54,11 +53,17 @@ export const MainView = (props: {
 		inputElemRef.current?.select()
 	}
 
+	function initSpeechRecognition() {
+		if (context.speechEnabled()) {
+			const SpeechRecognition = window['SpeechRecognition'] ?? window['webkitSpeechRecognition']
+			speechRec.current = new SpeechRecognition()
+		}
+	}
+
 	function updateSpeechRecognition() {
 		if (!context.speechEnabled()) {
 			return
 		}
-
 		speechRec.current.onstart = () => {
 			console.info("Listening for speech…")
 			setThrobber(true)
