@@ -19,6 +19,7 @@ export const InfoView = () => (
 			<section>
 				<h2>📅 Recent Changes</h2>
 				<ul>
+					<li>Added experimental voice input for supported browsers.</li>
 					<li>Added compact barcode option.</li>
 					<li>Now supporting multiple organizations. Set your database in settings.</li>
 					<li>Support key combinations in settings.</li>
