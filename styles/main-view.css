@@ -91,6 +91,7 @@
 	color: #666;
 	overflow: hidden;
 	border-radius: 50%;
+	filter: grayscale(1);
 	transition-duration: .2s;
 	transition-property: transform, background;
 	user-select: none;
