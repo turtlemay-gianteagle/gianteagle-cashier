@@ -177,7 +177,7 @@ export const MainView = (props: {
 				}
 			}
 
-			if (e.key === 'Escape') {
+			if (e.key === context.appNavBackKey) {
 				if (context.speechEnabled()) {
 					e.preventDefault()
 					speechRec.current?.abort()
