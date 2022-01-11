@@ -10,7 +10,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { MainViewQueryResults } from './MainViewQueryResults'
 import { Untabbable } from '../lib/tabindex'
 import { isTabbable } from 'tabbable'
-import { useIsFirstRender } from '../lib/react'
+import { useIsFirstRender, usePrevious } from '../lib/react'
 import { matchKeyCombos } from '../src/keys'
 
 export const MainView = (props: {
@@ -22,6 +22,7 @@ export const MainView = (props: {
 	const navigate = useNavigate()
 	const location = useLocation()
 	const [query, setQuery] = React.useState(context.defaultQuery)
+	const prevQuery = usePrevious(query)
 	const [splitQueries, setSplitQueries] = React.useState([query])
 	const [activeQueryIndex, setActiveQueryIndex] = React.useState(0)
 	const [highlightQuery, setHighlightQuery] = React.useState<string | null>(null)
@@ -37,27 +38,19 @@ export const MainView = (props: {
 	const inputElemRef = React.useRef<HTMLInputElement>(null)
 	const speechRec = React.useRef<SpeechRecognition | null>(null)
 	const [startedSpeechRec, setStartedSpeechRec] = React.useState(false)
-	const selectInputTimeout = React.useRef<number | undefined>(undefined)
 	const [lastInputTime, setLastInputTime] = React.useState(Date.now())
 
-	React.useEffect(initTimers, [])
 	React.useEffect(initSelectInput, [])
 	React.useEffect(initSpeechRecognition, [])
 	React.useEffect(updateKeyListener)
 	React.useEffect(updateQueryParams)
 	React.useEffect(updateSpeechRecognition)
+	React.useEffect(updateSelectInputTimeout, [context.selectQueryTime, query, lastInputTime])
 	React.useEffect(cancelSpeech, [props.active, query, activeQueryIndex, useNumInput, showShadowbox])
 	React.useEffect(onChangedQuery, [query])
 	React.useEffect(onChangedActiveView, [props.active])
 	React.useEffect(updateChangedSplitQueries, [splitQueries, query, context.defaultQuery])
 	React.useEffect(updateHighlightedQuery, [highlightQuery, context.querySeparator, activeQueryIndex])
-
-	function initTimers() {
-		return function cleanup() {
-			window.clearTimeout(selectInputTimeout.current)
-			selectInputTimeout.current = undefined
-		}
-	}
 
 	function initSelectInput() {
 		inputElemRef.current?.select()
@@ -208,6 +201,19 @@ export const MainView = (props: {
 		setShowShadowbox(queryParams.has('sb'))
 	}
 
+	function updateSelectInputTimeout() {
+		let timeout: number | undefined
+
+		if (context.selectQueryTime > 0 && query !== prevQuery) {
+			const fn = () => inputElemRef.current?.select()
+			timeout = window.setTimeout(fn, context.selectQueryTime)
+		}
+
+		return function cleanup() {
+			window.clearTimeout(timeout)
+		}
+	}
+
 	function onChangedActiveView() {
 		if (props.active)
 			inputElemRef.current?.select()
@@ -356,26 +362,11 @@ export const MainView = (props: {
 
 	function onStartInput() {
 		setThrobber(true)
-
-		window.clearTimeout(selectInputTimeout.current)
-		selectInputTimeout.current = undefined
+		setLastInputTime(Date.now())
 	}
 	
 	function onStopInput() {
 		setThrobber(false)
-
-		if (context.selectQueryTime > 0) {
-			if (Date.now() - lastInputTime >= context.selectQueryTime) {
-				selectInputTimeout.current = window.setTimeout(inputTimeoutCallback, context.selectQueryTime)
-			}
-		}
-
-		setLastInputTime(Date.now())
-	}
-
-	function inputTimeoutCallback() {
-		inputElemRef.current?.select()
-		selectInputTimeout.current = undefined
 	}
 
 	const showViewLeftButton = activeQueryIndex > 0
