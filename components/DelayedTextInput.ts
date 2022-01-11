@@ -19,24 +19,21 @@ export function DelayedTextInput(props: {
 	passProps?: Object
 }) {
 	const [value, setValue] = React.useState(props.committedValue)
-	const [commitTimeout, setCommitTimeout] = React.useState<number | null>(null)
 	const [active, setActive] = React.useState(false)
 
 	React.useEffect(updateOnResetDelegate)
-	React.useEffect(updateClearTimeout)
+	React.useEffect(onChangeValue, [value])
 	React.useEffect(onChangeCommitedValue, [props.committedValue])
+
+	function onChangeValue() {
+		const timeout = window.setTimeout(changedValueCallback, props.commitDelay)
+		return () => window.clearTimeout(timeout)
+	}
 
 	function updateOnResetDelegate() {
 		const onReset = () => setValue(props.committedValue)
 		props.onResetDelegate?.add(onReset)
 		return () => void props.onResetDelegate?.delete(onReset)
-	}
-
-	function updateClearTimeout() {
-		return () => {
-			if (commitTimeout !== null)
-				window.clearTimeout(commitTimeout)
-		}
 	}
 
 	function onChangeCommitedValue() {
@@ -46,15 +43,13 @@ export function DelayedTextInput(props: {
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		props.onStartInput?.()
 		setActive(true)
-		const newValue = e.target.value
-		setValue(newValue)
-		if (commitTimeout !== null)
-			window.clearTimeout(commitTimeout)
-		setCommitTimeout(window.setTimeout(() => {
-			setActive(false)
-			props.onCommit(newValue)
-			props.onStopInput?.()
-		}, props.commitDelay))
+		setValue(e.target.value)
+	}
+
+	function changedValueCallback() {
+		props.onStopInput?.()
+		setActive(false)
+		props.onCommit(value)
 	}
 
 	return React.createElement(props.textarea ? 'textarea' : 'input', {
