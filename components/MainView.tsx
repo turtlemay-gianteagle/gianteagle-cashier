@@ -355,6 +355,11 @@ export const MainView = (props: {
 						{useNumInput ? '⌨️' : '🔢'}
 					</div>
 				</div>
+				{context.speechEnabled() && (
+					<div className={c('mainView__queryVoiceInputButton', { 'mainView__queryVoiceInputButton--active': startedSpeechRec })} role="button" onClick={onClickVoiceInputButton}>
+						<span className="mainview__queryVoiceInputButtonText">🎙️</span>
+					</div>
+				)}
 				<DelayedTextInput className={c('mainView__mainInput', { 'mainView__mainInput--numType': useNumInput })}
 					type={useNumInput ? 'number' : 'text'}
 					elemRef={inputElemRef}
@@ -367,11 +372,6 @@ export const MainView = (props: {
 					commitDelay={300}
 					disabled={!props.active}
 					passProps={{ spellCheck: false }} />
-				{context.speechEnabled() && (
-					<div className={c('mainView__queryVoiceInputButton', { 'mainView__queryVoiceInputButton--active': startedSpeechRec })} role="button" onClick={onClickVoiceInputButton}>
-						<span className="mainview__queryVoiceInputButtonText">🎙️</span>
-					</div>
-				)}
 				<div className="mainView__queryResetButton" role="button" onClick={onClickResetButton}>
 					<span className="mainView__queryResetButtonText">↶</span>
 				</div>
