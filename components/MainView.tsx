@@ -37,7 +37,10 @@ export const MainView = (props: {
 	const inputElemRef = React.useRef<HTMLInputElement>(null)
 	const speechRec = React.useRef<SpeechRecognition | null>(null)
 	const [startedSpeechRec, setStartedSpeechRec] = React.useState(false)
+	const selectInputTimeout = React.useRef<number | undefined>(undefined)
+	const [lastInputTime, setLastInputTime] = React.useState(Date.now())
 
+	React.useEffect(initTimers, [])
 	React.useEffect(initSelectInput, [])
 	React.useEffect(initSpeechRecognition, [])
 	React.useEffect(updateKeyListener)
@@ -48,6 +51,13 @@ export const MainView = (props: {
 	React.useEffect(onChangedActiveView, [props.active])
 	React.useEffect(updateChangedSplitQueries, [splitQueries, query, context.defaultQuery])
 	React.useEffect(updateHighlightedQuery, [highlightQuery, context.querySeparator, activeQueryIndex])
+
+	function initTimers() {
+		return function cleanup() {
+			window.clearTimeout(selectInputTimeout.current)
+			selectInputTimeout.current = undefined
+		}
+	}
 
 	function initSelectInput() {
 		inputElemRef.current?.select()
@@ -344,6 +354,30 @@ export const MainView = (props: {
 		}
 	}
 
+	function onStartInput() {
+		setThrobber(true)
+
+		window.clearTimeout(selectInputTimeout.current)
+		selectInputTimeout.current = undefined
+	}
+	
+	function onStopInput() {
+		setThrobber(false)
+
+		if (context.selectQueryTime > 0) {
+			if (Date.now() - lastInputTime >= context.selectQueryTime) {
+				selectInputTimeout.current = window.setTimeout(inputTimeoutCallback, context.selectQueryTime)
+			}
+		}
+
+		setLastInputTime(Date.now())
+	}
+
+	function inputTimeoutCallback() {
+		inputElemRef.current?.select()
+		selectInputTimeout.current = undefined
+	}
+
 	const showViewLeftButton = activeQueryIndex > 0
 	const showViewRightButton = activeQueryIndex < splitQueries.length - 1
 
@@ -365,8 +399,8 @@ export const MainView = (props: {
 					elemRef={inputElemRef}
 					placeholder={useNumInput ? "Enter UPC or PLU" : "Enter query"}
 					committedValue={query}
-					onStartInput={() => setThrobber(true)}
-					onStopInput={() => setThrobber(false)}
+					onStartInput={onStartInput}
+					onStopInput={onStopInput}
 					onCommit={v => { if (v.length > 0) setQuery(v) }}
 					onResetDelegate={onResetQueryDelegate}
 					commitDelay={300}

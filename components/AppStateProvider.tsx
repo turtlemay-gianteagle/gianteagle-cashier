@@ -27,6 +27,7 @@ const DEFAULT_PREFS = {
 	overrideOrganizationId: '',
 	compactBarcodes: false,
 	enableSpeech: true,
+	selectQueryTime: 0,
 }
 
 type IPrefs = typeof DEFAULT_PREFS

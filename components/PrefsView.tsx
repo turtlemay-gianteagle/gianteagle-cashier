@@ -74,6 +74,17 @@ export function PrefsView() {
 							onChange={e => context.provider.setState({ compactBarcodes: e.target.checked })} />,
 					}}</PrefsOption>
 					<PrefsOption>{{
+						label: "⏱️ Select query timeout", description: "Select input field some milliseconds after last query. 0 to disable.",
+						controlNode: <input type="number"
+							className="prefsView__optionTextInput"
+							value={context.selectQueryTime}
+							onClick={e => { (e.target as HTMLInputElement).select() }}
+							onChange={e => {
+								const n = lodash.clamp(Number(e.target.value), 0, Infinity)
+								context.provider.setState({ selectQueryTime: n })
+							}} />,
+					}}</PrefsOption>
+					<PrefsOption>{{
 						label: "#️⃣ Items per page", description: "Number of query results to load at a time.",
 						controlNode: <input type="number"
 							className="prefsView__optionTextInput"
