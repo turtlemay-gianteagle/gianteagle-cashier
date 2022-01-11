@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { AppStateContext } from './AppStateProvider'
 import { Untabbable, useTabIndex } from '../lib/tabindex'
 import { GeneratedItemCard, StoreItemCard } from './item-cards'
-import { matchKeyCombo } from '../src/keys'
+import { matchKeyCombos } from '../src/keys'
 
 export function Shadowbox(props: React.PropsWithChildren<{
 	className?: string
@@ -26,7 +26,7 @@ export function Shadowbox(props: React.PropsWithChildren<{
 		function handleKeyDown(e: KeyboardEvent) {
 			if (!props.active)
 				return
-			if (matchKeyCombo(e, context.appNavBackKey))
+			if (matchKeyCombos(e, context.appNavBackKey))
 				handleClose()
 		}
 	}

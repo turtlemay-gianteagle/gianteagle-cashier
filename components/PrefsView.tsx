@@ -154,7 +154,7 @@ export function PrefsView() {
 				<section>
 					<div className="prefsView__optionsListSectionInfo">
 						<h2>Key Bindings</h2>
-						<p>JavaScript event key names or keycodes. Include any combination of modifier keys by prepending "^" for Ctrl, "!" for Alt, "+" for Shift, and "#" for Meta. (e.g. "+Space" means Shift and Space)</p>
+						<p>JavaScript event key names or keycodes. Include any combination of modifier keys by prepending "^" for Ctrl, "!" for Alt, "+" for Shift, and "#" for Meta (e.g. "+Space" means Shift and Space). Comma-separate multiple combos.</p>
 					</div>
 
 					<PrefsOption>{{

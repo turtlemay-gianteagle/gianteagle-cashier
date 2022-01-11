@@ -14,11 +14,20 @@ function getKeyCombo(str: string): IKeyCombo {
 	}
 }
 
-export function matchKeyCombo(event: KeyboardEvent, key: string): boolean {
-	const kc = getKeyCombo(key)
+function matchKeyCombo(event: KeyboardEvent, str: string): boolean {
+	const kc = getKeyCombo(str)
 	const matchedKey = isMatch(event, pick(kc, ['key', 'ctrlKey', 'altKey', 'shiftKey', 'metaKey']))
 	const matchedCode = isMatch(event, pick(kc, ['code', 'ctrlKey', 'altKey', 'shiftKey', 'metaKey']))
 	return matchedKey || matchedCode
+}
+
+export function matchKeyCombos(event: KeyboardEvent, str: string): boolean {
+	const keys: string[] = str.split(/[\s,]+/)
+	for (const v of keys) {
+		if (matchKeyCombo(event, v))
+			return true
+	}
+	return false
 }
 
 export interface IKeyCombo {

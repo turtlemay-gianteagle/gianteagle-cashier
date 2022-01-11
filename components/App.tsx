@@ -7,7 +7,7 @@ import { AppStateContext, AppStateProvider } from './AppStateProvider'
 import { InfoView } from './InfoView'
 import { WeightCalcView } from './WeightCalcView'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
-import { matchKeyCombo } from '../src/keys'
+import { matchKeyCombos } from '../src/keys'
 
 export function App() {
 	return (
@@ -78,7 +78,7 @@ function AppStateConsumer(props: React.PropsWithChildren<{}>) {
 		addEventListener('keydown', fn)
 		return () => removeEventListener('keydown', fn)
 		function fn(e: KeyboardEvent) {
-			if (matchKeyCombo(e, context.appRestartKey)) {
+			if (matchKeyCombos(e, context.appRestartKey)) {
 				e.preventDefault()
 				navigate('/')
 			}

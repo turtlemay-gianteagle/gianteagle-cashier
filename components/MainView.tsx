@@ -11,7 +11,7 @@ import { MainViewQueryResults } from './MainViewQueryResults'
 import { Untabbable } from '../lib/tabindex'
 import { isTabbable } from 'tabbable'
 import { useIsFirstRender } from '../lib/react'
-import { matchKeyCombo } from '../src/keys'
+import { matchKeyCombos } from '../src/keys'
 
 export const MainView = (props: {
 	className?: string
@@ -142,13 +142,13 @@ export const MainView = (props: {
 				return
 			}
 
-			if (context.speechEnabled() && matchKeyCombo(e, context.speechStartKey)) {
+			if (context.speechEnabled() && matchKeyCombos(e, context.speechStartKey)) {
 				e.preventDefault()
 				if (!startedSpeechRec) speechRec.current?.start()
 				return
 			}
 
-			if (matchKeyCombo(e, context.resetQueryKey)) {
+			if (matchKeyCombos(e, context.resetQueryKey)) {
 				e.preventDefault()
 				resetQuery()
 				return
@@ -156,13 +156,13 @@ export const MainView = (props: {
 
 			if (!showShadowbox) {
 				if (splitQueries.length > 1) {
-					if (matchKeyCombo(e, context.appNavViewLeftKey)) {
+					if (matchKeyCombos(e, context.appNavViewLeftKey)) {
 						e.preventDefault()
 						setThrobber(false)
 						setActiveQueryLeft()
 						return
 					}
-					if (matchKeyCombo(e, context.appNavViewRightKey)) {
+					if (matchKeyCombos(e, context.appNavViewRightKey)) {
 						e.preventDefault()
 						setThrobber(false)
 						setActiveQueryRight()
