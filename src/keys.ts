@@ -1,12 +1,14 @@
 import { isMatch, pick } from 'lodash'
 
 function getKeyCombo(str: string): IKeyCombo {
-	const [, modifiers, key] = str.match(/^((?:\^?|!?|\+?|#?)*)(.+)$/) as RegExpMatchArray
+	const match = str.match(/^((?:\^?|!?|\+?|#?)*)(.+)$/)
+	const modifiers = match?.[1]
+	const key = match?.[2]
 	return {
-		ctrlKey: modifiers.includes('^'),
-		altKey: modifiers.includes('!'),
-		shiftKey: modifiers.includes('+'),
-		metaKey: modifiers.includes('#'),
+		ctrlKey: modifiers?.includes('^'),
+		altKey: modifiers?.includes('!'),
+		shiftKey: modifiers?.includes('+'),
+		metaKey: modifiers?.includes('#'),
 		key: key,
 		code: key,
 	}
