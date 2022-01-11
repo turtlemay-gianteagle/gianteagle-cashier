@@ -21,8 +21,8 @@ export function DelayedTextInput(props: {
 	const [value, setValue] = React.useState(props.committedValue)
 	const [active, setActive] = React.useState(false)
 
-	React.useEffect(updateOnResetDelegate)
-	React.useEffect(onChangeValue, [value])
+	React.useEffect(updateOnResetDelegate, [props.onResetDelegate, props.committedValue])
+	React.useEffect(onChangeValue, [value, props.commitDelay])
 	React.useEffect(onChangeCommitedValue, [props.committedValue])
 
 	function onChangeValue() {
