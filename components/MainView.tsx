@@ -463,7 +463,7 @@ function tryRoundUp(query: string): number | null {
 }
 
 function sanitizeSpokenNumbers(str: string) {
-	if (str.match(/^[\d\s-]*$/g)) {
+	if (str.match(/^[\d\s-+/]*$/g)) {
 		return str.replace(/\D/g, '')
 	} else {
 		return str
