@@ -30,8 +30,8 @@ export const InfoView = () => (
 				<h2>🧰 Other Tools</h2>
 				<ul>
 					<li><Link to="/wcalc">Weight Calculator</Link></li>
-					<li><Link to="https://github.com/turtlemay-gianteagle/gianteagle-web">Giant Eagle browser extension</Link></li>
-					<li><Link to="https://target.turtlemay.us/">Target tools</Link></li>
+					<li><a target="_blank" href="https://github.com/turtlemay-gianteagle/gianteagle-web#readme">Giant Eagle browser extension</a></li>
+					<li><a target="_blank" href="https://target.turtlemay.us/">Target tools</a></li>
 				</ul>
 			</section>
 			<section>
