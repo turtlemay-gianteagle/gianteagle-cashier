@@ -19,7 +19,11 @@ export function PrefsView() {
 
 				<section>
 					<PrefsOption>{{
-						label: "🔗 Database URL", description: "Must match our JSON schema and serve over HTTPS. Defaults to Turtlemay's store database.",
+						label: "🔗 Database URL",
+						description: (<>
+							<p>Must match our JSON schema and serve over HTTPS. Defaults to Turtlemay's store database.</p>
+							<p>Default url: <div>{context.defaultPrefs.dbUrl}</div></p>
+						</>),
 						controlNode: <DelayedTextInput
 							className="prefsView__optionTextInput"
 							committedValue={context.dbUrl}
