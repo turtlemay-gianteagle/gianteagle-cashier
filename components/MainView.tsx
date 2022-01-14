@@ -41,7 +41,6 @@ export const MainView = (props: {
 	const [lastInputTime, setLastInputTime] = React.useState(Date.now());
 
 	React.useEffect(initSelectInput, []);
-	React.useEffect(initSpeechRecognition, []);
 	React.useEffect(updateKeyListener);
 	React.useEffect(updateQueryParams);
 	React.useEffect(updateSpeechRecognition);
@@ -56,51 +55,55 @@ export const MainView = (props: {
 		inputElemRef.current?.select();
 	}
 
-	function initSpeechRecognition() {
+	function updateSpeechRecognition() {
 		if (context.speechEnabled()) {
 			const SpeechRecognition = window['SpeechRecognition'] ?? window['webkitSpeechRecognition'];
-			speechRec.current = new SpeechRecognition();
+			speechRec.current = speechRec.current ?? new SpeechRecognition();
+			speechRec.current.onstart = speechOnStart;
+			speechRec.current.onend = speechOnEnd;
+			speechRec.current.onerror = speechOnError;
+			speechRec.current.onspeechend = speechOnSpeechEnd;
+			speechRec.current.onresult = speechOnResult;
 		}
 	}
 
-	function updateSpeechRecognition() {
-		if (!context.speechEnabled() || !speechRec.current) {
-			return;
-		}
-		speechRec.current.onstart = () => {
-			console.info("Listening for speech…");
-			setThrobber(true);
-			setStartedSpeechRec(true);
-		};
-		speechRec.current.onend = () => {
-			if (startedSpeechRec) {
-				console.info("Stopped listening.");
-				setThrobber(false);
-				setStartedSpeechRec(false);
-			}
-		};
-		speechRec.current.onerror = (err) => {
+	function speechOnStart() {
+		console.info("Listening for speech…");
+		setThrobber(true);
+		setStartedSpeechRec(true);
+	}
+
+	function speechOnEnd() {
+		if (startedSpeechRec) {
+			console.info("Stopped listening.");
 			setThrobber(false);
 			setStartedSpeechRec(false);
-			if (err.error === 'not-allowed') {
-				context.provider.setState({ enableSpeech: false });
-			} else if (err.error === 'aborted') {
-				console.info("Listening canceled.");
-			} else if (err.error === 'no-speech') {
-				console.info("No speech detected.");
-			} else {
-				console.error(err);
-			}
-		};
-		speechRec.current.onspeechend = () => {
-			speechRec.current?.stop();
-		};
-		speechRec.current.onresult = (event) => {
-			const transcript = event.results[0][0].transcript;
-			console.info(`"${transcript}"`);
-			setQuery(sanitizeSpokenNumbers(transcript));
-			focusInputField();
-		};
+		}
+	}
+
+	function speechOnError(err: SpeechRecognitionErrorEvent) {
+		setThrobber(false);
+		setStartedSpeechRec(false);
+		if (err.error === 'not-allowed') {
+			context.provider.setState({ enableSpeech: false });
+		} else if (err.error === 'aborted') {
+			console.info("Listening canceled.");
+		} else if (err.error === 'no-speech') {
+			console.info("No speech detected.");
+		} else {
+			console.error(err);
+		}
+	}
+
+	function speechOnSpeechEnd() {
+		speechRec.current?.stop();
+	}
+
+	function speechOnResult(event: SpeechRecognitionEvent) {
+		const transcript = event.results[0][0].transcript;
+		console.info(`"${transcript}"`);
+		setQuery(sanitizeSpokenNumbers(transcript));
+		focusInputField();
 	}
 
 	function updateKeyListener() {
