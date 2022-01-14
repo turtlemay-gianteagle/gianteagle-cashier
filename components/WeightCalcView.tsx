@@ -92,8 +92,7 @@ export function WeightCalcView() {
 	}
 
 	function handleFocusInput(event: React.FocusEvent<HTMLInputElement>) {
-		const elem = event.target as HTMLInputElement;
-		elem.select();
+		event.target.select();
 	}
 }
 
