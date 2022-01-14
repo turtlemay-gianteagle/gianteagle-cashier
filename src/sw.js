@@ -23,11 +23,7 @@ async function getResource(request) {
 
 	/** @type {Response | undefined} */
 	let fetchRes;
-
-	try {
-		fetchRes = await fetch(request);
-	} catch (error) {
-	}
+	try { fetchRes = await fetch(request); } catch { }
 
 	if (fetchRes?.ok) {
 		cache.add(request.url);
