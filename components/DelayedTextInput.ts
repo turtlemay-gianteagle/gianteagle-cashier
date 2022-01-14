@@ -1,55 +1,55 @@
-import * as React from 'react'
-import c from 'classnames'
+import * as React from 'react';
+import c from 'classnames';
 
 export function DelayedTextInput(props: {
-	className?: string
-	activeClassName?: string
-	textarea?: boolean
-	type?: string
-	disabled?: boolean
-	placeholder?: string
-	elemRef?: React.RefObject<HTMLElement>
-	children?: React.ReactNode
-	committedValue: string
-	commitDelay: number
-	onStartInput?: VoidFunction
-	onStopInput?: VoidFunction
-	onCommit: (v: string) => void
-	onResetDelegate?: Set<VoidFunction>
-	passProps?: Object
+	className?: string;
+	activeClassName?: string;
+	textarea?: boolean;
+	type?: string;
+	disabled?: boolean;
+	placeholder?: string;
+	elemRef?: React.RefObject<HTMLElement>;
+	children?: React.ReactNode;
+	committedValue: string;
+	commitDelay: number;
+	onStartInput?: VoidFunction;
+	onStopInput?: VoidFunction;
+	onCommit: (v: string) => void;
+	onResetDelegate?: Set<VoidFunction>;
+	passProps?: Object;
 }) {
-	const [value, setValue] = React.useState(props.committedValue)
-	const [active, setActive] = React.useState(false)
+	const [value, setValue] = React.useState(props.committedValue);
+	const [active, setActive] = React.useState(false);
 
-	React.useEffect(updateOnResetDelegate, [props.onResetDelegate, props.committedValue])
-	React.useEffect(onChangeValue, [value, props.commitDelay])
-	React.useEffect(onChangeCommitedValue, [props.committedValue])
+	React.useEffect(updateOnResetDelegate, [props.onResetDelegate, props.committedValue]);
+	React.useEffect(onChangeValue, [value, props.commitDelay]);
+	React.useEffect(onChangeCommitedValue, [props.committedValue]);
 
 	function onChangeValue() {
-		const timeout = window.setTimeout(changedValueCallback, props.commitDelay)
-		return () => window.clearTimeout(timeout)
+		const timeout = window.setTimeout(changedValueCallback, props.commitDelay);
+		return () => window.clearTimeout(timeout);
 	}
 
 	function updateOnResetDelegate() {
-		const onReset = () => setValue(props.committedValue)
-		props.onResetDelegate?.add(onReset)
-		return () => void props.onResetDelegate?.delete(onReset)
+		const onReset = () => setValue(props.committedValue);
+		props.onResetDelegate?.add(onReset);
+		return () => void props.onResetDelegate?.delete(onReset);
 	}
 
 	function onChangeCommitedValue() {
-		setValue(props.committedValue)
+		setValue(props.committedValue);
 	}
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-		props.onStartInput?.()
-		setActive(true)
-		setValue(e.target.value)
+		props.onStartInput?.();
+		setActive(true);
+		setValue(e.target.value);
 	}
 
 	function changedValueCallback() {
-		props.onStopInput?.()
-		setActive(false)
-		props.onCommit(value)
+		props.onStopInput?.();
+		setActive(false);
+		props.onCommit(value);
 	}
 
 	return React.createElement(props.textarea ? 'textarea' : 'input', {
@@ -62,5 +62,5 @@ export function DelayedTextInput(props: {
 		children: props.children,
 		ref: props.elemRef,
 		...props.passProps ?? {},
-	})
+	});
 }

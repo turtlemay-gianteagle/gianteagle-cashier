@@ -1,376 +1,376 @@
-import * as React from 'react'
-import lodash from 'lodash'
-import * as mathjs from 'mathjs'
-import c from 'classnames'
-import { focusInputAtEnd } from '../lib/dom'
-import { AppStateContext } from './AppStateProvider'
-import { DelayedTextInput } from './DelayedTextInput'
-import { Shadowbox } from './Shadowbox'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { MainViewQueryResults } from './MainViewQueryResults'
-import { Untabbable } from '../lib/tabindex'
-import { isTabbable } from 'tabbable'
-import { useIsFirstRender, usePrevious } from '../lib/react'
-import { matchKeyCombos } from '../src/keys'
+import * as React from 'react';
+import lodash from 'lodash';
+import * as mathjs from 'mathjs';
+import c from 'classnames';
+import { focusInputAtEnd } from '../lib/dom';
+import { AppStateContext } from './AppStateProvider';
+import { DelayedTextInput } from './DelayedTextInput';
+import { Shadowbox } from './Shadowbox';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { MainViewQueryResults } from './MainViewQueryResults';
+import { Untabbable } from '../lib/tabindex';
+import { isTabbable } from 'tabbable';
+import { useIsFirstRender, usePrevious } from '../lib/react';
+import { matchKeyCombos } from '../src/keys';
 
 export const MainView = (props: {
-	className?: string
-	active: boolean
+	className?: string;
+	active: boolean;
 }) => {
-	const isFirstRender = useIsFirstRender()
-	const context = React.useContext(AppStateContext)
-	const navigate = useNavigate()
-	const location = useLocation()
-	const [query, setQuery] = React.useState(context.defaultQuery)
-	const prevQuery = usePrevious(query)
-	const [splitQueries, setSplitQueries] = React.useState([query])
-	const [activeQueryIndex, setActiveQueryIndex] = React.useState(0)
-	const [highlightQuery, setHighlightQuery] = React.useState<string | null>(null)
-	const [showThrobber, setThrobber] = React.useState(false)
-	const [mathResult, setMathResult] = React.useState(0)
-	const [showMathResult, setShowMathResult] = React.useState(false)
-	const [roundUpResult, setRoundUpResult] = React.useState(0)
-	const [showRoundUpResult, setShowRoundUpResult] = React.useState(false)
-	const [showShadowbox, setShowShadowbox] = React.useState(false)
-	const [useNumInput, setUseNumInput] = React.useState(false)
-	const [onResetQueryDelegate] = React.useState(new Set<VoidFunction>())
-	const rootElemRef = React.useRef<HTMLDivElement>(null)
-	const inputElemRef = React.useRef<HTMLInputElement>(null)
-	const speechRec = React.useRef<SpeechRecognition | null>(null)
-	const [startedSpeechRec, setStartedSpeechRec] = React.useState(false)
-	const [lastInputTime, setLastInputTime] = React.useState(Date.now())
+	const isFirstRender = useIsFirstRender();
+	const context = React.useContext(AppStateContext);
+	const navigate = useNavigate();
+	const location = useLocation();
+	const [query, setQuery] = React.useState(context.defaultQuery);
+	const prevQuery = usePrevious(query);
+	const [splitQueries, setSplitQueries] = React.useState([query]);
+	const [activeQueryIndex, setActiveQueryIndex] = React.useState(0);
+	const [highlightQuery, setHighlightQuery] = React.useState<string | null>(null);
+	const [showThrobber, setThrobber] = React.useState(false);
+	const [mathResult, setMathResult] = React.useState(0);
+	const [showMathResult, setShowMathResult] = React.useState(false);
+	const [roundUpResult, setRoundUpResult] = React.useState(0);
+	const [showRoundUpResult, setShowRoundUpResult] = React.useState(false);
+	const [showShadowbox, setShowShadowbox] = React.useState(false);
+	const [useNumInput, setUseNumInput] = React.useState(false);
+	const [onResetQueryDelegate] = React.useState(new Set<VoidFunction>());
+	const rootElemRef = React.useRef<HTMLDivElement>(null);
+	const inputElemRef = React.useRef<HTMLInputElement>(null);
+	const speechRec = React.useRef<SpeechRecognition | null>(null);
+	const [startedSpeechRec, setStartedSpeechRec] = React.useState(false);
+	const [lastInputTime, setLastInputTime] = React.useState(Date.now());
 
-	React.useEffect(initSelectInput, [])
-	React.useEffect(initSpeechRecognition, [])
-	React.useEffect(updateKeyListener)
-	React.useEffect(updateQueryParams)
-	React.useEffect(updateSpeechRecognition)
-	React.useEffect(updateSelectInputTimeout, [context.selectQueryTime, query, lastInputTime])
-	React.useEffect(cancelSpeech, [props.active, query, activeQueryIndex, useNumInput, showShadowbox])
-	React.useEffect(onChangedQuery, [query])
-	React.useEffect(onChangedActiveView, [props.active])
-	React.useEffect(updateChangedSplitQueries, [splitQueries, query, context.defaultQuery])
-	React.useEffect(updateHighlightedQuery, [highlightQuery, context.querySeparator, activeQueryIndex])
+	React.useEffect(initSelectInput, []);
+	React.useEffect(initSpeechRecognition, []);
+	React.useEffect(updateKeyListener);
+	React.useEffect(updateQueryParams);
+	React.useEffect(updateSpeechRecognition);
+	React.useEffect(updateSelectInputTimeout, [context.selectQueryTime, query, lastInputTime]);
+	React.useEffect(cancelSpeech, [props.active, query, activeQueryIndex, useNumInput, showShadowbox]);
+	React.useEffect(onChangedQuery, [query]);
+	React.useEffect(onChangedActiveView, [props.active]);
+	React.useEffect(updateChangedSplitQueries, [splitQueries, query, context.defaultQuery]);
+	React.useEffect(updateHighlightedQuery, [highlightQuery, context.querySeparator, activeQueryIndex]);
 
 	function initSelectInput() {
-		inputElemRef.current?.select()
+		inputElemRef.current?.select();
 	}
 
 	function initSpeechRecognition() {
 		if (context.speechEnabled()) {
-			const SpeechRecognition = window['SpeechRecognition'] ?? window['webkitSpeechRecognition']
-			speechRec.current = new SpeechRecognition()
+			const SpeechRecognition = window['SpeechRecognition'] ?? window['webkitSpeechRecognition'];
+			speechRec.current = new SpeechRecognition();
 		}
 	}
 
 	function updateSpeechRecognition() {
 		if (!context.speechEnabled() || !speechRec.current) {
-			return
+			return;
 		}
 		speechRec.current.onstart = () => {
-			console.info("Listening for speech…")
-			setThrobber(true)
-			setStartedSpeechRec(true)
-		}
+			console.info("Listening for speech…");
+			setThrobber(true);
+			setStartedSpeechRec(true);
+		};
 		speechRec.current.onend = () => {
 			if (startedSpeechRec) {
-				console.info("Stopped listening.")
-				setThrobber(false)
-				setStartedSpeechRec(false)
+				console.info("Stopped listening.");
+				setThrobber(false);
+				setStartedSpeechRec(false);
 			}
-		}
+		};
 		speechRec.current.onerror = (err) => {
-			setThrobber(false)
-			setStartedSpeechRec(false)
+			setThrobber(false);
+			setStartedSpeechRec(false);
 			if (err.error === 'not-allowed') {
-				context.provider.setState({ enableSpeech: false })
+				context.provider.setState({ enableSpeech: false });
 			} else if (err.error === 'aborted') {
-				console.info("Listening canceled.")
+				console.info("Listening canceled.");
 			} else if (err.error === 'no-speech') {
-				console.info("No speech detected.")
+				console.info("No speech detected.");
 			} else {
-				console.error(err)
+				console.error(err);
 			}
-		}
+		};
 		speechRec.current.onspeechend = () => {
-			speechRec.current?.stop()
-		}
+			speechRec.current?.stop();
+		};
 		speechRec.current.onresult = (event) => {
-			const transcript = event.results[0][0].transcript
-			console.info(`"${transcript}"`)
-			setQuery(sanitizeSpokenNumbers(transcript))
-			focusInputField()
-		}
+			const transcript = event.results[0][0].transcript;
+			console.info(`"${transcript}"`);
+			setQuery(sanitizeSpokenNumbers(transcript));
+			focusInputField();
+		};
 	}
 
 	function updateKeyListener() {
-		addEventListener('keydown', handleKeyDown)
+		addEventListener('keydown', handleKeyDown);
 
 		return function cleanup() {
-			removeEventListener('keydown', handleKeyDown)
-		}
+			removeEventListener('keydown', handleKeyDown);
+		};
 
 		function handleKeyDown(e: KeyboardEvent) {
 			if (!props.active)
-				return
+				return;
 
 			// Use Ctrl + Alt + Function keys to select result by index
 			if (e.ctrlKey && e.altKey && e.key.match(/^F\d{1,2}$/)?.[0]) {
-				e.preventDefault()
-				const n = Number(e.key.match(/^F(\d{1,2})$/)?.[1])
+				e.preventDefault();
+				const n = Number(e.key.match(/^F(\d{1,2})$/)?.[1]);
 				if (!isNaN(n)) {
-					const index = n - 1
-					const elems = rootElemRef.current?.querySelectorAll('.mainView__queryResultListView.active .mainView__queryResultNode')
-					const clickEl: HTMLElement | null | undefined = elems?.[index]?.querySelector('[role="button"]')
-					clickEl?.click()
+					const index = n - 1;
+					const elems = rootElemRef.current?.querySelectorAll('.mainView__queryResultListView.active .mainView__queryResultNode');
+					const clickEl: HTMLElement | null | undefined = elems?.[index]?.querySelector('[role="button"]');
+					clickEl?.click();
 				}
-				return
+				return;
 			}
 
 			// Use Ctrl + Number to switch active view
-			const matchedNumKey = e.key.match(/^\d$/)?.[0]
+			const matchedNumKey = e.key.match(/^\d$/)?.[0];
 			if (e.ctrlKey && matchedNumKey) {
-				e.preventDefault()
-				setActiveQueryTo(matchedNumKey === '0' ? 9 : Number(matchedNumKey) - 1)
-				return
+				e.preventDefault();
+				setActiveQueryTo(matchedNumKey === '0' ? 9 : Number(matchedNumKey) - 1);
+				return;
 			}
 
 			if (context.speechEnabled() && matchKeyCombos(e, context.speechStartKey)) {
-				e.preventDefault()
-				if (!startedSpeechRec) speechRec.current?.start()
-				return
+				e.preventDefault();
+				if (!startedSpeechRec) speechRec.current?.start();
+				return;
 			}
 
 			if (matchKeyCombos(e, context.resetQueryKey)) {
-				e.preventDefault()
-				resetQuery()
-				return
+				e.preventDefault();
+				resetQuery();
+				return;
 			}
 
 			if (!showShadowbox) {
 				if (splitQueries.length > 1) {
 					if (matchKeyCombos(e, context.appNavViewLeftKey)) {
-						e.preventDefault()
-						setThrobber(false)
-						setActiveQueryLeft()
-						return
+						e.preventDefault();
+						setThrobber(false);
+						setActiveQueryLeft();
+						return;
 					}
 					if (matchKeyCombos(e, context.appNavViewRightKey)) {
-						e.preventDefault()
-						setThrobber(false)
-						setActiveQueryRight()
-						return
+						e.preventDefault();
+						setThrobber(false);
+						setActiveQueryRight();
+						return;
 					}
 				}
 			}
 
 			if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey)
-				return
+				return;
 
 			if (e.key === 'Enter') {
-				handleCommand(inputElemRef.current?.value ?? '')
-				const el = document.activeElement
-				const isInputFocused = el === inputElemRef.current
-				const isTabbableFocused = el ? isTabbable(el) : false
+				handleCommand(inputElemRef.current?.value ?? '');
+				const el = document.activeElement;
+				const isInputFocused = el === inputElemRef.current;
+				const isTabbableFocused = el ? isTabbable(el) : false;
 				if (isInputFocused || !isTabbableFocused) {
-					e.preventDefault()
-					focusInputField()
-					clearInputField()
-					return
+					e.preventDefault();
+					focusInputField();
+					clearInputField();
+					return;
 				}
 			}
 
 			if (e.key === context.appNavBackKey) {
 				if (context.speechEnabled()) {
-					e.preventDefault()
-					speechRec.current?.abort()
+					e.preventDefault();
+					speechRec.current?.abort();
 				}
 			}
 
 			if (inputElemRef && inputElemRef.current !== document.activeElement) {
 				if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.match(/^(\S)$/)) {
-					focusInputField()
-					return
+					focusInputField();
+					return;
 				}
 			}
 		}
 	}
 
 	function updateQueryParams() {
-		const queryParams = new URLSearchParams(location.search)
-		setShowShadowbox(queryParams.has('sb'))
+		const queryParams = new URLSearchParams(location.search);
+		setShowShadowbox(queryParams.has('sb'));
 	}
 
 	function updateSelectInputTimeout() {
-		let timeout: number | undefined
+		let timeout: number | undefined;
 
 		if (context.selectQueryTime > 0 && query !== prevQuery) {
-			const fn = () => inputElemRef.current?.select()
-			timeout = window.setTimeout(fn, context.selectQueryTime)
+			const fn = () => inputElemRef.current?.select();
+			timeout = window.setTimeout(fn, context.selectQueryTime);
 		}
 
 		return function cleanup() {
-			window.clearTimeout(timeout)
-		}
+			window.clearTimeout(timeout);
+		};
 	}
 
 	function onChangedActiveView() {
 		if (props.active)
-			inputElemRef.current?.select()
+			inputElemRef.current?.select();
 	}
 
 	function onChangedQuery() {
 		if (query.length === 0)
-			return
+			return;
 
-		setSplitQueries(splitQuery(query))
+		setSplitQueries(splitQuery(query));
 
 		if (!isFirstRender) {
-			const queryParams = new URLSearchParams(location.search)
+			const queryParams = new URLSearchParams(location.search);
 			if (queryParams.has('sb')) {
-				queryParams.delete('sb')
-				navigate(`?${queryParams.toString()}`)
+				queryParams.delete('sb');
+				navigate(`?${queryParams.toString()}`);
 			}
 		}
 
-		const gotMathResult = tryMath(query)
+		const gotMathResult = tryMath(query);
 		if (gotMathResult) {
-			setMathResult(gotMathResult)
-			setShowMathResult(true)
+			setMathResult(gotMathResult);
+			setShowMathResult(true);
 		} else {
-			setShowMathResult(false)
+			setShowMathResult(false);
 		}
 
-		const gotRoundUpResult = tryRoundUp(query)
+		const gotRoundUpResult = tryRoundUp(query);
 		if (gotRoundUpResult) {
-			setRoundUpResult(gotRoundUpResult)
-			setShowRoundUpResult(true)
+			setRoundUpResult(gotRoundUpResult);
+			setShowRoundUpResult(true);
 		} else {
-			setShowRoundUpResult(false)
+			setShowRoundUpResult(false);
 		}
 	}
 
 	function cancelSpeech() {
-		speechRec.current?.abort()
+		speechRec.current?.abort();
 	}
 
 	function updateChangedSplitQueries() {
-		setActiveQueryIndex(0)
-		setHighlightQuery(null)
-		
+		setActiveQueryIndex(0);
+		setHighlightQuery(null);
+
 		if (query === context.defaultQuery)
-			inputElemRef.current?.select()
+			inputElemRef.current?.select();
 	}
 
 	function updateHighlightedQuery() {
-		if (!highlightQuery) { return }
-		const [fullStr, subStr] = [query, highlightQuery]
-		const [s, n] = [context.querySeparator, activeQueryIndex]
-		const ss = lodash.escapeRegExp(subStr)
-		const regex = new RegExp(`^((?:[^${s}]+${s}){${n}})${ss}`, '')
-		const match = fullStr.match(regex)
-		if (!match) { return }
-		const start = match[1].length
-		const end = start + subStr.length
+		if (!highlightQuery) { return; }
+		const [fullStr, subStr] = [query, highlightQuery];
+		const [s, n] = [context.querySeparator, activeQueryIndex];
+		const ss = lodash.escapeRegExp(subStr);
+		const regex = new RegExp(`^((?:[^${s}]+${s}){${n}})${ss}`, '');
+		const match = fullStr.match(regex);
+		if (!match) { return; }
+		const start = match[1].length;
+		const end = start + subStr.length;
 
 		// Hack to scroll to selection.
-		inputElemRef.current?.setSelectionRange(start, start)
-		inputElemRef.current?.blur()
-		inputElemRef.current?.focus()
+		inputElemRef.current?.setSelectionRange(start, start);
+		inputElemRef.current?.blur();
+		inputElemRef.current?.focus();
 
 		// Select text.
-		inputElemRef.current?.setSelectionRange(start, end)
+		inputElemRef.current?.setSelectionRange(start, end);
 	}
 
 	function resetQuery() {
-		speechRec.current?.abort()
-		onResetQueryDelegate.forEach(fn => fn?.())
-		setHighlightQuery(null)
-		setActiveQueryIndex(0)
-		setQuery(context.defaultQuery)
-		setThrobber(false)
-		setUseNumInput(false)
-		const queryParams = new URLSearchParams(location.search)
+		speechRec.current?.abort();
+		onResetQueryDelegate.forEach(fn => fn?.());
+		setHighlightQuery(null);
+		setActiveQueryIndex(0);
+		setQuery(context.defaultQuery);
+		setThrobber(false);
+		setUseNumInput(false);
+		const queryParams = new URLSearchParams(location.search);
 		if (queryParams.has('sb')) {
-			queryParams.delete('sb')
-			navigate(`?${queryParams.toString()}`)
+			queryParams.delete('sb');
+			navigate(`?${queryParams.toString()}`);
 		}
-		inputElemRef.current?.select()
+		inputElemRef.current?.select();
 	}
 
 	function splitQuery(str: string): string[] {
-		const s = context.querySeparator
-		const arr = s ? str.split(s) : [str]
-		return arr.filter(v => v.length > 0)
+		const s = context.querySeparator;
+		const arr = s ? str.split(s) : [str];
+		return arr.filter(v => v.length > 0);
 	}
 
 	function focusInputField() {
-		const elem = inputElemRef.current
+		const elem = inputElemRef.current;
 		if (elem && elem !== document.activeElement)
-			focusInputAtEnd(elem)
+			focusInputAtEnd(elem);
 	}
 
 	function clearInputField() {
-		const elem = inputElemRef.current
-		if (elem) elem.value = ''
+		const elem = inputElemRef.current;
+		if (elem) elem.value = '';
 	}
 
 	function onClickToggleKbButton() {
-		inputElemRef.current?.select()
-		setUseNumInput(!useNumInput)
-		setQuery('')
+		inputElemRef.current?.select();
+		setUseNumInput(!useNumInput);
+		setQuery('');
 	}
 
 	function onClickResetButton() {
-		resetQuery()
+		resetQuery();
 	}
 
 	function onClickVoiceInputButton() {
 		if (startedSpeechRec) {
-			speechRec.current?.abort()
+			speechRec.current?.abort();
 		} else {
-			speechRec.current?.start()
+			speechRec.current?.start();
 		}
 	}
 
 	function onPickShadowBoxElem(jsx: JSX.Element) {
-		const queryParams = new URLSearchParams(location.search)
-		queryParams.set('sb', jsx.props['data-json'])
-		navigate(`?${queryParams.toString()}`)
+		const queryParams = new URLSearchParams(location.search);
+		queryParams.set('sb', jsx.props['data-json']);
+		navigate(`?${queryParams.toString()}`);
 	}
 
 	function setActiveQueryTo(index: number) {
-		const clampedIndex = lodash.clamp(index, 0, splitQueries.length - 1)
-		setActiveQueryIndex(clampedIndex)
-		setHighlightQuery(splitQueries[clampedIndex])
+		const clampedIndex = lodash.clamp(index, 0, splitQueries.length - 1);
+		setActiveQueryIndex(clampedIndex);
+		setHighlightQuery(splitQueries[clampedIndex]);
 	}
 
 	function setActiveQueryLeft() {
-		setActiveQueryTo(activeQueryIndex - 1)
+		setActiveQueryTo(activeQueryIndex - 1);
 	}
 
 	function setActiveQueryRight() {
-		setActiveQueryTo(activeQueryIndex + 1)
+		setActiveQueryTo(activeQueryIndex + 1);
 	}
 
 	function handleCommand(str: string) {
 		if (str === 'wc') {
-			navigate('/wcalc')
-			resetQuery()
+			navigate('/wcalc');
+			resetQuery();
 		}
 	}
 
 	function onStartInput() {
-		setThrobber(true)
-		setLastInputTime(Date.now())
-	}
-	
-	function onStopInput() {
-		setThrobber(false)
+		setThrobber(true);
+		setLastInputTime(Date.now());
 	}
 
-	const showViewLeftButton = activeQueryIndex > 0
-	const showViewRightButton = activeQueryIndex < splitQueries.length - 1
+	function onStopInput() {
+		setThrobber(false);
+	}
+
+	const showViewLeftButton = activeQueryIndex > 0;
+	const showViewRightButton = activeQueryIndex < splitQueries.length - 1;
 
 	return (
 		<div className={c('mainView__root mainView__mainLayout', props.className)} ref={rootElemRef}>
@@ -392,7 +392,7 @@ export const MainView = (props: {
 					committedValue={query}
 					onStartInput={onStartInput}
 					onStopInput={onStopInput}
-					onCommit={v => { if (v.length > 0) setQuery(v) }}
+					onCommit={v => { if (v.length > 0) setQuery(v); }}
 					onResetDelegate={onResetQueryDelegate}
 					commitDelay={300}
 					disabled={!props.active}
@@ -466,31 +466,31 @@ export const MainView = (props: {
 			</div>
 
 		</div>
-	)
-}
+	);
+};
 
 function tryMath(query: string): number | null {
-	let result: unknown
+	let result: unknown;
 	if (query.match(/^\d+$/))
-		return null
-	try { result = mathjs.evaluate(query) } catch { }
+		return null;
+	try { result = mathjs.evaluate(query); } catch { }
 	if (typeof result === 'number')
-		return result
-	return null
+		return result;
+	return null;
 }
 
 function tryRoundUp(query: string): number | null {
 	if (query.match(/^\d{1,2}$/)) {
-		const n = Number(query)
-		return lodash.inRange(n, 1, 100) ? 100 - n : 0
+		const n = Number(query);
+		return lodash.inRange(n, 1, 100) ? 100 - n : 0;
 	}
-	return null
+	return null;
 }
 
 function sanitizeSpokenNumbers(str: string) {
 	if (str.match(/^[\d\s-+/]*$/g)) {
-		return str.replace(/\D/g, '')
+		return str.replace(/\D/g, '');
 	} else {
-		return str
+		return str;
 	}
 }

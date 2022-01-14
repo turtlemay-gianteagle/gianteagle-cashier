@@ -1,7 +1,7 @@
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const OfflinePlugin = require('@lcdp/offline-plugin')
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const OfflinePlugin = require('@lcdp/offline-plugin');
 
 module.exports = {
 	mode: 'development',
@@ -59,9 +59,9 @@ module.exports = {
 		}),
 		new OfflinePlugin({ ServiceWorker: { events: true } }),
 	],
-}
+};
 
 function getBuildDate() {
-	const today = new Date()
-	return today.toUTCString()
+	const today = new Date();
+	return today.toUTCString();
 }

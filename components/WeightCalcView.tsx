@@ -1,11 +1,11 @@
-import * as React from 'react'
-import lodash from 'lodash'
-import c from 'classnames'
+import * as React from 'react';
+import lodash from 'lodash';
+import c from 'classnames';
 
 export function WeightCalcView() {
-	const [bundleLbs, setBundleLbs] = React.useState<string | number>('0')
-	const [containerOz, setContainerOz] = React.useState<string | number>('0')
-	const [containerLbs, setContainerLbs] = React.useState<string | number>('0')
+	const [bundleLbs, setBundleLbs] = React.useState<string | number>('0');
+	const [containerOz, setContainerOz] = React.useState<string | number>('0');
+	const [containerLbs, setContainerLbs] = React.useState<string | number>('0');
 
 	return (
 		<div className="weightCalcView__root">
@@ -73,39 +73,39 @@ export function WeightCalcView() {
 				</div>
 			</div>
 		</div>
-	)
+	);
 
 	function handleChangeBundleLbs(event: React.ChangeEvent<HTMLInputElement>) {
-		setBundleLbs(event.target.value)
+		setBundleLbs(event.target.value);
 	}
 
 	function handleChangeContainerOz(event: React.ChangeEvent<HTMLInputElement>) {
-		const v = event.target.value
-		setContainerOz(v)
-		if (v) setContainerLbs(ozToLbs(Number(v)))
+		const v = event.target.value;
+		setContainerOz(v);
+		if (v) setContainerLbs(ozToLbs(Number(v)));
 	}
 
 	function handleChangeContainerLbs(event: React.ChangeEvent<HTMLInputElement>) {
-		const v = event.target.value
-		setContainerLbs(v)
-		if (v) setContainerOz(lbsToOz(Number(v)))
+		const v = event.target.value;
+		setContainerLbs(v);
+		if (v) setContainerOz(lbsToOz(Number(v)));
 	}
 
 	function handleFocusInput(event: React.FocusEvent<HTMLInputElement>) {
-		const elem = event.target as HTMLInputElement
-		elem.select()
+		const elem = event.target as HTMLInputElement;
+		elem.select();
 	}
 }
 
 function calcItemWeight(bundleLbs: number, containerLbs: number) {
-	const n = lodash.clamp(bundleLbs - containerLbs, 0, Infinity)
-	return Math.round(n * 100) / 100
+	const n = lodash.clamp(bundleLbs - containerLbs, 0, Infinity);
+	return Math.round(n * 100) / 100;
 }
 
 function lbsToOz(n: number) {
-	return n * 16
+	return n * 16;
 }
 
 function ozToLbs(n: number) {
-	return n / 16
+	return n / 16;
 }

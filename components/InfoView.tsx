@@ -1,6 +1,6 @@
-import * as React from 'react'
-import packageJson from '../package.json'
-import { Link } from 'react-router-dom'
+import * as React from 'react';
+import packageJson from '../package.json';
+import { Link } from 'react-router-dom';
 
 export const InfoView = () => (
 	<div className="infoView__root">
@@ -35,18 +35,18 @@ export const InfoView = () => (
 				</ul>
 			</section>
 			<section>
-				<p><VersionText version={packageJson.version} buildDate={__BUILD_DATE__} /><br/>See source code <a href="https://github.com/turtlemay/turtlemay-cashier">here</a>.</p>
+				<p><VersionText version={packageJson.version} buildDate={__BUILD_DATE__} /><br />See source code <a href="https://github.com/turtlemay/turtlemay-cashier">here</a>.</p>
 				<p>We use the latest browser APIs so ensure your OS, browser and/or WebView is up to date. An Android device with peripheral keyboard is recommended.</p>
 				<p>Created and maintained by <a target="_blank" href="http://turtlemay.us">Turtlemay</a>.</p>
 			</section>
 		</div>
 	</div>
-)
+);
 
-function VersionText(props: { version: string, buildDate?: string }) {
+function VersionText(props: { version: string, buildDate?: string; }) {
 	if (props.buildDate) {
-		return <>Software version <strong>{props.version}</strong> built on {props.buildDate}.</>
+		return <>Software version <strong>{props.version}</strong> built on {props.buildDate}.</>;
 	} else {
-		return <>Software version <strong>{props.version}</strong>.</>
+		return <>Software version <strong>{props.version}</strong>.</>;
 	}
 }

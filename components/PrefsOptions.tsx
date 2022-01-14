@@ -1,14 +1,14 @@
-import * as React from 'react'
-import c from 'classnames'
+import * as React from 'react';
+import c from 'classnames';
 
 export const PrefsOption: React.FunctionComponent<{
-	className?: string
+	className?: string;
 	children: {
-		label: string
-		description?: React.ReactNode
-		controlNode: React.ReactNode
-		stateInfo?: React.ReactNode
-	}
+		label: string;
+		description?: React.ReactNode;
+		controlNode: React.ReactNode;
+		stateInfo?: React.ReactNode;
+	};
 }> = props => (
 	<div className={c('prefsView__optionsListItem prefsView__optionsLayout', props.className)}>
 		<div className="prefsView__optionsLayoutLeft">
@@ -30,4 +30,4 @@ export const PrefsOption: React.FunctionComponent<{
 			)}
 		</div>
 	</div>
-)
+);

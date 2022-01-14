@@ -1,13 +1,13 @@
-import * as React from 'react'
-import c from 'classnames'
-import { HashRouter, NavLink, Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom'
-import { MainView } from './MainView'
-import { PrefsView } from './PrefsView'
-import { AppStateContext, AppStateProvider } from './AppStateProvider'
-import { InfoView } from './InfoView'
-import { WeightCalcView } from './WeightCalcView'
-import { TransitionGroup, CSSTransition } from 'react-transition-group'
-import { matchKeyCombos } from '../src/keys'
+import * as React from 'react';
+import c from 'classnames';
+import { HashRouter, NavLink, Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { MainView } from './MainView';
+import { PrefsView } from './PrefsView';
+import { AppStateContext, AppStateProvider } from './AppStateProvider';
+import { InfoView } from './InfoView';
+import { WeightCalcView } from './WeightCalcView';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { matchKeyCombos } from '../src/keys';
 
 export function App() {
 	return (
@@ -20,20 +20,20 @@ export function App() {
 				<Route path="/wcalc" element={<AppMain viewElem={<WeightCalcView />} />} />
 			</Routes>
 		</HashRouter>
-	)
+	);
 }
 
 function AppIndex() {
 	return (
 		<Navigate replace to="/l" />
-	)
+	);
 }
 
 function AppMain(props: React.PropsWithChildren<{
 	viewElem?: React.ReactElement,
 }>) {
-	const location = useLocation()
-	const activateMainView = !props.viewElem
+	const location = useLocation();
+	const activateMainView = !props.viewElem;
 	return (
 		<div className="app__layout">
 			<AppStateProvider>
@@ -65,25 +65,25 @@ function AppMain(props: React.PropsWithChildren<{
 				</nav>
 			</div>
 		</div>
-	)
+	);
 }
 
 function AppStateConsumer(props: React.PropsWithChildren<{}>) {
-	const navigate = useNavigate()
-	const context = React.useContext(AppStateContext)
+	const navigate = useNavigate();
+	const context = React.useContext(AppStateContext);
 
-	React.useEffect(updateKeyListener)
+	React.useEffect(updateKeyListener);
 
 	function updateKeyListener() {
-		addEventListener('keydown', fn)
-		return () => removeEventListener('keydown', fn)
+		addEventListener('keydown', fn);
+		return () => removeEventListener('keydown', fn);
 		function fn(e: KeyboardEvent) {
 			if (matchKeyCombos(e, context.appRestartKey)) {
-				e.preventDefault()
-				navigate('/')
+				e.preventDefault();
+				navigate('/');
 			}
 		}
 	}
 
-	return <React.Fragment children={props.children} />
+	return <React.Fragment children={props.children} />;
 }

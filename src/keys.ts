@@ -1,9 +1,9 @@
-import { isMatch, pick } from 'lodash'
+import { isMatch, pick } from 'lodash';
 
 function getKeyCombo(str: string): IKeyCombo {
-	const match = str.match(/^((?:\^?|!?|\+?|#?)*)(.+)$/)
-	const modifiers = match?.[1]
-	const key = match?.[2]
+	const match = str.match(/^((?:\^?|!?|\+?|#?)*)(.+)$/);
+	const modifiers = match?.[1];
+	const key = match?.[2];
 	return {
 		ctrlKey: modifiers?.includes('^'),
 		altKey: modifiers?.includes('!'),
@@ -11,30 +11,30 @@ function getKeyCombo(str: string): IKeyCombo {
 		metaKey: modifiers?.includes('#'),
 		key: key,
 		code: key,
-	}
+	};
 }
 
 function matchKeyCombo(event: KeyboardEvent, str: string): boolean {
-	const kc = getKeyCombo(str)
-	const matchedKey = isMatch(event, pick(kc, ['key', 'ctrlKey', 'altKey', 'shiftKey', 'metaKey']))
-	const matchedCode = isMatch(event, pick(kc, ['code', 'ctrlKey', 'altKey', 'shiftKey', 'metaKey']))
-	return matchedKey || matchedCode
+	const kc = getKeyCombo(str);
+	const matchedKey = isMatch(event, pick(kc, ['key', 'ctrlKey', 'altKey', 'shiftKey', 'metaKey']));
+	const matchedCode = isMatch(event, pick(kc, ['code', 'ctrlKey', 'altKey', 'shiftKey', 'metaKey']));
+	return matchedKey || matchedCode;
 }
 
 export function matchKeyCombos(event: KeyboardEvent, str: string): boolean {
-	const keys: string[] = str.split(/[\s,]+/)
+	const keys: string[] = str.split(/[\s,]+/);
 	for (const v of keys) {
 		if (matchKeyCombo(event, v))
-			return true
+			return true;
 	}
-	return false
+	return false;
 }
 
 export interface IKeyCombo {
-	ctrlKey?: boolean
-	altKey?: boolean
-	shiftKey?: boolean
-	metaKey?: boolean
-	key?: string
-	code?: string
+	ctrlKey?: boolean;
+	altKey?: boolean;
+	shiftKey?: boolean;
+	metaKey?: boolean;
+	key?: string;
+	code?: string;
 }

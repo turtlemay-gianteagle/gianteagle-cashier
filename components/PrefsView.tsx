@@ -1,14 +1,14 @@
-import * as React from 'react'
-import lodash from 'lodash'
-import c from 'classnames'
-import { AppStateContext } from './AppStateProvider'
-import { PrefsOption } from './PrefsOptions'
-import { DelayedTextInput } from './DelayedTextInput'
+import * as React from 'react';
+import lodash from 'lodash';
+import c from 'classnames';
+import { AppStateContext } from './AppStateProvider';
+import { PrefsOption } from './PrefsOptions';
+import { DelayedTextInput } from './DelayedTextInput';
 
 export function PrefsView() {
-	const context = React.useContext(AppStateContext)
-	const [showThrobber, setThrobber] = React.useState(false)
-	const [itemsPerPage, setItemsPerPage] = React.useState(String(context.itemsPerPage))
+	const context = React.useContext(AppStateContext);
+	const [showThrobber, setThrobber] = React.useState(false);
+	const [itemsPerPage, setItemsPerPage] = React.useState(String(context.itemsPerPage));
 
 	return (
 		<div className="prefsView__root">
@@ -27,10 +27,12 @@ export function PrefsView() {
 							onCommit={v => context.provider.setState({ dbUrl: v })}
 							onStartInput={() => setThrobber(true)}
 							onStopInput={() => setThrobber(false)}
-							passProps={{ onMouseDown: e => {
-								if (document.activeElement !== e?.target)
-									e?.target?.select?.()
-							} }} />,
+							passProps={{
+								onMouseDown: e => {
+									if (document.activeElement !== e?.target)
+										e?.target?.select?.();
+								}
+							}} />,
 						stateInfo: context.dbInfo ? (
 							<React.Fragment>
 								<div>Loaded remote database "{context.dbInfo.name}" {context.dbInfo.version}.</div>
@@ -78,10 +80,10 @@ export function PrefsView() {
 						controlNode: <input type="number"
 							className="prefsView__optionTextInput"
 							value={context.selectQueryTime}
-							onClick={e => { (e.target as HTMLInputElement).select() }}
+							onClick={e => { (e.target as HTMLInputElement).select(); }}
 							onChange={e => {
-								const n = lodash.clamp(Number(e.target.value), 0, Infinity)
-								context.provider.setState({ selectQueryTime: n })
+								const n = lodash.clamp(Number(e.target.value), 0, Infinity);
+								context.provider.setState({ selectQueryTime: n });
 							}} />,
 					}}</PrefsOption>
 					<PrefsOption>{{
@@ -89,11 +91,11 @@ export function PrefsView() {
 						controlNode: <input type="number"
 							className="prefsView__optionTextInput"
 							value={itemsPerPage}
-							onClick={e => { (e.target as HTMLInputElement).select() }}
+							onClick={e => { (e.target as HTMLInputElement).select(); }}
 							onChange={e => {
-								setItemsPerPage(e.target.value)
-								const n = lodash.clamp(Number(e.target.value), 1, 20)
-								context.provider.setState({ itemsPerPage: n })
+								setItemsPerPage(e.target.value);
+								const n = lodash.clamp(Number(e.target.value), 1, 20);
+								context.provider.setState({ itemsPerPage: n });
 							}} />,
 					}}</PrefsOption>
 				</section>
@@ -235,12 +237,12 @@ export function PrefsView() {
 			<div className="prefsView__resetButtonContainer">
 				<input type="button" className="prefsView__resetButton" value="Reset all"
 					onClick={() => {
-						setItemsPerPage(String(context.defaultPrefs.itemsPerPage))
-						context.provider.resetAll()
+						setItemsPerPage(String(context.defaultPrefs.itemsPerPage));
+						context.provider.resetAll();
 					}}
 				/>
 			</div>
 
 		</div>
-	)
+	);
 }

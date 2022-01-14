@@ -1,83 +1,83 @@
-import * as schemaJson from 'turtlemay-cashier-db-schema/schema.json'
-import { Validator } from 'jsonschema'
+import * as schemaJson from 'turtlemay-cashier-db-schema/schema.json';
+import { Validator } from 'jsonschema';
 
-const LOCAL_STORE_DB_CACHE_KEY = 'item-database-cache'
+const LOCAL_STORE_DB_CACHE_KEY = 'item-database-cache';
 
-let cachedRemoteDb: { url: string, db: IItemDb } | undefined
+let cachedRemoteDb: { url: string, db: IItemDb; } | undefined;
 
-export async function getRemoteDb(url?: string, opts?: { forceFetch: boolean }): Promise<IItemDb | null> {
+export async function getRemoteDb(url?: string, opts?: { forceFetch: boolean; }): Promise<IItemDb | null> {
 	if (!url)
-		return null
+		return null;
 
-	console.info(`Looking for database at "${url}".`)
+	console.info(`Looking for database at "${url}".`);
 
 	if (!opts?.forceFetch && url === cachedRemoteDb?.url) {
-		console.info("Already have remote data in memory, skipping fetch.")
-		return cachedRemoteDb.db
+		console.info("Already have remote data in memory, skipping fetch.");
+		return cachedRemoteDb.db;
 	}
 
-	let fetchRes: Response | undefined
+	let fetchRes: Response | undefined;
 
 	try {
-		console.info(`Fetching remote database from "${url}".`)
-		fetchRes = await fetch(url)
+		console.info(`Fetching remote database from "${url}".`);
+		fetchRes = await fetch(url);
 	} catch (error) {
-		console.error(error)
+		console.error(error);
 	}
 
 	if (fetchRes && fetchRes.ok) {
-		console.info(`Got remote database "${url}".`)
-		const db = await fetchRes.json() as unknown
+		console.info(`Got remote database "${url}".`);
+		const db = await fetchRes.json() as unknown;
 
 		if (validateDb(db)) {
-			const validDb = db as IItemDb
-			cachedRemoteDb = { url, db: validDb }
-			console.info(`Successfully loaded remote database "${validDb.name}". Cached in memory.`)
-			return validDb
+			const validDb = db as IItemDb;
+			cachedRemoteDb = { url, db: validDb };
+			console.info(`Successfully loaded remote database "${validDb.name}". Cached in memory.`);
+			return validDb;
 		}
 
-		console.error(`Database found at "${url}" is not valid.`)
+		console.error(`Database found at "${url}" is not valid.`);
 	}
 	else {
-		console.info("Could not fetch database.")
+		console.info("Could not fetch database.");
 	}
 
-	return null
+	return null;
 }
 
 export function loadCacheDb(): IItemDb | unknown | null {
-	const str = localStorage.getItem(LOCAL_STORE_DB_CACHE_KEY)
+	const str = localStorage.getItem(LOCAL_STORE_DB_CACHE_KEY);
 	if (str) {
-		console.info(`Got database from cache "${LOCAL_STORE_DB_CACHE_KEY}".`)
-		return JSON.parse(str)
+		console.info(`Got database from cache "${LOCAL_STORE_DB_CACHE_KEY}".`);
+		return JSON.parse(str);
 	}
-	return null
+	return null;
 }
 
 export function saveCacheDb(db: IItemDb | unknown) {
-	const str = JSON.stringify(db)
-	localStorage.setItem(LOCAL_STORE_DB_CACHE_KEY, str)
-	console.info(`Saved database to cache "${LOCAL_STORE_DB_CACHE_KEY}".`)
+	const str = JSON.stringify(db);
+	localStorage.setItem(LOCAL_STORE_DB_CACHE_KEY, str);
+	console.info(`Saved database to cache "${LOCAL_STORE_DB_CACHE_KEY}".`);
 }
 
 export function clearCacheDb() {
-	localStorage.removeItem(LOCAL_STORE_DB_CACHE_KEY)
-	console.info(`Cleared cached data from "${LOCAL_STORE_DB_CACHE_KEY}".`)
+	localStorage.removeItem(LOCAL_STORE_DB_CACHE_KEY);
+	console.info(`Cleared cached data from "${LOCAL_STORE_DB_CACHE_KEY}".`);
 }
 
 export function validateDb(db: IItemDb | unknown): boolean {
-	const validator = new Validator()
-	const result = validator.validate(db, schemaJson)
+	const validator = new Validator();
+	const result = validator.validate(db, schemaJson);
 	if (result.errors.length > 0) {
-		const [err] = result.errors
+		const [err] = result.errors;
 		console.error(
 			"Database does not match schema.",
 			`${err.property} ${err.message}`,
 			"Must provide valid database.",
-		)
-		return false
+		);
+		return false;
 	}
-	const validDb = db as IItemDb
-	console.info(`Database "${validDb.name}" matches current schema.`)
-	return true
+	const validDb = db as IItemDb;
+	console.info(`Database "${validDb.name}" matches current schema.`);
+	return true;
 }
