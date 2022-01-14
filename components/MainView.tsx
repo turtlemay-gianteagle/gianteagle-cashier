@@ -102,7 +102,7 @@ export const MainView = (props: {
 	function speechOnResult(event: SpeechRecognitionEvent) {
 		const transcript = event.results[0][0].transcript;
 		console.info(`"${transcript}"`);
-		setQuery(sanitizeSpokenNumbers(transcript));
+		setQuery(formatSpokenNumbers(transcript));
 		focusInputField();
 	}
 
@@ -479,10 +479,10 @@ function tryRoundUp(query: string): number | null {
 	return null;
 }
 
-function sanitizeSpokenNumbers(str: string) {
-	if (str.match(/^[\d\s-+/]*$/g)) {
-		return str.replace(/\D/g, '');
+function formatSpokenNumbers(transcript: string) {
+	if (transcript.match(/^[\d\s-+/]*$/g)) {
+		return transcript.replace(/\D/g, '');
 	} else {
-		return str;
+		return transcript;
 	}
 }
