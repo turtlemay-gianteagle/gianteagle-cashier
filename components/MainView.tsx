@@ -27,7 +27,7 @@ export const MainView = (props: {
 	const [activeQueryIndex, setActiveQueryIndex] = React.useState(0);
 	const [highlightQuery, setHighlightQuery] = React.useState<string | null>(null);
 	const [showThrobber, setThrobber] = React.useState(false);
-	const [mathResult, setMathResult] = React.useState(0);
+	const [mathResult, setMathResult] = React.useState('');
 	const [showMathResult, setShowMathResult] = React.useState(false);
 	const [roundUpResult, setRoundUpResult] = React.useState(0);
 	const [showRoundUpResult, setShowRoundUpResult] = React.useState(false);
@@ -461,14 +461,14 @@ export const MainView = (props: {
 	);
 };
 
-function tryMath(query: string): number | null {
-	let result: unknown;
+function tryMath(query: string): string | null {
 	if (query.match(/^\d+$/))
 		return null;
+	let result: unknown = null;
 	try { result = mathjs.evaluate(query); } catch { }
-	if (typeof result === 'number')
-		return result;
-	return null;
+	if (typeof result === 'function')
+		return null;
+	return result ? String(result) : null;
 }
 
 function tryRoundUp(query: string): number | null {
