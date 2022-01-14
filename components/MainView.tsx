@@ -361,6 +361,7 @@ export const MainView = (props: {
 		setThrobber(false);
 	}
 
+	const inputCodeText = context.getOrganization() === 'TARGET' ? "Enter UPC, SKU, or PLU" : "Enter UPC or PLU";
 	const showViewLeftButton = activeQueryIndex > 0;
 	const showViewRightButton = activeQueryIndex < splitQueries.length - 1;
 
@@ -380,7 +381,7 @@ export const MainView = (props: {
 				<DelayedTextInput className={c('mainView__mainInput', { 'mainView__mainInput--numType': useNumInput })}
 					type={useNumInput ? 'number' : 'text'}
 					elemRef={inputElemRef}
-					placeholder={useNumInput ? "Enter UPC or PLU" : "Enter query"}
+					placeholder={useNumInput ? inputCodeText : "Enter query"}
 					committedValue={query}
 					onStartInput={onStartInput}
 					onStopInput={onStopInput}

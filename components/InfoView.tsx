@@ -10,7 +10,7 @@ export const InfoView = () => (
 				<h2>✨ Features</h2>
 				<ul>
 					<li>Enter search text into the query box to display a list of items found in the database.</li>
-					<li>Enter a UPC or PLU code to generate a data bar.</li>
+					<li>Enter a UPC, SKU, or PLU code to generate a data bar.</li>
 					<li>Multiple queries can be chained with semicolon (default <Link to="/prefs">user setting</Link>).</li>
 					<li>Mathematical expressions entered in the query box will be automatically evaluated.</li>
 					<li>Enter a two digit number to calculate round-up amount.</li>
