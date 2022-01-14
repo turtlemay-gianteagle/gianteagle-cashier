@@ -238,20 +238,12 @@ export const MainView = (props: {
 		}
 
 		const gotMathResult = tryMath(query);
-		if (gotMathResult) {
-			setMathResult(gotMathResult);
-			setShowMathResult(true);
-		} else {
-			setShowMathResult(false);
-		}
+		if (gotMathResult) setMathResult(gotMathResult);
+		setShowMathResult(Boolean(gotMathResult));
 
 		const gotRoundUpResult = tryRoundUp(query);
-		if (gotRoundUpResult) {
-			setRoundUpResult(gotRoundUpResult);
-			setShowRoundUpResult(true);
-		} else {
-			setShowRoundUpResult(false);
-		}
+		if (gotRoundUpResult) setRoundUpResult(gotRoundUpResult);
+		setShowRoundUpResult(Boolean(gotRoundUpResult));
 	}
 
 	function updateChangedSplitQueries() {
