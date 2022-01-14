@@ -20,15 +20,14 @@ export function Shadowbox(props: React.PropsWithChildren<{
 
 	function updateKeyListener() {
 		addEventListener('keydown', handleKeyDown);
-		return function cleanup() {
-			removeEventListener('keydown', handleKeyDown);
-		};
-		function handleKeyDown(e: KeyboardEvent) {
-			if (!props.active)
-				return;
-			if (matchKeyCombos(e, context.appNavBackKey))
-				handleClose();
-		}
+		return () => removeEventListener('keydown', handleKeyDown);
+	}
+
+	function handleKeyDown(e: KeyboardEvent) {
+		if (!props.active)
+			return;
+		if (matchKeyCombos(e, context.appNavBackKey))
+			handleClose();
 	}
 
 	function handleClose() {
