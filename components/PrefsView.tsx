@@ -22,7 +22,7 @@ export function PrefsView() {
 						label: "🔗 Database URL",
 						description: (<>
 							<p>Must match our JSON schema and serve over HTTPS. Defaults to Turtlemay's store database.</p>
-							<p>Default url: <div>{context.defaultPrefs.dbUrl}</div></p>
+							<p>Default url: {context.defaultPrefs.dbUrl}</p>
 						</>),
 						controlNode: <DelayedTextInput
 							className="prefsView__optionTextInput"
