@@ -36,10 +36,8 @@ export function Barcode(props: {
 	]);
 
 	function updateValue() {
-		if (canvasElemRef.current) {
-			const org = context.overrideOrganizationId || context.dbInfo?.organization || '';
-			renderBarcode(org, canvasElemRef.current, props.value, jsBarcodeOpts);
-		}
+		if (canvasElemRef.current)
+			renderBarcode(context.getOrganization(), canvasElemRef.current, props.value, jsBarcodeOpts);
 	}
 
 	function handleKeyDown(e: React.KeyboardEvent<HTMLElement>) {
@@ -52,7 +50,7 @@ export function Barcode(props: {
 
 	return (
 		<div role="button" className={props.className}
-			key={`${props.value};${context.dbInfo?.organization};${context.overrideOrganizationId}`}
+			key={`${props.value};${context.getOrganization()}`}
 			tabIndex={tabIndex}
 			onClick={props.onClickBarcode}
 			onKeyDown={handleKeyDown}

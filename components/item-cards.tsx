@@ -21,7 +21,7 @@ export function StoreItemCard(props: {
 	}
 
 	const disableBarcode = (
-		(context.overrideOrganizationId || context.dbInfo?.organization) === 'GIANT_EAGLE' &&
+		context.getOrganization() === 'GIANT_EAGLE' &&
 		context.noCheat &&
 		props.data.tags?.includes("produce"));
 

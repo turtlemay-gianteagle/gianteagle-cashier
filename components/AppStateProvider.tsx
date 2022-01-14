@@ -41,6 +41,7 @@ type IState = IPrefs & {
 	compiledItemData: IItemData[];
 	search: Function,
 	speechEnabled: () => boolean;
+	getOrganization: () => string;
 };
 
 // @ts-expect-error
@@ -75,6 +76,7 @@ export class AppStateProvider extends React.Component<{}, IState> {
 			search: this._search,
 			enableSpeech: BROWSER_SUPPORT_SPEECH && DEFAULT_PREFS.enableSpeech,
 			speechEnabled: this._speechEnabled,
+			getOrganization: this._getOrganization,
 		};
 
 		this.state = Object.assign({}, DEFAULT_PREFS, localPrefs, cachedDbState, initialState);
@@ -120,6 +122,10 @@ export class AppStateProvider extends React.Component<{}, IState> {
 
 	_speechEnabled = () => {
 		return BROWSER_SUPPORT_SPEECH && this.state.enableSpeech;
+	};
+
+	_getOrganization = () => {
+		return this.state.overrideOrganizationId || this.state.dbInfo?.organization || '';
 	};
 
 	resetAll = () => {
