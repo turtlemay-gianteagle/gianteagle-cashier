@@ -73,9 +73,8 @@ export function PrefsView() {
 				<section>
 					<PrefsOption>{{
 						label: "🤏 Compact barcodes", description: "Decrease barcode height.",
-						controlNode: <input
+						controlNode: <input type="checkbox"
 							className="prefsView__optionCheckbox"
-							type="checkbox"
 							checked={context.compactBarcodes}
 							onChange={e => context.provider.setState({ compactBarcodes: e.target.checked })} />,
 					}}</PrefsOption>
@@ -149,9 +148,8 @@ export function PrefsView() {
 				<section>
 					<PrefsOption>{{
 						label: "🚫 No Cheat Mode", description: "Disable some barcodes to preserve company metrics.",
-						controlNode: <input
+						controlNode: <input type="checkbox"
 							className="prefsView__optionCheckbox"
-							type="checkbox"
 							checked={context.noCheat}
 							onChange={e => context.provider.setState({ noCheat: e.target.checked })} />,
 					}}</PrefsOption>
@@ -228,9 +226,8 @@ export function PrefsView() {
 
 					<PrefsOption>{{
 						label: "🎙️ Enable voice", description: "Enable voice input in supported browsers.",
-						controlNode: <input
+						controlNode: <input type="checkbox"
 							className="prefsView__optionCheckbox"
-							type="checkbox"
 							checked={context.enableSpeech}
 							onChange={e => context.provider.setState({ enableSpeech: e.target.checked })} />,
 					}}</PrefsOption>
