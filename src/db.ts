@@ -25,7 +25,7 @@ export async function getRemoteDb(url?: string, opts?: { forceFetch: boolean; })
 		console.error(error);
 	}
 
-	if (fetchRes && fetchRes.ok) {
+	if (fetchRes?.ok) {
 		console.info(`Got remote database "${url}".`);
 		const db = await fetchRes.json() as unknown;
 

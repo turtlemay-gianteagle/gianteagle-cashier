@@ -29,7 +29,7 @@ async function getResource(request) {
 	} catch (error) {
 	}
 
-	if (fetchRes && fetchRes.ok) {
+	if (fetchRes?.ok) {
 		cache.add(request.url);
 		return fetchRes;
 	}
