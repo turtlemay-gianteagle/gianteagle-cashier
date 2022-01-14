@@ -112,93 +112,90 @@ export const MainView = (props: {
 
 	function updateKeyListener() {
 		addEventListener('keydown', handleKeyDown);
+		return () => removeEventListener('keydown', handleKeyDown);
+	}
 
-		return function cleanup() {
-			removeEventListener('keydown', handleKeyDown);
-		};
+	function handleKeyDown(e: KeyboardEvent) {
+		if (!props.active)
+			return;
 
-		function handleKeyDown(e: KeyboardEvent) {
-			if (!props.active)
-				return;
-
-			// Use Ctrl + Alt + Function keys to select result by index
-			if (e.ctrlKey && e.altKey && e.key.match(/^F\d{1,2}$/)?.[0]) {
-				e.preventDefault();
-				const n = Number(e.key.match(/^F(\d{1,2})$/)?.[1]);
-				if (!isNaN(n)) {
-					const index = n - 1;
-					const elems = rootElemRef.current?.querySelectorAll('.mainView__queryResultListView.active .mainView__queryResultNode');
-					const clickEl: HTMLElement | null | undefined = elems?.[index]?.querySelector('[role="button"]');
-					clickEl?.click();
-				}
-				return;
+		// Use Ctrl + Alt + Function keys to select result by index
+		if (e.ctrlKey && e.altKey && e.key.match(/^F\d{1,2}$/)?.[0]) {
+			e.preventDefault();
+			const n = Number(e.key.match(/^F(\d{1,2})$/)?.[1]);
+			if (!isNaN(n)) {
+				const index = n - 1;
+				const elems = rootElemRef.current?.querySelectorAll('.mainView__queryResultListView.active .mainView__queryResultNode');
+				const clickEl: HTMLElement | null | undefined = elems?.[index]?.querySelector('[role="button"]');
+				clickEl?.click();
 			}
+			return;
+		}
 
-			// Use Ctrl + Number to switch active view
-			const matchedNumKey = e.key.match(/^\d$/)?.[0];
-			if (e.ctrlKey && matchedNumKey) {
-				e.preventDefault();
-				setActiveQueryTo(matchedNumKey === '0' ? 9 : Number(matchedNumKey) - 1);
-				return;
-			}
+		// Use Ctrl + Number to switch active view
+		const matchedNumKey = e.key.match(/^\d$/)?.[0];
+		if (e.ctrlKey && matchedNumKey) {
+			e.preventDefault();
+			setActiveQueryTo(matchedNumKey === '0' ? 9 : Number(matchedNumKey) - 1);
+			return;
+		}
 
-			if (context.speechEnabled() && matchKeyCombos(e, context.speechStartKey)) {
-				e.preventDefault();
-				if (!startedSpeechRec) speechRec.current?.start();
-				return;
-			}
+		if (context.speechEnabled() && matchKeyCombos(e, context.speechStartKey)) {
+			e.preventDefault();
+			if (!startedSpeechRec) speechRec.current?.start();
+			return;
+		}
 
-			if (matchKeyCombos(e, context.resetQueryKey)) {
-				e.preventDefault();
-				resetQuery();
-				return;
-			}
+		if (matchKeyCombos(e, context.resetQueryKey)) {
+			e.preventDefault();
+			resetQuery();
+			return;
+		}
 
-			if (!showShadowbox) {
-				if (splitQueries.length > 1) {
-					if (matchKeyCombos(e, context.appNavViewLeftKey)) {
-						e.preventDefault();
-						setThrobber(false);
-						setActiveQueryLeft();
-						return;
-					}
-					if (matchKeyCombos(e, context.appNavViewRightKey)) {
-						e.preventDefault();
-						setThrobber(false);
-						setActiveQueryRight();
-						return;
-					}
-				}
-			}
-
-			if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey)
-				return;
-
-			if (e.key === 'Enter') {
-				handleCommand(inputElemRef.current?.value ?? '');
-				const el = document.activeElement;
-				const isInputFocused = el === inputElemRef.current;
-				const isTabbableFocused = el ? isTabbable(el) : false;
-				if (isInputFocused || !isTabbableFocused) {
+		if (!showShadowbox) {
+			if (splitQueries.length > 1) {
+				if (matchKeyCombos(e, context.appNavViewLeftKey)) {
 					e.preventDefault();
-					focusInputField();
-					clearInputField();
+					setThrobber(false);
+					setActiveQueryLeft();
+					return;
+				}
+				if (matchKeyCombos(e, context.appNavViewRightKey)) {
+					e.preventDefault();
+					setThrobber(false);
+					setActiveQueryRight();
 					return;
 				}
 			}
+		}
 
-			if (e.key === context.appNavBackKey) {
-				if (context.speechEnabled()) {
-					e.preventDefault();
-					speechRec.current?.abort();
-				}
+		if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey)
+			return;
+
+		if (e.key === 'Enter') {
+			handleCommand(inputElemRef.current?.value ?? '');
+			const el = document.activeElement;
+			const isInputFocused = el === inputElemRef.current;
+			const isTabbableFocused = el ? isTabbable(el) : false;
+			if (isInputFocused || !isTabbableFocused) {
+				e.preventDefault();
+				focusInputField();
+				clearInputField();
+				return;
 			}
+		}
 
-			if (inputElemRef && inputElemRef.current !== document.activeElement) {
-				if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.match(/^(\S)$/)) {
-					focusInputField();
-					return;
-				}
+		if (e.key === context.appNavBackKey) {
+			if (context.speechEnabled()) {
+				e.preventDefault();
+				speechRec.current?.abort();
+			}
+		}
+
+		if (inputElemRef && inputElemRef.current !== document.activeElement) {
+			if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.match(/^(\S)$/)) {
+				focusInputField();
+				return;
 			}
 		}
 	}
