@@ -106,6 +106,10 @@ export const MainView = (props: {
 		focusInputField();
 	}
 
+	function cancelSpeech() {
+		speechRec.current?.abort();
+	}
+
 	function updateKeyListener() {
 		addEventListener('keydown', handleKeyDown);
 
@@ -251,10 +255,6 @@ export const MainView = (props: {
 		} else {
 			setShowRoundUpResult(false);
 		}
-	}
-
-	function cancelSpeech() {
-		speechRec.current?.abort();
 	}
 
 	function updateChangedSplitQueries() {
