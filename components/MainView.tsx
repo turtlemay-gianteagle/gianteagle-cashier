@@ -58,7 +58,7 @@ export const MainView = (props: {
 	function updateSpeechRecognition() {
 		if (context.speechEnabled()) {
 			const SpeechRecognition = window['SpeechRecognition'] ?? window['webkitSpeechRecognition'];
-			speechRec.current = speechRec.current ?? new SpeechRecognition();
+			speechRec.current ??= new SpeechRecognition();
 			speechRec.current.onstart = speechOnStart;
 			speechRec.current.onend = speechOnEnd;
 			speechRec.current.onerror = speechOnError;
