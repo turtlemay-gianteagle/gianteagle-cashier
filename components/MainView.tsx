@@ -12,6 +12,7 @@ import { Untabbable } from '../lib/tabindex';
 import { isTabbable } from 'tabbable';
 import { useIsFirstRender, usePrevious } from '../lib/react';
 import { matchKeyCombos } from '../src/keys';
+import { useSpeechRecognition } from '../src/useSpeechRecognition';
 
 export const MainView = (props: {
 	className?: string;
@@ -36,78 +37,26 @@ export const MainView = (props: {
 	const [onResetQueryDelegate] = React.useState(new Set<VoidFunction>());
 	const rootElemRef = React.useRef<HTMLDivElement>(null);
 	const inputElemRef = React.useRef<HTMLInputElement>(null);
-	const speechRec = React.useRef<SpeechRecognition | null>(null);
-	const [startedSpeechRec, setStartedSpeechRec] = React.useState(false);
+	const [listening, startSpeech, stopSpeech] = useSpeechRecognition(setQuery);
 	const [lastInputTime, setLastInputTime] = React.useState(Date.now());
 
 	React.useEffect(initSelectInput, []);
 	React.useEffect(updateKeyListener);
 	React.useEffect(updateQueryParams);
-	React.useEffect(updateSpeechRecognition);
 	React.useEffect(updateSelectInputTimeout, [context.selectQueryTime, query, lastInputTime]);
-	React.useEffect(cancelSpeech, [props.active, query, activeQueryIndex, useNumInput, showShadowbox]);
+	React.useEffect(stopSpeech, [props.active, query, activeQueryIndex, useNumInput, showShadowbox]);
 	React.useEffect(onChangedQuery, [query]);
 	React.useEffect(onChangedActiveView, [props.active]);
 	React.useEffect(updateChangedSplitQueries, [splitQueries, query, context.defaultQuery]);
 	React.useEffect(updateHighlightedQuery, [highlightQuery, context.querySeparator, activeQueryIndex]);
+	React.useEffect(updateSpeechThrobber, [listening]);
 
 	function initSelectInput() {
 		inputElemRef.current?.select();
 	}
 
-	function updateSpeechRecognition() {
-		if (context.speechEnabled()) {
-			const SpeechRecognition = window['SpeechRecognition'] ?? window['webkitSpeechRecognition'];
-			speechRec.current ??= new SpeechRecognition();
-			speechRec.current.onstart = speechOnStart;
-			speechRec.current.onend = speechOnEnd;
-			speechRec.current.onerror = speechOnError;
-			speechRec.current.onspeechend = speechOnSpeechEnd;
-			speechRec.current.onresult = speechOnResult;
-		}
-	}
-
-	function speechOnStart() {
-		console.info("Listening for speech…");
-		setThrobber(true);
-		setStartedSpeechRec(true);
-	}
-
-	function speechOnEnd() {
-		if (startedSpeechRec) {
-			console.info("Stopped listening.");
-			setThrobber(false);
-			setStartedSpeechRec(false);
-		}
-	}
-
-	function speechOnError(err: SpeechRecognitionErrorEvent) {
-		setThrobber(false);
-		setStartedSpeechRec(false);
-		if (err.error === 'not-allowed') {
-			context.provider.setState({ enableSpeech: false });
-		} else if (err.error === 'aborted') {
-			console.info("Listening canceled.");
-		} else if (err.error === 'no-speech') {
-			console.info("No speech detected.");
-		} else {
-			console.error(err);
-		}
-	}
-
-	function speechOnSpeechEnd() {
-		speechRec.current?.stop();
-	}
-
-	function speechOnResult(event: SpeechRecognitionEvent) {
-		const transcript = event.results[0][0].transcript;
-		console.info(`"${transcript}"`);
-		setQuery(formatSpokenNumbers(transcript));
-		focusInputField();
-	}
-
-	function cancelSpeech() {
-		speechRec.current?.abort();
+	function updateSpeechThrobber() {
+		setThrobber(listening);
 	}
 
 	function updateKeyListener() {
@@ -142,7 +91,7 @@ export const MainView = (props: {
 
 		if (context.speechEnabled() && matchKeyCombos(e, context.speechStartKey)) {
 			e.preventDefault();
-			if (!startedSpeechRec) speechRec.current?.start();
+			if (!listening) startSpeech();
 			return;
 		}
 
@@ -188,7 +137,7 @@ export const MainView = (props: {
 		if (e.key === context.appNavBackKey) {
 			if (context.speechEnabled()) {
 				e.preventDefault();
-				speechRec.current?.abort();
+				stopSpeech();
 			}
 		}
 
@@ -275,7 +224,7 @@ export const MainView = (props: {
 	}
 
 	function resetQuery() {
-		speechRec.current?.abort();
+		stopSpeech();
 		onResetQueryDelegate.forEach(fn => fn?.());
 		setHighlightQuery(null);
 		setActiveQueryIndex(0);
@@ -318,10 +267,10 @@ export const MainView = (props: {
 	}
 
 	function onClickVoiceInputButton() {
-		if (startedSpeechRec) {
-			speechRec.current?.abort();
+		if (listening) {
+			stopSpeech();
 		} else {
-			speechRec.current?.start();
+			startSpeech();
 		}
 	}
 
@@ -374,7 +323,7 @@ export const MainView = (props: {
 					</div>
 				</div>
 				{context.speechEnabled() && (
-					<div className={c('mainView__queryVoiceInputButton', { 'mainView__queryVoiceInputButton--active': startedSpeechRec })} role="button" onClick={onClickVoiceInputButton}>
+					<div className={c('mainView__queryVoiceInputButton', { 'mainView__queryVoiceInputButton--active': listening })} role="button" onClick={onClickVoiceInputButton}>
 						<span className="mainview__queryVoiceInputButtonText">🎙️</span>
 					</div>
 				)}
@@ -431,7 +380,7 @@ export const MainView = (props: {
 					<span className="mainView__mathResultEqualSign">=</span>{mathResult}
 				</div>
 
-				<div className={c('mainView__listeningIndicator', { 'active': startedSpeechRec })}>
+				<div className={c('mainView__listeningIndicator', { 'active': listening })}>
 					<span className="mainView__listeningIndicatorText">Listening…</span>
 				</div>
 
@@ -478,12 +427,4 @@ function tryRoundUp(query: string): number | null {
 		return lodash.inRange(n, 1, 100) ? 100 - n : 0;
 	}
 	return null;
-}
-
-function formatSpokenNumbers(transcript: string) {
-	if (transcript.match(/^[\d\s-+/]*$/g)) {
-		return transcript.replace(/\D/g, '');
-	} else {
-		return transcript;
-	}
 }
