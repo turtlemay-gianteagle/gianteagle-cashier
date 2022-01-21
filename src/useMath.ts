@@ -2,26 +2,38 @@ import * as React from 'react';
 import * as mathjs from 'mathjs';
 
 export function useMath(query: string) {
-	const [mathResult, setMathResult] = React.useState('');
-	const [showMathResult, setShowMathResult] = React.useState(false);
+	const [result, setResult] = React.useState('');
+	const [renderResult, setRenderResult] = React.useState(false);
 
 	React.useEffect(update, [query]);
 
 	function update() {
-		const gotMathResult = tryMath(query);
-		if (gotMathResult) setMathResult(gotMathResult);
-		setShowMathResult(Boolean(gotMathResult));
+		const result = tryMath(query);
+
+		if (typeof result === 'string') {
+			setResult(result);
+			setRenderResult(true);
+		} else {
+			setRenderResult(false);
+		}
 	}
 
-	return [mathResult, showMathResult] as const;
+	return [result, renderResult] as const;
 }
 
 function tryMath(query: string): string | null {
 	if (query.match(/^\d+$/))
 		return null;
-	let result: unknown = null;
+
+	let result: unknown;
+
 	try { result = mathjs.evaluate(query); } catch { }
-	if (typeof result === 'function')
-		return null;
-	return result ? String(result) : null;
+
+	if (typeof result === 'string')
+		return result;
+
+	if (typeof result === 'number')
+		return String(result);
+
+	return null;
 }
