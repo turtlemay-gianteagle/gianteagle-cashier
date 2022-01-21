@@ -123,7 +123,7 @@ export const MainView = (props: {
 			handleCommand(inputElemRef.current?.value ?? '');
 			const el = document.activeElement;
 			const isInputFocused = el === inputElemRef.current;
-			const isTabbableFocused = el ? isTabbable(el) : false;
+			const isTabbableFocused = el && isTabbable(el);
 			if (isInputFocused || !isTabbableFocused) {
 				e.preventDefault();
 				focusInputField();
