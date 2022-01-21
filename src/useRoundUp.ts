@@ -2,18 +2,18 @@ import * as React from 'react';
 import lodash from 'lodash';
 
 export function useRoundUp(query: string) {
-	const [roundUpResult, setRoundUpResult] = React.useState(0);
-	const [showRoundUpResult, setShowRoundUpResult] = React.useState(false);
+	const [result, setResult] = React.useState(0);
+	const [renderResult, setRenderResult] = React.useState(false);
 
 	React.useEffect(update, [query]);
 
 	function update() {
-		const gotRoundUpResult = tryRoundUp(query);
-		if (gotRoundUpResult) setRoundUpResult(gotRoundUpResult);
-		setShowRoundUpResult(Boolean(gotRoundUpResult));
+		const result = tryRoundUp(query);
+		if (result) setResult(result);
+		setRenderResult(Boolean(result));
 	}
 
-	return [roundUpResult, showRoundUpResult] as const;
+	return [result, renderResult] as const;
 }
 
 function tryRoundUp(query: string): number | null {
