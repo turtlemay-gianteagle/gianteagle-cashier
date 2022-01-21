@@ -41,7 +41,6 @@ export const MainView = (props: {
 	const [lastInputTime, setLastInputTime] = React.useState(Date.now());
 	useVisibility(onVisible, onHidden);
 
-	React.useEffect(initSelectInput, []);
 	React.useEffect(updateKeyListener);
 	React.useEffect(updateQueryParams);
 	React.useEffect(updateSelectInputTimeout, [context.selectQueryTime, query, lastInputTime]);
@@ -154,10 +153,6 @@ export const MainView = (props: {
 
 		</div>
 	);
-
-	function initSelectInput() {
-		inputElemRef.current?.select();
-	}
 
 	function updateSpeechThrobber() {
 		setThrobber(listening);
