@@ -3,7 +3,7 @@ import lodash from 'lodash';
 import * as yaml from 'js-yaml';
 import FuseJs from 'fuse.js';
 import { loadCacheDb, validateDb, saveCacheDb, getRemoteDb, clearCacheDb } from '../src/db';
-import dbUrls from '../data/db-urls.json';
+import data from '../data/data.json';
 
 const BROWSER_SUPPORT_SPEECH = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
 
@@ -213,13 +213,13 @@ function getDefaultDbUrl() {
 	}
 	// Fall back to checking host location.
 	if (location.host.includes('gianteagle')) {
-		return dbUrls['default_gianteagle'];
+		return data.db_urls.default_gianteagle;
 	}
 	if (location.host.includes('target')) {
-		return dbUrls['default_target'];
+		return data.db_urls.default_target;
 	}
 	// Default to Giant Eagle.
-	return dbUrls['default_gianteagle'];
+	return data.db_urls.default_gianteagle;
 }
 
 interface IUserItemData {
