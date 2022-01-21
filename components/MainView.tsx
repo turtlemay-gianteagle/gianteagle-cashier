@@ -232,6 +232,7 @@ export const MainView = (props: {
 			if (context.speechEnabled()) {
 				e.preventDefault();
 				stopSpeech();
+				return;
 			}
 		}
 
