@@ -120,16 +120,21 @@ export const MainView = (props: {
 			return;
 
 		if (e.key === 'Enter') {
-			handleCommand(inputElemRef.current?.value ?? '');
 			const el = document.activeElement;
 			const isInputFocused = el === inputElemRef.current;
 			const isTabbableFocused = el && isTabbable(el);
 			if (isInputFocused || !isTabbableFocused) {
 				e.preventDefault();
-				focusInputField();
-				clearInputField();
-				return;
+				const v = inputElemRef.current?.value;
+				const didCommand = v && handleCommand(v);
+				if (didCommand) {
+					inputElemRef.current?.select();
+				} else {
+					clearInputField();
+					inputElemRef.current?.select();
+				}
 			}
+			return;
 		}
 
 		if (e.key === context.appNavBackKey) {
@@ -278,11 +283,14 @@ export const MainView = (props: {
 		setActiveQueryTo(activeQueryIndex + 1);
 	}
 
-	function handleCommand(str: string) {
+	function handleCommand(str: string): boolean {
 		if (str === 'wc') {
 			navigate('/wcalc');
 			resetQuery();
+			return true;
 		}
+
+		return false;
 	}
 
 	function onStartInput() {
