@@ -16,6 +16,7 @@ import { useSpeechRecognition } from '../src/useSpeechRecognition';
 import { useMath } from '../src/useMath';
 import { useRoundUp } from '../src/useRoundUp';
 import { useVisibility } from '../src/useVisibility';
+import { useKeyDown } from '../src/useKeyDown';
 
 export const MainView = (props: {
 	className?: string;
@@ -39,9 +40,10 @@ export const MainView = (props: {
 	const inputElemRef = React.useRef<HTMLInputElement>(null);
 	const [listening, startSpeech, stopSpeech] = useSpeechRecognition(setQuery);
 	const [lastInputTime, setLastInputTime] = React.useState(Date.now());
-	useVisibility(onVisible, onHidden);
 
-	React.useEffect(updateKeyListener);
+	useVisibility(onVisible, onHidden);
+	useKeyDown(onKeyDown);
+
 	React.useEffect(updateQueryParams);
 	React.useEffect(updateSelectInputTimeout, [context.selectQueryTime, query, lastInputTime]);
 	React.useEffect(stopSpeech, [props.active, query, activeQueryIndex, useNumInput, showShadowbox]);
@@ -158,12 +160,7 @@ export const MainView = (props: {
 		setThrobber(listening);
 	}
 
-	function updateKeyListener() {
-		addEventListener('keydown', handleKeyDown);
-		return () => removeEventListener('keydown', handleKeyDown);
-	}
-
-	function handleKeyDown(e: KeyboardEvent) {
+	function onKeyDown(e: KeyboardEvent) {
 		if (!props.active)
 			return;
 

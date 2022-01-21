@@ -8,6 +8,7 @@ import { InfoView } from './InfoView';
 import { WeightCalcView } from './WeightCalcView';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { matchKeyCombos } from '../src/keys';
+import { useKeyDown } from '../src/useKeyDown';
 
 export function App() {
 	return (
@@ -71,19 +72,13 @@ function AppMain(props: React.PropsWithChildren<{
 function AppStateConsumer(props: React.PropsWithChildren<{}>) {
 	const navigate = useNavigate();
 	const context = React.useContext(AppStateContext);
-
-	React.useEffect(updateKeyListener);
-
-	function updateKeyListener() {
-		addEventListener('keydown', fn);
-		return () => removeEventListener('keydown', fn);
-		function fn(e: KeyboardEvent) {
-			if (matchKeyCombos(e, context.appRestartKey)) {
-				e.preventDefault();
-				navigate('/');
-			}
+	
+	useKeyDown(e => {
+		if (matchKeyCombos(e, context.appRestartKey)) {
+			e.preventDefault();
+			navigate('/');
 		}
-	}
+	});
 
 	return <React.Fragment children={props.children} />;
 }

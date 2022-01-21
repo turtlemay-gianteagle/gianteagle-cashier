@@ -5,6 +5,7 @@ import { AppStateContext } from './AppStateProvider';
 import { Untabbable, useTabIndex } from '../lib/tabindex';
 import { GeneratedItemCard, StoreItemCard } from './item-cards';
 import { matchKeyCombos } from '../src/keys';
+import { useKeyDown } from '../src/useKeyDown';
 
 export function Shadowbox(props: React.PropsWithChildren<{
 	className?: string;
@@ -16,7 +17,12 @@ export function Shadowbox(props: React.PropsWithChildren<{
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	React.useEffect(updateKeyListener);
+	useKeyDown(e => {
+		if (!props.active)
+			return;
+		if (matchKeyCombos(e, context.appNavBackKey))
+			handleClose();
+	});
 
 	const renderedItem = renderItem();
 
@@ -39,18 +45,6 @@ export function Shadowbox(props: React.PropsWithChildren<{
 			</div>
 		</div>
 	);
-
-	function updateKeyListener() {
-		addEventListener('keydown', handleKeyDown);
-		return () => removeEventListener('keydown', handleKeyDown);
-	}
-
-	function handleKeyDown(e: KeyboardEvent) {
-		if (!props.active)
-			return;
-		if (matchKeyCombos(e, context.appNavBackKey))
-			handleClose();
-	}
 
 	function handleClose() {
 		const queryParams = new URLSearchParams(location.search);
