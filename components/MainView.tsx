@@ -13,6 +13,7 @@ import { useIsFirstRender, usePrevious } from '../lib/react';
 import { matchKeyCombos } from '../src/keys';
 import { useSpeechRecognition } from '../src/useSpeechRecognition';
 import { useMath } from '../src/useMath';
+import { useRoundUp } from '../src/useRoundUp';
 
 export const MainView = (props: {
 	className?: string;
@@ -29,8 +30,7 @@ export const MainView = (props: {
 	const [highlightQuery, setHighlightQuery] = React.useState<string | null>(null);
 	const [showThrobber, setThrobber] = React.useState(false);
 	const [mathResult, showMathResult] = useMath(query);
-	const [roundUpResult, setRoundUpResult] = React.useState(0);
-	const [showRoundUpResult, setShowRoundUpResult] = React.useState(false);
+	const [roundUpResult, showRoundUpResult] = useRoundUp(query);
 	const [showShadowbox, setShowShadowbox] = React.useState(false);
 	const [useNumInput, setUseNumInput] = React.useState(false);
 	const [onResetQueryDelegate] = React.useState(new Set<VoidFunction>());
@@ -184,10 +184,6 @@ export const MainView = (props: {
 				navigate(`?${queryParams.toString()}`);
 			}
 		}
-
-		const gotRoundUpResult = tryRoundUp(query);
-		if (gotRoundUpResult) setRoundUpResult(gotRoundUpResult);
-		setShowRoundUpResult(Boolean(gotRoundUpResult));
 	}
 
 	function updateChangedSplitQueries() {
@@ -405,11 +401,3 @@ export const MainView = (props: {
 		</div>
 	);
 };
-
-function tryRoundUp(query: string): number | null {
-	if (query.match(/^\d{1,2}$/)) {
-		const n = Number(query);
-		return lodash.inRange(n, 1, 100) ? 100 - n : 0;
-	}
-	return null;
-}
