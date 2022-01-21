@@ -27,7 +27,6 @@ export const MainView = (props: {
 	const prevQuery = usePrevious(query);
 	const [splitQueries, setSplitQueries] = React.useState([query]);
 	const [activeQueryIndex, setActiveQueryIndex] = React.useState(0);
-	const [highlightQuery, setHighlightQuery] = React.useState<string | null>(null);
 	const [showThrobber, setThrobber] = React.useState(false);
 	const [mathResult, showMathResult] = useMath(query);
 	const [roundUpResult, showRoundUpResult] = useRoundUp(query);
@@ -47,7 +46,7 @@ export const MainView = (props: {
 	React.useEffect(onChangedQuery, [query]);
 	React.useEffect(onChangedActiveView, [props.active]);
 	React.useEffect(updateChangedSplitQueries, [splitQueries, query, context.defaultQuery]);
-	React.useEffect(updateHighlightedQuery, [highlightQuery, context.querySeparator, activeQueryIndex]);
+	React.useEffect(updateHighlightedQuery, [context.querySeparator, activeQueryIndex]);
 	React.useEffect(updateSpeechThrobber, [listening]);
 
 	function initSelectInput() {
@@ -188,22 +187,18 @@ export const MainView = (props: {
 
 	function updateChangedSplitQueries() {
 		setActiveQueryIndex(0);
-		setHighlightQuery(null);
 
 		if (query === context.defaultQuery)
 			inputElemRef.current?.select();
 	}
 
 	function updateHighlightedQuery() {
-		if (!highlightQuery) { return; }
-		const [fullStr, subStr] = [query, highlightQuery];
 		const [s, n] = [context.querySeparator, activeQueryIndex];
-		const ss = lodash.escapeRegExp(subStr);
-		const regex = new RegExp(`^((?:[^${s}]+${s}){${n}})${ss}`, '');
-		const match = fullStr.match(regex);
+		const regex = new RegExp(`^((?:[^${s}]+${s}){${n}})([^${s}]+)`, '');
+		const match = query.match(regex);
 		if (!match) { return; }
 		const start = match[1].length;
-		const end = start + subStr.length;
+		const end = start + match[2].length;
 
 		// Hack to scroll to selection.
 		inputElemRef.current?.setSelectionRange(start, start);
@@ -217,7 +212,6 @@ export const MainView = (props: {
 	function resetQuery() {
 		stopSpeech();
 		onResetQueryDelegate.forEach(fn => fn?.());
-		setHighlightQuery(null);
 		setActiveQueryIndex(0);
 		setQuery(context.defaultQuery);
 		setThrobber(false);
@@ -274,7 +268,6 @@ export const MainView = (props: {
 	function setActiveQueryTo(index: number) {
 		const clampedIndex = lodash.clamp(index, 0, splitQueries.length - 1);
 		setActiveQueryIndex(clampedIndex);
-		setHighlightQuery(splitQueries[clampedIndex]);
 	}
 
 	function setActiveQueryLeft() {
