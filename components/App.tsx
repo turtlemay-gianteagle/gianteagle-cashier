@@ -8,7 +8,7 @@ import { InfoView } from './InfoView';
 import { WeightCalcView } from './WeightCalcView';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { matchKeyCombos } from '../src/keys';
-import { useKeyDown } from '../src/useKeyDown';
+import { useKeyDown } from '../hooks/useKeyDown';
 
 export function App() {
 	return (

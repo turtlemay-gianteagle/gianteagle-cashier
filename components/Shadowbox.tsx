@@ -5,7 +5,7 @@ import { AppStateContext } from './AppStateProvider';
 import { Untabbable, useTabIndex } from '../lib/tabindex';
 import { GeneratedItemCard, StoreItemCard } from './item-cards';
 import { matchKeyCombos } from '../src/keys';
-import { useKeyDown } from '../src/useKeyDown';
+import { useKeyDown } from '../hooks/useKeyDown';
 
 export function Shadowbox(props: React.PropsWithChildren<{
 	className?: string;

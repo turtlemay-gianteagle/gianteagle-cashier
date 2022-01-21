@@ -12,11 +12,11 @@ import { Untabbable } from '../lib/tabindex';
 import { isTabbable } from 'tabbable';
 import { useIsFirstRender, usePrevious } from '../lib/react';
 import { matchKeyCombos } from '../src/keys';
-import { useSpeechRecognition } from '../src/useSpeechRecognition';
-import { useMath } from '../src/useMath';
-import { useRoundUp } from '../src/useRoundUp';
-import { useVisibility } from '../src/useVisibility';
-import { useKeyDown } from '../src/useKeyDown';
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
+import { useMath } from '../hooks/useMath';
+import { useRoundUp } from '../hooks/useRoundUp';
+import { useVisibility } from '../hooks/useVisibility';
+import { useKeyDown } from '../hooks/useKeyDown';
 
 export const MainView = (props: {
 	className?: string;
