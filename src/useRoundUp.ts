@@ -9,8 +9,13 @@ export function useRoundUp(query: string) {
 
 	function update() {
 		const result = tryRoundUp(query);
-		if (result) setResult(result);
-		setRenderResult(Boolean(result));
+
+		if (typeof result === 'number') {
+			setResult(result);
+			setRenderResult(true);
+		} else {
+			setRenderResult(false);
+		}
 	}
 
 	return [result, renderResult] as const;
