@@ -36,6 +36,41 @@ export function MainViewQueryResults(props: {
 		context.compiledItemData,
 	]);
 
+	const renderSearchResults = enablePaging ? searchResults.slice(0, numRenderResultItems) : searchResults;
+	const renderShowMoreButton = enablePaging && numRenderResultItems < searchResults.length;
+
+	return (
+		<div className={c('mainView__queryResultList', props.className)}
+			ref={scrollElemRef as React.RefObject<HTMLDivElement>}>
+			<TransitionGroup component={null}>
+				{showTypedCode && (
+					<CSSTransition classNames="mainView__resultItemTransition" timeout={250}>
+						<div className="mainView__queryResultNode">
+							<GeneratedItemCard value={typedCode} onPick={props.onPickShadowBoxElem} />
+						</div>
+					</CSSTransition>
+				)}
+				{renderSearchResults.length === 0 && (
+					<CSSTransition classNames="mainView__resultItemTransition" timeout={250}>
+						<div className="mainView__queryResultNone">
+							<span>No items found.</span>
+						</div>
+					</CSSTransition>
+				)}
+				{renderSearchResults.map((v, i) => (
+					<CSSTransition classNames="mainView__resultItemTransition" key={`${v.value}.${v.name}.${i}`} timeout={250}>
+						<div className="mainView__queryResultNode">
+							<StoreItemCard data={v} onPick={props.onPickShadowBoxElem} query={props.query} compact={context.compactBarcodes} />
+						</div>
+					</CSSTransition>
+				))}
+			</TransitionGroup>
+			{renderShowMoreButton && (
+				<button className="mainView__showMoreButton" onClick={showMore} tabIndex={tabIndex} key={numRenderResultItems}>+</button>
+			)}
+		</div>
+	);
+
 	function updateResetQueryCallback() {
 		props.onResetQueryDelegate.add(onResetQuery);
 		return function cleanup() {
@@ -94,39 +129,4 @@ export function MainViewQueryResults(props: {
 			Object.assign(scrollToOptions, { behavior: 'smooth' });
 		scrollElemRef.current?.scrollTo(scrollToOptions);
 	}
-
-	const renderSearchResults = enablePaging ? searchResults.slice(0, numRenderResultItems) : searchResults;
-	const renderShowMoreButton = enablePaging && numRenderResultItems < searchResults.length;
-
-	return (
-		<div className={c('mainView__queryResultList', props.className)}
-			ref={scrollElemRef as React.RefObject<HTMLDivElement>}>
-			<TransitionGroup component={null}>
-				{showTypedCode && (
-					<CSSTransition classNames="mainView__resultItemTransition" timeout={250}>
-						<div className="mainView__queryResultNode">
-							<GeneratedItemCard value={typedCode} onPick={props.onPickShadowBoxElem} />
-						</div>
-					</CSSTransition>
-				)}
-				{renderSearchResults.length === 0 && (
-					<CSSTransition classNames="mainView__resultItemTransition" timeout={250}>
-						<div className="mainView__queryResultNone">
-							<span>No items found.</span>
-						</div>
-					</CSSTransition>
-				)}
-				{renderSearchResults.map((v, i) => (
-					<CSSTransition classNames="mainView__resultItemTransition" key={`${v.value}.${v.name}.${i}`} timeout={250}>
-						<div className="mainView__queryResultNode">
-							<StoreItemCard data={v} onPick={props.onPickShadowBoxElem} query={props.query} compact={context.compactBarcodes} />
-						</div>
-					</CSSTransition>
-				))}
-			</TransitionGroup>
-			{renderShowMoreButton && (
-				<button className="mainView__showMoreButton" onClick={showMore} tabIndex={tabIndex} key={numRenderResultItems}>+</button>
-			)}
-		</div>
-	);
 }

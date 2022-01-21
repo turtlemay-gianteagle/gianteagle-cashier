@@ -50,6 +50,109 @@ export const MainView = (props: {
 	React.useEffect(updateHighlightedQuery, [context.querySeparator, activeQueryIndex]);
 	React.useEffect(updateSpeechThrobber, [listening]);
 
+	let inputCodeText = "Enter UPC or PLU";
+	if (context.getOrganization() === 'TARGET')
+		inputCodeText = "Enter UPC, SKU, or PLU";
+
+	const showViewLeftButton = activeQueryIndex > 0;
+	const showViewRightButton = activeQueryIndex < splitQueries.length - 1;
+
+	return (
+		<div className={c('mainView__root mainView__mainLayout', props.className)} ref={rootElemRef}>
+			<div className="mainView__mainLayoutTop mainView__mainInputContainer">
+				<div className="mainView__queryNumInputToggleButton" role="button">
+					<div className="mainView__queryNumInputToggleButtonText" onClick={onClickToggleKbButton}>
+						{useNumInput ? '⌨️' : '🔢'}
+					</div>
+				</div>
+				{context.speechEnabled() && (
+					<div className={c('mainView__queryVoiceInputButton', { 'mainView__queryVoiceInputButton--active': listening })} role="button" onClick={onClickVoiceInputButton}>
+						<span className="mainview__queryVoiceInputButtonText">🎙️</span>
+					</div>
+				)}
+				<DelayedTextInput className={c('mainView__mainInput', { 'mainView__mainInput--numType': useNumInput })}
+					type={useNumInput ? 'number' : 'text'}
+					elemRef={inputElemRef}
+					placeholder={useNumInput ? inputCodeText : "Enter query"}
+					committedValue={query}
+					onStartInput={onStartInput}
+					onStopInput={onStopInput}
+					onCommit={v => { if (v.length > 0) setQuery(v); }}
+					onResetDelegate={onResetQueryDelegate}
+					commitDelay={300}
+					disabled={!props.active}
+					passProps={{ spellCheck: false }} />
+				<div className="mainView__queryResetButton" role="button" onClick={onClickResetButton}>
+					<span className="mainView__queryResetButtonText">↶</span>
+				</div>
+			</div>
+
+			<div className={c(
+				'mainView__mainLayoutBottom',
+				'mainView__throbberPositioner',
+				'mainView__mathResultPositioner',
+				'mainView__roundUpResultPositioner',
+				'mainView__listeningIndicatorPositioner',
+				'mainView__viewNavContainerPositionRoot',
+				'mainView__shadowboxPositionroot',
+			)}>
+
+				<div className="mainView__queryResultListViewContainer">
+					{splitQueries.map((q, i) => (
+						<Untabbable active={showShadowbox || i !== activeQueryIndex} key={i}>
+							<MainViewQueryResults query={q}
+								className={c('mainView__queryResultListView', {
+									'active': i === activeQueryIndex,
+									'hideToLeft': i < activeQueryIndex,
+									'hideToRight': i > activeQueryIndex,
+								})}
+								active={i === activeQueryIndex}
+								onPickShadowBoxElem={onPickShadowBoxElem}
+								onResetQueryDelegate={onResetQueryDelegate} />
+						</Untabbable>
+					))}
+				</div>
+
+				<div className={c('mainView__roundUpResult', { 'active': showRoundUpResult })}>
+					<div className="mainView__roundUpText">Round up:</div>
+					<span>{roundUpResult}</span>
+					<span className="mainView__roundUpCentSign">¢</span>
+				</div>
+
+				<div className={c('mainView__mathResult', { 'active': showMathResult })}>
+					<span className="mainView__mathResultEqualSign">=</span>{mathResult}
+				</div>
+
+				<div className={c('mainView__listeningIndicator', { 'active': listening })}>
+					<span className="mainView__listeningIndicatorText">Listening…</span>
+				</div>
+
+				<div className={c('mainView__throbberBackdrop', { 'active': showThrobber })}>
+					<div className="mainView__throbber" />
+				</div>
+
+				<div className="mainView__viewNavContainer">
+					<div className="mainView__viewNavButtonLeftContainer">
+						<button className={c('mainView__viewNavButtonLeft', { 'active': showViewLeftButton })} onClick={setActiveQueryLeft} tabIndex={-1}>
+							<span>‹</span>
+						</button>
+					</div>
+					<div className="mainView__viewNavButtonRightContainer">
+						<button className={c('mainView__viewNavButtonRight', { 'active': showViewRightButton })} onClick={setActiveQueryRight} tabIndex={-1}>
+							<span>›</span>
+						</button>
+					</div>
+				</div>
+
+				<Untabbable active={!showShadowbox}>
+					<Shadowbox className="mainView__shadowbox" active={showShadowbox} />
+				</Untabbable>
+
+			</div>
+
+		</div>
+	);
+
 	function initSelectInput() {
 		inputElemRef.current?.select();
 	}
@@ -311,107 +414,4 @@ export const MainView = (props: {
 	function onStopInput() {
 		setThrobber(false);
 	}
-
-	let inputCodeText = "Enter UPC or PLU";
-	if (context.getOrganization() === 'TARGET')
-		inputCodeText = "Enter UPC, SKU, or PLU";
-
-	const showViewLeftButton = activeQueryIndex > 0;
-	const showViewRightButton = activeQueryIndex < splitQueries.length - 1;
-
-	return (
-		<div className={c('mainView__root mainView__mainLayout', props.className)} ref={rootElemRef}>
-			<div className="mainView__mainLayoutTop mainView__mainInputContainer">
-				<div className="mainView__queryNumInputToggleButton" role="button">
-					<div className="mainView__queryNumInputToggleButtonText" onClick={onClickToggleKbButton}>
-						{useNumInput ? '⌨️' : '🔢'}
-					</div>
-				</div>
-				{context.speechEnabled() && (
-					<div className={c('mainView__queryVoiceInputButton', { 'mainView__queryVoiceInputButton--active': listening })} role="button" onClick={onClickVoiceInputButton}>
-						<span className="mainview__queryVoiceInputButtonText">🎙️</span>
-					</div>
-				)}
-				<DelayedTextInput className={c('mainView__mainInput', { 'mainView__mainInput--numType': useNumInput })}
-					type={useNumInput ? 'number' : 'text'}
-					elemRef={inputElemRef}
-					placeholder={useNumInput ? inputCodeText : "Enter query"}
-					committedValue={query}
-					onStartInput={onStartInput}
-					onStopInput={onStopInput}
-					onCommit={v => { if (v.length > 0) setQuery(v); }}
-					onResetDelegate={onResetQueryDelegate}
-					commitDelay={300}
-					disabled={!props.active}
-					passProps={{ spellCheck: false }} />
-				<div className="mainView__queryResetButton" role="button" onClick={onClickResetButton}>
-					<span className="mainView__queryResetButtonText">↶</span>
-				</div>
-			</div>
-
-			<div className={c(
-				'mainView__mainLayoutBottom',
-				'mainView__throbberPositioner',
-				'mainView__mathResultPositioner',
-				'mainView__roundUpResultPositioner',
-				'mainView__listeningIndicatorPositioner',
-				'mainView__viewNavContainerPositionRoot',
-				'mainView__shadowboxPositionroot',
-			)}>
-
-				<div className="mainView__queryResultListViewContainer">
-					{splitQueries.map((q, i) => (
-						<Untabbable active={showShadowbox || i !== activeQueryIndex} key={i}>
-							<MainViewQueryResults query={q}
-								className={c('mainView__queryResultListView', {
-									'active': i === activeQueryIndex,
-									'hideToLeft': i < activeQueryIndex,
-									'hideToRight': i > activeQueryIndex,
-								})}
-								active={i === activeQueryIndex}
-								onPickShadowBoxElem={onPickShadowBoxElem}
-								onResetQueryDelegate={onResetQueryDelegate} />
-						</Untabbable>
-					))}
-				</div>
-
-				<div className={c('mainView__roundUpResult', { 'active': showRoundUpResult })}>
-					<div className="mainView__roundUpText">Round up:</div>
-					<span>{roundUpResult}</span>
-					<span className="mainView__roundUpCentSign">¢</span>
-				</div>
-
-				<div className={c('mainView__mathResult', { 'active': showMathResult })}>
-					<span className="mainView__mathResultEqualSign">=</span>{mathResult}
-				</div>
-
-				<div className={c('mainView__listeningIndicator', { 'active': listening })}>
-					<span className="mainView__listeningIndicatorText">Listening…</span>
-				</div>
-
-				<div className={c('mainView__throbberBackdrop', { 'active': showThrobber })}>
-					<div className="mainView__throbber" />
-				</div>
-
-				<div className="mainView__viewNavContainer">
-					<div className="mainView__viewNavButtonLeftContainer">
-						<button className={c('mainView__viewNavButtonLeft', { 'active': showViewLeftButton })} onClick={setActiveQueryLeft} tabIndex={-1}>
-							<span>‹</span>
-						</button>
-					</div>
-					<div className="mainView__viewNavButtonRightContainer">
-						<button className={c('mainView__viewNavButtonRight', { 'active': showViewRightButton })} onClick={setActiveQueryRight} tabIndex={-1}>
-							<span>›</span>
-						</button>
-					</div>
-				</div>
-
-				<Untabbable active={!showShadowbox}>
-					<Shadowbox className="mainView__shadowbox" active={showShadowbox} />
-				</Untabbable>
-
-			</div>
-
-		</div>
-	);
 };

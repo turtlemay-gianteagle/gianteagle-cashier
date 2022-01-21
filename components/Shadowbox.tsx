@@ -18,6 +18,28 @@ export function Shadowbox(props: React.PropsWithChildren<{
 
 	React.useEffect(updateKeyListener);
 
+	const renderedItem = renderItem();
+
+	return (
+		<div className={c('shadowbox__root', props.className, { 'shadowbox__root--active': props.active })}>
+			<div className="shadowbox__topbar">
+				<div className="shadowbox__topbarlayoutleft" />
+				<button className="shadowbox__closebutton" onClick={handleClose} tabIndex={tabIndex} children="×" />
+			</div>
+			<div className="shadowbox__layoutbottom">
+				<div className="shadowbox__itemcontainer">
+					{renderedItem ? (
+						<Untabbable>{renderedItem}</Untabbable>
+					) : (
+						<div className="shadowbox__noitem">
+							There's nothing here.
+						</div>
+					)}
+				</div>
+			</div>
+		</div>
+	);
+
 	function updateKeyListener() {
 		addEventListener('keydown', handleKeyDown);
 		return () => removeEventListener('keydown', handleKeyDown);
@@ -56,26 +78,4 @@ export function Shadowbox(props: React.PropsWithChildren<{
 
 		return null;
 	}
-
-	const renderedItem = renderItem();
-
-	return (
-		<div className={c('shadowbox__root', props.className, { 'shadowbox__root--active': props.active })}>
-			<div className="shadowbox__topbar">
-				<div className="shadowbox__topbarlayoutleft" />
-				<button className="shadowbox__closebutton" onClick={handleClose} tabIndex={tabIndex} children="×" />
-			</div>
-			<div className="shadowbox__layoutbottom">
-				<div className="shadowbox__itemcontainer">
-					{renderedItem ? (
-						<Untabbable>{renderedItem}</Untabbable>
-					) : (
-						<div className="shadowbox__noitem">
-							There's nothing here.
-						</div>
-					)}
-				</div>
-			</div>
-		</div>
-	);
 }

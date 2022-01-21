@@ -35,6 +35,17 @@ export function Barcode(props: {
 		context.overrideOrganizationId,
 	]);
 
+	return (
+		<div role="button" className={props.className}
+			key={`${props.value};${context.getOrganization()}`}
+			tabIndex={tabIndex}
+			onClick={props.onClickBarcode}
+			onKeyDown={handleKeyDown}
+		>
+			<canvas ref={canvasElemRef} />
+		</div>
+	);
+
 	function updateValue() {
 		if (canvasElemRef.current)
 			renderBarcode(context.getOrganization(), canvasElemRef.current, props.value, jsBarcodeOpts);
@@ -47,17 +58,6 @@ export function Barcode(props: {
 			el?.click();
 		}
 	}
-
-	return (
-		<div role="button" className={props.className}
-			key={`${props.value};${context.getOrganization()}`}
-			tabIndex={tabIndex}
-			onClick={props.onClickBarcode}
-			onKeyDown={handleKeyDown}
-		>
-			<canvas ref={canvasElemRef} />
-		</div>
-	);
 
 	function renderBarcode(org: string, elem: HTMLElement, value: string, jsBarcodeOpts = {}) {
 		if (value.match(PLU_REGEX)) {
