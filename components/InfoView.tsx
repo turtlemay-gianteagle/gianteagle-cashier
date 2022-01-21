@@ -1,6 +1,7 @@
 import * as React from 'react';
 import packageJson from '../package.json';
 import { Link } from 'react-router-dom';
+import { AppStateContext } from './AppStateProvider';
 
 export const InfoView = () => (
 	<div className="infoView__root">
@@ -10,7 +11,7 @@ export const InfoView = () => (
 				<h2>✨ Features</h2>
 				<ul>
 					<li>Enter search text into the query box to display a list of items found in the database.</li>
-					<li>Enter a UPC, SKU, or PLU code to generate a data bar.</li>
+					<li><CodeEntryFeatureText /></li>
 					<li>Multiple queries can be chained with semicolon (default <Link to="/prefs">user setting</Link>).</li>
 					<li>Mathematical expressions entered in the query box will be automatically evaluated.</li>
 					<li>Enter a two digit number to calculate round-up amount.</li>
@@ -48,5 +49,15 @@ function VersionText(props: { version: string, buildDate?: string; }) {
 		return <>Software version <strong>{props.version}</strong> built on {props.buildDate}.</>;
 	} else {
 		return <>Software version <strong>{props.version}</strong>.</>;
+	}
+}
+
+function CodeEntryFeatureText() {
+	const context = React.useContext(AppStateContext);
+
+	if (context.getOrganization() === "TARGET") {
+		return <>Enter a UPC, SKU, or PLU code to generate a data bar.</>;
+	} else {
+		return <>Enter a UPC or PLU code to generate a barcode.</>;
 	}
 }
