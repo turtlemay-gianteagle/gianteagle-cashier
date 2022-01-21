@@ -15,6 +15,7 @@ import { matchKeyCombos } from '../src/keys';
 import { useSpeechRecognition } from '../src/useSpeechRecognition';
 import { useMath } from '../src/useMath';
 import { useRoundUp } from '../src/useRoundUp';
+import { useVisibility } from '../src/useVisibility';
 
 export const MainView = (props: {
 	className?: string;
@@ -38,6 +39,7 @@ export const MainView = (props: {
 	const inputElemRef = React.useRef<HTMLInputElement>(null);
 	const [listening, startSpeech, stopSpeech] = useSpeechRecognition(setQuery);
 	const [lastInputTime, setLastInputTime] = React.useState(Date.now());
+	useVisibility(onVisible, onHidden);
 
 	React.useEffect(initSelectInput, []);
 	React.useEffect(updateKeyListener);
@@ -413,5 +415,13 @@ export const MainView = (props: {
 
 	function onStopInput() {
 		setThrobber(false);
+	}
+
+	function onVisible() {
+		inputElemRef.current?.select();
+	}
+
+	function onHidden() {
+		stopSpeech();
 	}
 };
