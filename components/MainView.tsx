@@ -207,7 +207,7 @@ export const MainView = (props: {
 			}
 		}
 
-		if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey)
+		if (e.ctrlKey || e.altKey || e.metaKey)
 			return;
 
 		if (e.key === 'Enter') {
