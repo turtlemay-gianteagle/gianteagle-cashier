@@ -1,6 +1,7 @@
 import * as React from 'react';
 import lodash from 'lodash';
 import c from 'classnames';
+import data from '../data/data.json';
 import { focusInputAtEnd } from '../lib/dom';
 import { AppStateContext } from './AppStateProvider';
 import { DelayedTextInput } from './DelayedTextInput';
@@ -286,8 +287,17 @@ export const MainView = (props: {
 	function handleCommand(str: string): boolean {
 		if (str === 'wc') {
 			navigate('/wcalc');
-			resetQuery();
 			return true;
+		}
+
+		const searchMatch = str.match(/^@(\S+) (.+)$/);
+		if (searchMatch) {
+			const [, k, s] = searchMatch;
+			const url = data.search_urls[k]?.replace('%s', s);
+			if (url) {
+				window.open(url);
+				return true;
+			}
 		}
 
 		return false;

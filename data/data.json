@@ -2,5 +2,11 @@
 	"db_urls": {
 		"default_gianteagle": "https://db.gianteagle.turtlemay.us/",
 		"default_target": "https://db.target.turtlemay.us/"
+	},
+	"search_urls": {
+		"g": "https://www.google.com/search?q=%s",
+		"k": "https://www.kroger.com/search?query=%s",
+		"ge": "https://shop.gianteagle.com/search?q=%s",
+		"t": "https://www.target.com/s?searchTerm=%s"
 	}
 }
