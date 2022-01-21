@@ -312,7 +312,10 @@ export const MainView = (props: {
 		setThrobber(false);
 	}
 
-	const inputCodeText = context.getOrganization() === 'TARGET' ? "Enter UPC, SKU, or PLU" : "Enter UPC or PLU";
+	let inputCodeText = "Enter UPC or PLU";
+	if (context.getOrganization() === 'TARGET')
+		inputCodeText = "Enter UPC, SKU, or PLU";
+
 	const showViewLeftButton = activeQueryIndex > 0;
 	const showViewRightButton = activeQueryIndex < splitQueries.length - 1;
 
