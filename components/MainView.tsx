@@ -1,6 +1,5 @@
 import * as React from 'react';
 import lodash from 'lodash';
-import * as mathjs from 'mathjs';
 import c from 'classnames';
 import { focusInputAtEnd } from '../lib/dom';
 import { AppStateContext } from './AppStateProvider';
@@ -13,6 +12,7 @@ import { isTabbable } from 'tabbable';
 import { useIsFirstRender, usePrevious } from '../lib/react';
 import { matchKeyCombos } from '../src/keys';
 import { useSpeechRecognition } from '../src/useSpeechRecognition';
+import { useMath } from '../src/useMath';
 
 export const MainView = (props: {
 	className?: string;
@@ -28,8 +28,7 @@ export const MainView = (props: {
 	const [activeQueryIndex, setActiveQueryIndex] = React.useState(0);
 	const [highlightQuery, setHighlightQuery] = React.useState<string | null>(null);
 	const [showThrobber, setThrobber] = React.useState(false);
-	const [mathResult, setMathResult] = React.useState('');
-	const [showMathResult, setShowMathResult] = React.useState(false);
+	const [mathResult, showMathResult] = useMath(query);
 	const [roundUpResult, setRoundUpResult] = React.useState(0);
 	const [showRoundUpResult, setShowRoundUpResult] = React.useState(false);
 	const [showShadowbox, setShowShadowbox] = React.useState(false);
@@ -185,10 +184,6 @@ export const MainView = (props: {
 				navigate(`?${queryParams.toString()}`);
 			}
 		}
-
-		const gotMathResult = tryMath(query);
-		if (gotMathResult) setMathResult(gotMathResult);
-		setShowMathResult(Boolean(gotMathResult));
 
 		const gotRoundUpResult = tryRoundUp(query);
 		if (gotRoundUpResult) setRoundUpResult(gotRoundUpResult);
@@ -410,16 +405,6 @@ export const MainView = (props: {
 		</div>
 	);
 };
-
-function tryMath(query: string): string | null {
-	if (query.match(/^\d+$/))
-		return null;
-	let result: unknown = null;
-	try { result = mathjs.evaluate(query); } catch { }
-	if (typeof result === 'function')
-		return null;
-	return result ? String(result) : null;
-}
 
 function tryRoundUp(query: string): number | null {
 	if (query.match(/^\d{1,2}$/)) {
