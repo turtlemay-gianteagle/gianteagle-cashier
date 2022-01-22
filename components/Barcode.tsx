@@ -32,7 +32,7 @@ export function Barcode(props: {
 		props.value,
 		props.compact,
 		context.dbInfo,
-		context.overrideOrganizationId,
+		context.getOrganization(),
 	]);
 
 	return (
