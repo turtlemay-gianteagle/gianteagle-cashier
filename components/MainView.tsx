@@ -75,7 +75,7 @@ export const MainView = (props: {
 					committedValue={query}
 					onStartInput={onStartInput}
 					onStopInput={onStopInput}
-					onCommit={v => { if (v.length > 0) setQuery(v); }}
+					onCommit={v => v.length > 0 && setQuery(v)}
 					onResetDelegate={onResetQueryDelegate}
 					commitDelay={300}
 					disabled={!props.active}
