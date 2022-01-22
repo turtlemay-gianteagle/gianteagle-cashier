@@ -73,13 +73,12 @@ export function MainViewQueryResults(props: {
 
 	function updateResetQueryCallback() {
 		props.onResetQueryDelegate.add(onResetQuery);
-		return function cleanup() {
-			props.onResetQueryDelegate.delete(onResetQuery);
-		};
-		function onResetQuery() {
-			resetScroll({ smooth: props.query === context.defaultQuery });
-			setNumRenderResultItems(context.itemsPerPage);
-		}
+		return () => void props.onResetQueryDelegate.delete(onResetQuery);
+	}
+
+	function onResetQuery() {
+		resetScroll({ smooth: props.query === context.defaultQuery });
+		setNumRenderResultItems(context.itemsPerPage);
 	}
 
 	function updateQuery() {
