@@ -40,8 +40,7 @@ export function Barcode(props: {
 			key={`${props.value};${context.getOrganization()}`}
 			tabIndex={tabIndex}
 			onClick={props.onClickBarcode}
-			onKeyDown={handleKeyDown}
-		>
+			onKeyDown={handleKeyDown}>
 			<canvas ref={canvasElemRef} />
 		</div>
 	);
