@@ -72,7 +72,7 @@ function AppMain(props: React.PropsWithChildren<{
 function AppStateConsumer(props: React.PropsWithChildren<{}>) {
 	const navigate = useNavigate();
 	const context = React.useContext(AppStateContext);
-	
+
 	useKeyDown(e => {
 		if (matchKeyCombos(e, context.appRestartKey)) {
 			e.preventDefault();
