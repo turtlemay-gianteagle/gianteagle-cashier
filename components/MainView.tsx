@@ -64,7 +64,7 @@ export const MainView = (props: {
 					</div>
 				</div>
 				{context.speechEnabled() && (
-					<div className={c('mainView__queryVoiceInputButton', { 'mainView__queryVoiceInputButton--active': listening })} role="button" onClick={onClickVoiceInputButton}>
+					<div className={c('mainView__queryVoiceInputButton', { 'active': listening })} role="button" onClick={onClickVoiceInputButton}>
 						<span className="mainview__queryVoiceInputButtonText">🎙️</span>
 					</div>
 				)}

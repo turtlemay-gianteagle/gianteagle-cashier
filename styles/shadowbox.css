@@ -7,7 +7,7 @@
 	transition-property: transform, opacity;
 }
 
-.shadowbox__root:not(.shadowbox__root--active) {
+.shadowbox__root:not(.active) {
 	opacity: 0;
 	transform: scale(0.9) rotate(2deg);
 	pointer-events: none;

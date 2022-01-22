@@ -21,7 +21,7 @@
 	margin: 10px;
 }
 
-.itemCards__storeItemBarcode--disabled {
+.itemCards__storeItemBarcode.disabled {
 	display: none;
 }
 

@@ -20,7 +20,7 @@ export function Shadowbox(props: React.PropsWithChildren<{
 	React.useEffect(updateExitFn, [props.active]);
 
 	return (
-		<div className={c('shadowbox__root', props.className, { 'shadowbox__root--active': props.active })}>
+		<div className={c('shadowbox__root', props.className, { 'active': props.active })}>
 			<div className="shadowbox__topbar">
 				<div className="shadowbox__topbarlayoutleft" />
 				<button className="shadowbox__closebutton" onClick={props.onClose} tabIndex={tabIndex} children="×" />
