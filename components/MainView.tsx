@@ -230,19 +230,6 @@ export const MainView = (props: {
 			return;
 		}
 
-		if (e.key === context.appNavBackKey) {
-			if (listening) {
-				e.preventDefault();
-				stopSpeech();
-				return;
-			}
-			if (showShadowbox) {
-				e.preventDefault();
-				deleteParam('sb');
-				return;
-			}
-		}
-
 		if (inputElemRef && inputElemRef.current !== document.activeElement) {
 			if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.match(/^(\S)$/)) {
 				focusInputField();

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import lodash from 'lodash';
 import { AppStateContext } from '../components/AppStateProvider';
 
 const SpeechRecognition = window['SpeechRecognition'] ?? window['webkitSpeechRecognition'];
@@ -9,6 +10,7 @@ export function useSpeechRecognition(handleTranscript: (str: string) => void) {
 	const [listening, setListening] = React.useState(false);
 
 	React.useEffect(initSpeechRecognition, [context.speechEnabled()]);
+	React.useEffect(updateExitFn, [listening]);
 
 	function initSpeechRecognition() {
 		if (context.speechEnabled()) {
@@ -28,6 +30,15 @@ export function useSpeechRecognition(handleTranscript: (str: string) => void) {
 
 	function stop() {
 		sr.current?.abort();
+	}
+
+	function updateExitFn() {
+		if (listening) {
+			context.provider.exitStack.add(stop);
+		}
+		return () => {
+			context.provider.exitStack.delete(stop);
+		};
 	}
 
 	function _onStart() {

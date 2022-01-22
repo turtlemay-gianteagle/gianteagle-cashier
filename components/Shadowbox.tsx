@@ -1,7 +1,9 @@
 import * as React from 'react';
+import lodash from 'lodash';
 import c from 'classnames';
 import { Untabbable, useTabIndex } from '../lib/tabindex';
 import { GeneratedItemCard, StoreItemCard } from './item-cards';
+import { AppStateContext } from './AppStateProvider';
 
 export function Shadowbox(props: React.PropsWithChildren<{
 	className?: string;
@@ -10,9 +12,12 @@ export function Shadowbox(props: React.PropsWithChildren<{
 	onClose: VoidFunction;
 	data: IItemData | null;
 }>) {
+	const context = React.useContext(AppStateContext);
 	const tabIndex = useTabIndex(0);
 
 	const renderedItem = renderItem();
+
+	React.useEffect(updateExitFn, [props.active]);
 
 	return (
 		<div className={c('shadowbox__root', props.className, { 'shadowbox__root--active': props.active })}>
@@ -33,6 +38,15 @@ export function Shadowbox(props: React.PropsWithChildren<{
 			</div>
 		</div>
 	);
+
+	function updateExitFn() {
+		if (props.active) {
+			context.provider.exitStack.add(props.onClose);
+		}
+		return () => {
+			context.provider.exitStack.delete(props.onClose);
+		};
+	}
 
 	function renderItem() {
 		if (props.item)

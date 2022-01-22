@@ -50,6 +50,8 @@ export const AppStateContext = React.createContext<IState>(undefined);
 export class AppStateProvider extends React.Component<{}, IState> {
 	_fuse: { search: Function; };
 
+	public readonly exitStack = new Set<VoidFunction>();
+
 	constructor(props: AppStateProvider['props']) {
 		super(props);
 

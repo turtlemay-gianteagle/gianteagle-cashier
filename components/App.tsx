@@ -79,6 +79,15 @@ function AppStateConsumer(props: React.PropsWithChildren<{}>) {
 			navigate('/');
 			return;
 		}
+		if (matchKeyCombos(e, context.appNavBackKey)) {
+			e.preventDefault();
+			const lastFn = Array.from(context.provider.exitStack).pop();
+			if (lastFn) {
+				lastFn();
+				context.provider.exitStack.delete(lastFn);
+			}
+			return;
+		}
 	});
 
 	return <React.Fragment children={props.children} />;
