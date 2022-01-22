@@ -6,7 +6,7 @@ import { focusInputAtEnd } from '../lib/dom';
 import { AppStateContext } from './AppStateProvider';
 import { DelayedTextInput } from './DelayedTextInput';
 import { Shadowbox } from './Shadowbox';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MainViewQueryResults } from './MainViewQueryResults';
 import { Untabbable } from '../lib/tabindex';
 import { isTabbable } from 'tabbable';
@@ -17,6 +17,7 @@ import { useMath } from '../hooks/useMath';
 import { useRoundUp } from '../hooks/useRoundUp';
 import { useVisibility } from '../hooks/useVisibility';
 import { useKeyDown } from '../hooks/useKeyDown';
+import { useParams } from '../hooks/useParams';
 
 export const MainView = (props: {
 	className?: string;
@@ -25,7 +26,7 @@ export const MainView = (props: {
 	const isFirstRender = useIsFirstRender();
 	const context = React.useContext(AppStateContext);
 	const navigate = useNavigate();
-	const location = useLocation();
+	const [params, getParam, setParam, deleteParam] = useParams();
 	const [query, setQuery] = React.useState(context.defaultQuery);
 	const prevQuery = usePrevious(query);
 	const [splitQueries, setSplitQueries] = React.useState([query]);
@@ -34,6 +35,7 @@ export const MainView = (props: {
 	const [mathResult, showMathResult] = useMath(query);
 	const [roundUpResult, showRoundUpResult] = useRoundUp(query);
 	const [showShadowbox, setShowShadowbox] = React.useState(false);
+	const [shadowboxData, setShadowboxData] = React.useState<IItemData | null>(null);
 	const [useNumInput, setUseNumInput] = React.useState(false);
 	const [onResetQueryDelegate] = React.useState(new Set<VoidFunction>());
 	const rootElemRef = React.useRef<HTMLDivElement>(null);
@@ -44,7 +46,7 @@ export const MainView = (props: {
 	useVisibility(onVisible, onHidden);
 	useKeyDown(onKeyDown);
 
-	React.useEffect(updateQueryParams);
+	React.useEffect(updateShadowbox, [params]);
 	React.useEffect(updateSelectInputTimeout, [context.selectQueryTime, query, lastInputTime]);
 	React.useEffect(stopSpeech, [props.active, query, activeQueryIndex, useNumInput, showShadowbox]);
 	React.useEffect(onChangedQuery, [query]);
@@ -103,7 +105,7 @@ export const MainView = (props: {
 									'hideToRight': i > activeQueryIndex,
 								})}
 								active={i === activeQueryIndex}
-								onPickShadowBoxElem={onPickShadowBoxElem}
+								onPickShadowBoxElem={handlePickShadowBoxElem}
 								onResetQueryDelegate={onResetQueryDelegate} />
 						</Untabbable>
 					))}
@@ -141,7 +143,7 @@ export const MainView = (props: {
 				</div>
 
 				<Untabbable active={!showShadowbox}>
-					<Shadowbox className="mainView__shadowbox" active={showShadowbox} />
+					<Shadowbox className="mainView__shadowbox" active={showShadowbox} data={shadowboxData} onClose={onCloseShadowbox} />
 				</Untabbable>
 
 			</div>
@@ -229,9 +231,14 @@ export const MainView = (props: {
 		}
 
 		if (e.key === context.appNavBackKey) {
-			if (context.speechEnabled()) {
+			if (listening) {
 				e.preventDefault();
 				stopSpeech();
+				return;
+			}
+			if (showShadowbox) {
+				e.preventDefault();
+				deleteParam('sb');
 				return;
 			}
 		}
@@ -242,11 +249,6 @@ export const MainView = (props: {
 				return;
 			}
 		}
-	}
-
-	function updateQueryParams() {
-		const queryParams = new URLSearchParams(location.search);
-		setShowShadowbox(queryParams.has('sb'));
 	}
 
 	function updateSelectInputTimeout() {
@@ -273,13 +275,8 @@ export const MainView = (props: {
 
 		setSplitQueries(splitQuery(query));
 
-		if (!isFirstRender) {
-			const queryParams = new URLSearchParams(location.search);
-			if (queryParams.has('sb')) {
-				queryParams.delete('sb');
-				navigate(`?${queryParams.toString()}`);
-			}
-		}
+		if (!isFirstRender)
+			deleteParam('sb');
 	}
 
 	function updateChangedSplitQueries() {
@@ -313,11 +310,7 @@ export const MainView = (props: {
 		setQuery(context.defaultQuery);
 		setThrobber(false);
 		setUseNumInput(false);
-		const queryParams = new URLSearchParams(location.search);
-		if (queryParams.has('sb')) {
-			queryParams.delete('sb');
-			navigate(`?${queryParams.toString()}`);
-		}
+		deleteParam('sb');
 		inputElemRef.current?.select();
 	}
 
@@ -356,10 +349,24 @@ export const MainView = (props: {
 		}
 	}
 
-	function onPickShadowBoxElem(jsx: JSX.Element) {
-		const queryParams = new URLSearchParams(location.search);
-		queryParams.set('sb', jsx.props['data-json']);
-		navigate(`?${queryParams.toString()}`);
+	function updateShadowbox() {
+		const str = getParam('sb');
+		setShowShadowbox(str !== null);
+		try {
+			const data = str && JSON.parse(str);
+			if (data?.name) setShadowboxData(data);
+		} catch (err) {
+			console.error(err);
+			setShadowboxData(null);
+		}
+	}
+
+	function onCloseShadowbox() {
+		deleteParam('sb');
+	}
+
+	function handlePickShadowBoxElem(jsx: JSX.Element) {
+		setParam('sb', jsx.props['data-json']);
 	}
 
 	function setActiveQueryTo(index: number) {
