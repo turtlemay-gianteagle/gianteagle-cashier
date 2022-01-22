@@ -77,6 +77,7 @@ function AppStateConsumer(props: React.PropsWithChildren<{}>) {
 		if (matchKeyCombos(e, context.appRestartKey)) {
 			e.preventDefault();
 			navigate('/');
+			return;
 		}
 	});
 
