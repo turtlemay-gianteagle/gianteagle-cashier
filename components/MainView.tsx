@@ -120,7 +120,8 @@ export const MainView = (props: {
 				</div>
 
 				<div className={c('mainView__mathResult', { 'active': showMathResult })}>
-					<span className="mainView__mathResultEqualSign">=</span>{mathResult}
+					<span className="mainView__mathResultEqualSign">=</span>
+					<span className="mainView__mathResultText">{mathResult}</span>
 				</div>
 
 				<div className={c('mainView__listeningIndicator', { 'active': listening })}>
