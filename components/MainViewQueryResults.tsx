@@ -38,8 +38,6 @@ export function MainViewQueryResults(props: {
 		context.compiledItemData,
 	]);
 
-	const renderShowMoreButton = enablePaging && numRenderResultItems < searchResults.length;
-
 	return (
 		<div className={c('mainView__queryResultList', props.className)}
 			ref={scrollElemRef as React.RefObject<HTMLDivElement>}>
@@ -66,11 +64,15 @@ export function MainViewQueryResults(props: {
 					</CSSTransition>
 				))}
 			</TransitionGroup>
-			{renderShowMoreButton && (
+			{renderShowMoreButton() && (
 				<button className="mainView__showMoreButton" onClick={onClickShowMoreButton} tabIndex={tabIndex} key={numRenderResultItems}>+</button>
 			)}
 		</div>
 	);
+
+	function renderShowMoreButton(): boolean {
+		return enablePaging && numRenderResultItems < searchResults.length;
+	}
 
 	function updateRenderSearchResults() {
 		if (enablePaging)
