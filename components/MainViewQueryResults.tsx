@@ -27,7 +27,7 @@ export function MainViewQueryResults(props: {
 
 	React.useEffect(updateRenderSearchResults, [searchResults, numRenderResultItems]);
 	React.useEffect(updateResetQueryCallback);
-	React.useEffect(updateQuery, [
+	React.useEffect(update, [
 		props.query,
 		context.defaultQuery,
 		context.itemTagPrefix,
@@ -91,7 +91,7 @@ export function MainViewQueryResults(props: {
 		setNumRenderResultItems(context.itemsPerPage);
 	}
 
-	function updateQuery() {
+	function update() {
 		if (props.query.length === 0)
 			return;
 
