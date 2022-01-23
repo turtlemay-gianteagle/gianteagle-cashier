@@ -7,7 +7,7 @@ import { AppStateContext } from './AppStateProvider';
 export function Shadowbox(props: React.PropsWithChildren<{
 	className?: string;
 	active: boolean;
-	item?: React.ReactNode;
+	node?: React.ReactNode;
 	onClose: VoidFunction;
 	data: IItemData | null;
 }>) {
@@ -48,8 +48,8 @@ export function Shadowbox(props: React.PropsWithChildren<{
 	}
 
 	function renderItem() {
-		if (props.item)
-			return props.item;
+		if (props.node)
+			return props.node;
 
 		if (props.data?.name)
 			return <StoreItemCard data={props.data} compact={false} />;
