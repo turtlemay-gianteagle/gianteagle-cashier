@@ -112,9 +112,11 @@ export const MainView = (props: {
 				</div>
 
 				<div className={c('mainView__roundUpResult', { 'active': showRoundUpResult })}>
-					<div className="mainView__roundUpText">Round up:</div>
-					<span>{roundUpResult}</span>
-					<span className="mainView__roundUpCentSign">¢</span>
+					<div className="mainView__roundUpHeaderText">Round up:</div>
+					<div className="mainView__roundUpResultContent">
+						<span className="mainView__roundUpNumberText">{roundUpResult}</span>
+						<span className="mainView__roundUpCentSign">¢</span>
+					</div>
 				</div>
 
 				<div className={c('mainView__mathResult', { 'active': showMathResult })}>

@@ -9,8 +9,6 @@
 	padding: 0.5em 1em;
 	width: auto;
 	height: auto;
-	font: 1.2em monospace;
-	color: white;
 	background: #222;
 	transition-duration: 200ms;
 	transition-property: transform;
@@ -22,9 +20,17 @@
 	pointer-events: none;
 }
 
-.mainView__roundUpText {
-	font: 0.5em sans-serif;
+.mainView__roundUpHeaderText {
+	font: 0.75em sans-serif;
 	color: #666;
+}
+
+.mainView__roundUpResultContent {
+	font: 1.2em monospace;
+}
+
+.mainView__roundUpNumberText {
+	color: white;
 }
 
 .mainView__roundUpCentSign {
