@@ -66,7 +66,7 @@ export function MainViewQueryResults(props: {
 				))}
 			</TransitionGroup>
 			{renderShowMoreButton && (
-				<button className="mainView__showMoreButton" onClick={showMore} tabIndex={tabIndex} key={numRenderResultItems}>+</button>
+				<button className="mainView__showMoreButton" onClick={onClickShowMoreButton} tabIndex={tabIndex} key={numRenderResultItems}>+</button>
 			)}
 		</div>
 	);
@@ -117,7 +117,7 @@ export function MainViewQueryResults(props: {
 		}
 	}
 
-	function showMore() {
+	function onClickShowMoreButton() {
 		const n = lodash.clamp(numRenderResultItems + context.itemsPerPage, 1, searchResults.length);
 		setNumRenderResultItems(n);
 	}
