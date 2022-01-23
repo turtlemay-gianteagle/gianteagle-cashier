@@ -50,7 +50,7 @@ export const MainView = (props: {
 	React.useEffect(updateSelectInputTimeout, [context.selectQueryTime, query, lastInputTime]);
 	React.useEffect(stopSpeech, [props.active, query, activeQueryIndex, useNumInput, showShadowbox]);
 	React.useEffect(onChangedQuery, [query]);
-	React.useEffect(onChangedActiveView, [props.active]);
+	React.useEffect(selectInputOnActiveView, [props.active]);
 	React.useEffect(updateChangedSplitQueries, [splitQueries, query, context.defaultQuery]);
 	React.useEffect(updateHighlightedQuery, [context.querySeparator, activeQueryIndex]);
 	React.useEffect(updateSpeechThrobber, [listening]);
@@ -251,7 +251,7 @@ export const MainView = (props: {
 		};
 	}
 
-	function onChangedActiveView() {
+	function selectInputOnActiveView() {
 		if (props.active)
 			inputElemRef.current?.select();
 	}
