@@ -1,5 +1,4 @@
 import * as React from 'react';
-import lodash from 'lodash';
 import c from 'classnames';
 import { Untabbable, useTabIndex } from '../lib/tabindex';
 import { GeneratedItemCard, StoreItemCard } from './item-cards';
