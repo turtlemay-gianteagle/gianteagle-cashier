@@ -86,11 +86,6 @@ export function MainViewQueryResults(props: {
 		return () => void props.onResetQueryDelegate.delete(onResetQuery);
 	}
 
-	function onResetQuery() {
-		resetScroll({ smooth: props.query === context.defaultQuery });
-		setNumRenderResultItems(context.itemsPerPage);
-	}
-
 	function update() {
 		if (props.query.length === 0)
 			return;
@@ -125,6 +120,11 @@ export function MainViewQueryResults(props: {
 		} else {
 			setShowTypedCode(false);
 		}
+	}
+
+	function onResetQuery() {
+		resetScroll({ smooth: props.query === context.defaultQuery });
+		setNumRenderResultItems(context.itemsPerPage);
 	}
 
 	function onClickShowMoreButton() {
