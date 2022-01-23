@@ -55,7 +55,7 @@ function VersionText(props: { version: string, buildDate?: string; }) {
 function CodeEntryFeatureText() {
 	const context = React.useContext(AppStateContext);
 
-	if (context.getOrganization() === "TARGET") {
+	if (context.getOrganization() === 'TARGET') {
 		return <>Enter a UPC, SKU, or PLU code to generate a data bar.</>;
 	} else {
 		return <>Enter a UPC or PLU code to generate a barcode.</>;

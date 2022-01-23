@@ -23,7 +23,7 @@ export function StoreItemCard(props: {
 	const disableBarcode = (
 		context.getOrganization() === 'GIANT_EAGLE' &&
 		context.noCheat &&
-		props.data.tags?.includes("produce"));
+		props.data.tags?.includes('produce'));
 
 	const jsx = (
 		<div className="itemCards__storeItemCard"
