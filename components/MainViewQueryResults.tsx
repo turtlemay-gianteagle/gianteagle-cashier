@@ -37,6 +37,7 @@ export function MainViewQueryResults(props: {
 	]);
 
 	const renderSearchResults = enablePaging ? searchResults.slice(0, numRenderResultItems) : searchResults;
+	const renderShowMoreButton = enablePaging && numRenderResultItems < searchResults.length;
 
 	return (
 		<div className={c('mainView__queryResultList', props.className)}
@@ -64,15 +65,11 @@ export function MainViewQueryResults(props: {
 					</CSSTransition>
 				))}
 			</TransitionGroup>
-			{renderShowMoreButton() && (
+			{renderShowMoreButton && (
 				<button className="mainView__showMoreButton" onClick={onClickShowMoreButton} tabIndex={tabIndex} key={numRenderResultItems}>+</button>
 			)}
 		</div>
 	);
-
-	function renderShowMoreButton(): boolean {
-		return enablePaging && numRenderResultItems < searchResults.length;
-	}
 
 	function updateResetQueryCallback() {
 		props.onResetQueryDelegate.add(onResetQuery);
