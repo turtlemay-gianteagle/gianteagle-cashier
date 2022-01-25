@@ -44,8 +44,8 @@ export const MainView = (props: {
 	const [lastInputTime, setLastInputTime] = React.useState(Date.now());
 
 	useVisibility(onVisible, onHidden);
-	useKeyDown(onKeyDown);
 
+	React.useEffect(updateActiveKeyListener);
 	React.useEffect(updateShadowbox, [params]);
 	React.useEffect(updateSelectInputTimeout, [context.selectQueryTime, query, lastInputTime]);
 	React.useEffect(stopSpeech, [props.active, query, activeQueryIndex, useNumInput, showShadowbox]);
@@ -165,10 +165,14 @@ export const MainView = (props: {
 		setThrobber(listening);
 	}
 
-	function onKeyDown(e: KeyboardEvent) {
-		if (!props.active)
-			return;
+	function updateActiveKeyListener() {
+		if (props.active)
+			document.addEventListener('keydown', onKeyDown);
+		return () =>
+			document.removeEventListener('keydown', onKeyDown);
+	}
 
+	function onKeyDown(e: KeyboardEvent) {
 		// Use Ctrl + Alt + Function keys to select result by index
 		if (e.ctrlKey && e.altKey && e.key.match(/^F\d{1,2}$/)?.[0]) {
 			e.preventDefault();
