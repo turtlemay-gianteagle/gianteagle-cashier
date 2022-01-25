@@ -17,7 +17,6 @@ export function MainViewQueryResults(props: {
 	const context = React.useContext(AppStateContext);
 	const tabIndex = useTabIndex(0);
 	const [searchResults, setSearchResults] = React.useState<IItemData[]>(context.search(props.query));
-	const [renderSearchResults, setRenderSearchResults] = React.useState(searchResults);
 	const [numRenderResultItems, setNumRenderResultItems] = React.useState(context.itemsPerPage);
 	const [typedCode, setTypedCode] = React.useState('');
 	const [showTypedCode, setShowTypedCode] = React.useState(false);
@@ -25,7 +24,6 @@ export function MainViewQueryResults(props: {
 	const prevQuery = usePrevious(props.query);
 	const scrollElemRef = React.useRef<HTMLDivElement>();
 
-	React.useEffect(updateRenderSearchResults, [searchResults, numRenderResultItems]);
 	React.useEffect(updateResetQueryCallback);
 	React.useEffect(update, [
 		props.query,
@@ -37,6 +35,8 @@ export function MainViewQueryResults(props: {
 		context.dbUrl,
 		context.compiledItemData,
 	]);
+
+	const renderSearchResults = enablePaging ? searchResults.slice(0, numRenderResultItems) : searchResults;
 
 	return (
 		<div className={c('mainView__queryResultList', props.className)}
@@ -72,13 +72,6 @@ export function MainViewQueryResults(props: {
 
 	function renderShowMoreButton(): boolean {
 		return enablePaging && numRenderResultItems < searchResults.length;
-	}
-
-	function updateRenderSearchResults() {
-		if (enablePaging)
-			setRenderSearchResults(searchResults.slice(0, numRenderResultItems));
-		else
-			setRenderSearchResults(searchResults);
 	}
 
 	function updateResetQueryCallback() {
