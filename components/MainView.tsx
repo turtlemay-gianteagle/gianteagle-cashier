@@ -206,20 +206,20 @@ export const MainView = (props: {
 			return;
 		}
 
-		if (!showShadowbox) {
-			if (splitQueries.length > 1) {
-				if (matchKeyCombos(e, context.appNavViewLeftKey)) {
-					e.preventDefault();
-					setThrobber(false);
-					setActiveQueryLeft();
-					return;
-				}
-				if (matchKeyCombos(e, context.appNavViewRightKey)) {
-					e.preventDefault();
-					setThrobber(false);
-					setActiveQueryRight();
-					return;
-				}
+		if (splitQueries.length > 1) {
+			if (matchKeyCombos(e, context.appNavViewLeftKey)) {
+				e.preventDefault();
+				deleteParam('sb');
+				setThrobber(false);
+				setActiveQueryLeft();
+				return;
+			}
+			if (matchKeyCombos(e, context.appNavViewRightKey)) {
+				e.preventDefault();
+				deleteParam('sb');
+				setThrobber(false);
+				setActiveQueryRight();
+				return;
 			}
 		}
 
