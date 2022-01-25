@@ -57,7 +57,7 @@ export const MainView = (props: {
 
 	let inputCodeText = "Enter UPC or PLU";
 	if (context.getOrganization() === 'TARGET')
-		inputCodeText = "Enter UPC, SKU, or PLU";
+		inputCodeText = "Enter UPC, DPCI, or PLU";
 
 	const showViewLeftButton = activeQueryIndex > 0;
 	const showViewRightButton = activeQueryIndex < splitQueries.length - 1;
