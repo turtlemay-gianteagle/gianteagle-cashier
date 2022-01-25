@@ -114,7 +114,7 @@ export class AppStateProvider extends React.Component<{}, IState> {
 		if (this.state.compiledItemData !== prevState.compiledItemData)
 			this._fuse = this._createFuse(this.state.compiledItemData);
 
-		if (this.state.enableSpeech && !BROWSER_SUPPORT_SPEECH)
+		if (!BROWSER_SUPPORT_SPEECH)
 			this.setState({ enableSpeech: false });
 	}
 
