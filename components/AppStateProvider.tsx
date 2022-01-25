@@ -76,7 +76,6 @@ export class AppStateProvider extends React.Component<{}, IState> {
 			userItemData: userItemData,
 			compiledItemData: compiledItemData,
 			search: this._search,
-			enableSpeech: BROWSER_SUPPORT_SPEECH && DEFAULT_PREFS.enableSpeech,
 			speechEnabled: this._speechEnabled,
 			getOrganization: this._getOrganization,
 		};
