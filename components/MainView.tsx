@@ -55,6 +55,13 @@ export const MainView = (props: {
 	React.useEffect(updateHighlightedQuery, [context.querySeparator, activeQueryIndex]);
 	React.useEffect(updateSpeechThrobber, [listening]);
 
+	let inputCodeText = "Enter UPC or PLU";
+	if (context.getOrganization() === 'TARGET')
+		inputCodeText = "Enter UPC, SKU, or PLU";
+
+	const showViewLeftButton = activeQueryIndex > 0;
+	const showViewRightButton = activeQueryIndex < splitQueries.length - 1;
+
 	return (
 		<div className={c('mainView__root mainView__mainLayout', props.className)} ref={rootElemRef}>
 			<div className="mainView__mainLayoutTop mainView__mainInputContainer">
@@ -71,7 +78,7 @@ export const MainView = (props: {
 				<DelayedTextInput className={c('mainView__mainInput', { 'mainView__mainInput--numType': useNumInput })}
 					type={useNumInput ? 'number' : 'text'}
 					elemRef={inputElemRef}
-					placeholder={useNumInput ? getNumInputText() : "Enter query"}
+					placeholder={useNumInput ? inputCodeText : "Enter query"}
 					committedValue={query}
 					onStartInput={onStartInput}
 					onStopInput={onStopInput}
@@ -134,12 +141,12 @@ export const MainView = (props: {
 
 				<div className="mainView__viewNavContainer">
 					<div className="mainView__viewNavButtonLeftContainer">
-						<button className={c('mainView__viewNavButtonLeft', { 'active': showViewLeftButton() })} onClick={setActiveQueryLeft} tabIndex={-1}>
+						<button className={c('mainView__viewNavButtonLeft', { 'active': showViewLeftButton })} onClick={setActiveQueryLeft} tabIndex={-1}>
 							<span>‹</span>
 						</button>
 					</div>
 					<div className="mainView__viewNavButtonRightContainer">
-						<button className={c('mainView__viewNavButtonRight', { 'active': showViewRightButton() })} onClick={setActiveQueryRight} tabIndex={-1}>
+						<button className={c('mainView__viewNavButtonRight', { 'active': showViewRightButton })} onClick={setActiveQueryRight} tabIndex={-1}>
 							<span>›</span>
 						</button>
 					</div>
@@ -406,20 +413,5 @@ export const MainView = (props: {
 
 	function onHidden() {
 		stopSpeech();
-	}
-
-	function getNumInputText() {
-		if (context.getOrganization() === 'TARGET')
-			return "Enter UPC, SKU, or PLU";
-		else
-			return "Enter UPC or PLU";
-	}
-
-	function showViewLeftButton() {
-		return activeQueryIndex > 0;
-	}
-
-	function showViewRightButton() {
-		return activeQueryIndex < splitQueries.length - 1;
 	}
 };
