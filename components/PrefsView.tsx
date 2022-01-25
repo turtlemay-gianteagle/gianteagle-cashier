@@ -231,6 +231,14 @@ export function PrefsView() {
 							checked={context.enableSpeech}
 							onChange={e => context.provider.setState({ enableSpeech: e.target.checked })} />,
 					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "🌎 Web search prefix",
+						controlNode: <input type="text"
+							className="prefsView__optionTextInput"
+							value={context.searchPrefix}
+							onChange={e => context.provider.setState({ searchPrefix: e.target.value })} />,
+					}}</PrefsOption>
 				</section>
 
 			</div>

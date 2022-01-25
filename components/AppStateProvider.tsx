@@ -28,6 +28,7 @@ const DEFAULT_PREFS = {
 	compactBarcodes: false,
 	enableSpeech: true,
 	selectQueryTime: 0,
+	searchPrefix: '@',
 };
 
 type IPrefs = typeof DEFAULT_PREFS;
