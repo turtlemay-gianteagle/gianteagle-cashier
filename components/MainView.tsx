@@ -16,7 +16,6 @@ import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import { useMath } from '../hooks/useMath';
 import { useRoundUp } from '../hooks/useRoundUp';
 import { useVisibility } from '../hooks/useVisibility';
-import { useKeyDown } from '../hooks/useKeyDown';
 import { useParams } from '../hooks/useParams';
 
 export const MainView = (props: {
