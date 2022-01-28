@@ -232,13 +232,9 @@ export const MainView = (props: {
 			if (isInputFocused || !isTabbableFocused) {
 				e.preventDefault();
 				const v = inputElemRef.current?.value;
-				const didCommand = v && handleCommand(v);
-				if (didCommand) {
-					inputElemRef.current?.select();
-				} else {
-					clearInputField();
-					inputElemRef.current?.select();
-				}
+				if (v) handleCommand(v);
+				clearInputField();
+				inputElemRef.current?.select();
 			}
 			return;
 		}
