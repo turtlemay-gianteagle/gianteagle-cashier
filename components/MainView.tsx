@@ -319,11 +319,6 @@ export const MainView = (props: {
 			focusInputAtEnd(elem);
 	}
 
-	function clearInputField() {
-		const elem = inputElemRef.current;
-		if (elem) elem.value = '';
-	}
-
 	function onClickToggleKbButton() {
 		inputElemRef.current?.select();
 		setUseNumInput(!useNumInput);
