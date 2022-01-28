@@ -7,6 +7,8 @@
 		"g": "https://www.google.com/search?q=%s",
 		"k": "https://www.kroger.com/search?query=%s",
 		"ge": "https://shop.gianteagle.com/search?q=%s",
+		"gec": "https://shop.gianteagle.com/coupons?q=%s",
+		"gea": "https://shop.gianteagle.com/weekly-ad?q=%s",
 		"t": "https://www.target.com/s?searchTerm=%s",
 		"w": "https://www.walmart.com/search?q=%s",
 		"m": "https://www.meijer.com/shopping/search.html?text=%s"
