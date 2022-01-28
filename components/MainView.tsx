@@ -233,8 +233,8 @@ export const MainView = (props: {
 				e.preventDefault();
 				const v = inputElemRef.current?.value;
 				if (v) {
-					setQuery(v);
 					handleCommand(v);
+					setQuery(v);
 				}
 				setQuery('');
 				inputElemRef.current?.select();
