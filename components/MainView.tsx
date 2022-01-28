@@ -272,7 +272,7 @@ export const MainView = (props: {
 		if (query.length === 0)
 			return;
 
-		setSplitQueries(splitQuery(query));
+		setSplitQueries(splitQuery(query, context.querySeparator));
 
 		if (!isFirstRender)
 			deleteParam('sb');
@@ -311,12 +311,6 @@ export const MainView = (props: {
 		setUseNumInput(false);
 		deleteParam('sb');
 		inputElemRef.current?.select();
-	}
-
-	function splitQuery(str: string): string[] {
-		const s = context.querySeparator;
-		const arr = s ? str.split(s) : [str];
-		return arr.filter(v => v.length > 0);
 	}
 
 	function focusInputField() {
@@ -418,3 +412,8 @@ export const MainView = (props: {
 		stopSpeech();
 	}
 };
+
+function splitQuery(str: string, separator: string): string[] {
+	const arr = separator ? str.split(separator) : [str];
+	return arr.filter(v => v.length > 0);
+}
