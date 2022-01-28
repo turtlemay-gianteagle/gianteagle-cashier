@@ -14,6 +14,9 @@ module.exports = {
 	},
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
+		fallback: {
+			url: require.resolve('url'),
+		},
 	},
 	devtool: 'inline-source-map',
 	devServer: {
