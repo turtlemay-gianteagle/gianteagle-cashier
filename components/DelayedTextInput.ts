@@ -20,14 +20,15 @@ export function DelayedTextInput(props: {
 }) {
 	const [value, setValue] = React.useState(props.committedValue);
 	const [active, setActive] = React.useState(false);
+	const timeout = React.useRef<number | undefined>();
 
 	React.useEffect(updateOnResetDelegate, [props.onResetDelegate, props.committedValue]);
 	React.useEffect(onChangeValue, [value, props.commitDelay]);
 	React.useEffect(onChangeCommitedValue, [props.committedValue]);
 
 	function onChangeValue() {
-		const timeout = window.setTimeout(changedValueCallback, props.commitDelay);
-		return () => window.clearTimeout(timeout);
+		timeout.current = window.setTimeout(changedValueCallback, props.commitDelay);
+		return () => window.clearTimeout(timeout.current);
 	}
 
 	function updateOnResetDelegate() {
@@ -37,6 +38,8 @@ export function DelayedTextInput(props: {
 	}
 
 	function onChangeCommitedValue() {
+		window.clearTimeout(timeout.current);
+		props.onStopInput?.();
 		setValue(props.committedValue);
 	}
 
