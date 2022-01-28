@@ -22,8 +22,10 @@ export function useParams() {
 	}
 
 	function deleteParam(k: string) {
-		params.delete(k);
-		navigate('?' + params);
+		if (params.has(k)) {
+			params.delete(k);
+			navigate('?' + params);
+		}
 	}
 
 	return [params, getParam, setParam, deleteParam] as const;
