@@ -303,11 +303,11 @@ export const MainView = (props: {
 		inputElemRef.current?.setSelectionRange(start, end);
 	}
 
-	function resetQuery() {
+	function resetQuery(str?: string) {
 		stopSpeech();
 		onResetQueryDelegate.forEach(fn => fn?.());
 		setActiveQueryIndex(0);
-		setQuery(context.defaultQuery);
+		setQuery(str ?? context.defaultQuery);
 		setThrobber(false);
 		setUseNumInput(false);
 		deleteParam('sb');
