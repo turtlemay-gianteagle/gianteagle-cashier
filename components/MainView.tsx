@@ -152,7 +152,7 @@ export const MainView = (props: {
 				</div>
 
 				<Untabbable active={!showShadowbox}>
-					<Shadowbox className="mainView__shadowbox" active={showShadowbox} data={shadowboxData} onClose={onCloseShadowbox} />
+					<Shadowbox className="mainView__shadowbox" active={showShadowbox} data={shadowboxData} onClickClose={onClickCloseShadowbox} />
 				</Untabbable>
 
 			</div>
@@ -354,7 +354,7 @@ export const MainView = (props: {
 		}
 	}
 
-	function onCloseShadowbox() {
+	function onClickCloseShadowbox() {
 		deleteParam('sb');
 	}
 

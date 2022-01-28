@@ -8,7 +8,7 @@ export function Shadowbox(props: React.PropsWithChildren<{
 	className?: string;
 	active: boolean;
 	node?: React.ReactNode;
-	onClose: VoidFunction;
+	onClickClose: VoidFunction;
 	data: IItemData | null;
 }>) {
 	const context = React.useContext(AppStateContext);
@@ -22,7 +22,7 @@ export function Shadowbox(props: React.PropsWithChildren<{
 		<div className={c('shadowbox__root', props.className, { 'active': props.active })}>
 			<div className="shadowbox__topbar">
 				<div className="shadowbox__topbarlayoutleft" />
-				<button className="shadowbox__closebutton" onClick={props.onClose} tabIndex={tabIndex} children="×" />
+				<button className="shadowbox__closebutton" onClick={props.onClickClose} tabIndex={tabIndex} children="×" />
 			</div>
 			<div className="shadowbox__layoutbottom">
 				<div className="shadowbox__itemcontainer">
@@ -40,10 +40,10 @@ export function Shadowbox(props: React.PropsWithChildren<{
 
 	function updateExitFn() {
 		if (props.active) {
-			context.provider.exitStack.add(props.onClose);
+			context.provider.exitStack.add(props.onClickClose);
 		}
 		return () => {
-			context.provider.exitStack.delete(props.onClose);
+			context.provider.exitStack.delete(props.onClickClose);
 		};
 	}
 
