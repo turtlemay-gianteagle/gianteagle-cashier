@@ -342,7 +342,7 @@ export const MainView = (props: {
 		setShowShadowbox(str !== null);
 		try {
 			const data = str && JSON.parse(str);
-			if (data?.name) setShadowboxData(data);
+			if (data?.value) setShadowboxData(data);
 		} catch (err) {
 			console.error(err);
 			setShadowboxData(null);
