@@ -377,10 +377,11 @@ export const MainView = (props: {
 		}
 
 		const s = context.searchPrefix;
-		const searchMatch = str.match(new RegExp(`^${s}(\\S+) (.+)$`));
+		const searchMatch = str.match(new RegExp(`^${s}(\\S+) (.+)$`, 'i'));
 		if (searchMatch) {
 			const [, k, s] = searchMatch;
-			const url = data.search_urls[k]?.replace('%s', s);
+			const kl = k.toLowerCase();
+			const url = data.search_urls[kl]?.replace('%s', s);
 			if (url) {
 				window.open(url);
 				return true;
