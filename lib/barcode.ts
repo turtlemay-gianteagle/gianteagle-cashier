@@ -1,4 +1,5 @@
 export const UPC_REGEX = /^\d{11,12}$/;
+export const UPC_FULL_REGEX = /^\d{12}$/;
 export const PLU_REGEX = /^\d{4,5}$/;
 export const SKU_REGEX = /^\d{14}$/;
 
@@ -13,6 +14,14 @@ export function pluToUpc(str: string, safe = true): string | undefined {
 		const cd = calcUpcCheckDigit(upc);
 		if (cd) upc += cd;
 		return upc;
+	}
+}
+
+export function prettyUpc(str?: string): string | undefined {
+	if (str?.match(UPC_FULL_REGEX)) {
+		const f = str.substring.bind(str);
+		const arr = [f(0, 1), f(1, 6), f(6, 11), f(11, 12)];
+		return arr.join(' ');
 	}
 }
 
