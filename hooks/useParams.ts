@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, NavigateOptions } from 'react-router-dom';
 
 export function useParams() {
 	const navigate = useNavigate();
@@ -16,15 +16,15 @@ export function useParams() {
 		return params.get(k);
 	}
 
-	function setParam(k: string, v: string) {
+	function setParam(k: string, v: string, opts?: NavigateOptions) {
 		params.set(k, v);
-		navigate('?' + params);
+		navigate('?' + params, opts);
 	}
 
-	function deleteParam(k: string) {
+	function deleteParam(k: string, opts?: NavigateOptions) {
 		if (params.has(k)) {
 			params.delete(k);
-			navigate('?' + params);
+			navigate('?' + params, opts);
 		}
 	}
 
