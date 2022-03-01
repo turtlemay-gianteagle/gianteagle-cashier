@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Barcode } from './Barcode';
 import { AppStateContext } from './AppStateProvider';
 import c from 'classnames';
+import { pluToUpc, skuToUpc } from '../lib/barcode';
 
 export function StoreItemCard(props: {
 	query?: string;
@@ -45,13 +46,15 @@ export function GeneratedItemCard(props: {
 	value: string;
 	onPick?: (jsx: JSX.Element) => void;
 }) {
+	const upc = pluToUpc(props.value) ?? skuToUpc(props.value);
+	const value = upc ?? props.value;
 	const jsx = (
 		<div className="itemCards__generatedBarcodeCard"
-			data-json={JSON.stringify({ value: props.value })}>
+			data-json={JSON.stringify({ value: value })}>
 			<Barcode className="itemCards__generatedBarcode"
-				value={props.value}
+				value={value}
 				onClickBarcode={() => props.onPick?.(jsx)} />
-			<div className="itemCards__generatedBarcodeValue">{props.value}</div>
+			<div className="itemCards__generatedBarcodeValue">{value}</div>
 			<div className="itemCards__generatedBarcodeText">⇪ User Entered Code ⇪</div>
 		</div>
 	);
