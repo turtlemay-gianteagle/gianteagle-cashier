@@ -51,6 +51,7 @@ export function GeneratedItemCard(props: {
 			<Barcode className="itemCards__generatedBarcode"
 				value={props.value}
 				onClickBarcode={() => props.onPick?.(jsx)} />
+			<div className="itemCards__generatedBarcodeValue">{props.value}</div>
 			<div className="itemCards__generatedBarcodeText">⇪ User Entered Code ⇪</div>
 		</div>
 	);

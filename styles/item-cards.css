@@ -31,11 +31,17 @@
 	color: black;
 	border-radius: 5%;
 	position: relative;
+	text-align: center;
 }
 
 .itemCards__generatedBarcode {
-	padding: 1em;
+	padding: 1em 1em 0.5em;
 	box-sizing: content-box;
+}
+
+.itemCards__generatedBarcodeValue {
+	margin: 0 0 0.5em;
+	font: 0.75em monospace;
 }
 
 .itemCards__generatedBarcodeText {
