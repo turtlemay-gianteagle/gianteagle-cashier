@@ -3,10 +3,7 @@ import * as QRCode from 'qrcode';
 import jsbarcode from 'jsbarcode';
 import { useTabIndex } from '../lib/tabindex';
 import { AppStateContext } from './AppStateProvider';
-
-const PLU_REGEX = /^\d{4,5}$/;
-const UPC_REGEX = /^\d{11,12}$/;
-const SKU_REGEX = /^\d{14}$/;
+import { UPC_REGEX, PLU_REGEX, SKU_REGEX, pluToUpc, skuToUpc } from '../lib/barcode';
 
 export function Barcode(props: {
 	className?: string;
@@ -72,7 +69,7 @@ function renderBarcode(org: string, elem: HTMLElement, value: string, jsBarcodeO
 		// Use UPC format for PLU codes.
 		try {
 			const barcodeOpts = Object.assign({}, jsBarcodeOpts, { format: 'upc' });
-			jsbarcode(elem, value.padStart(11, '0'), barcodeOpts);
+			jsbarcode(elem, pluToUpc(value, false), barcodeOpts);
 			return;
 		} catch (err) {
 			console.error(err);
@@ -91,10 +88,9 @@ function renderBarcode(org: string, elem: HTMLElement, value: string, jsBarcodeO
 
 	// Take UPC from SKU format.
 	if (value.match(SKU_REGEX)) {
-		const upc = value.substring(2);
 		try {
 			const barcodeOpts = Object.assign({}, jsBarcodeOpts, { format: 'upc' });
-			jsbarcode(elem, upc, barcodeOpts);
+			jsbarcode(elem, skuToUpc(value, false), barcodeOpts);
 			return;
 		} catch (err) {
 			console.error(err);
