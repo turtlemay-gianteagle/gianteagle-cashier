@@ -17,8 +17,10 @@ export function useParams() {
 	}
 
 	function setParam(k: string, v: string, opts?: NavigateOptions) {
-		params.set(k, v);
-		navigate('?' + params, opts);
+		if (v !== params.get(k)) {
+			params.set(k, v);
+			navigate('?' + params, opts);
+		}
 	}
 
 	function deleteParam(k: string, opts?: NavigateOptions) {
