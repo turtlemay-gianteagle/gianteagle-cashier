@@ -25,8 +25,8 @@ export const MainView = (props: {
 	const isFirstRender = useIsFirstRender();
 	const context = React.useContext(AppStateContext);
 	const navigate = useNavigate();
-	const [params, getParam, setParam, deleteParam] = useParams();
-	const [query, setQuery] = React.useState(context.defaultQuery);
+	const [params, getParam, setParam, deleteParam] = useParams(onChangedParams);
+	const [query, setQuery] = React.useState(getParam('q') ?? context.defaultQuery);
 	const prevQuery = usePrevious(query);
 	const [splitQueries, setSplitQueries] = React.useState([query]);
 	const [activeQueryIndex, setActiveQueryIndex] = React.useState(0);
@@ -81,7 +81,7 @@ export const MainView = (props: {
 					committedValue={query}
 					onStartInput={onStartInput}
 					onStopInput={onStopInput}
-					onCommit={v => v.length > 0 && setQuery(v)}
+					onCommit={onCommitQueryInput}
 					onResetDelegate={onResetQueryDelegate}
 					commitDelay={300}
 					disabled={!props.active}
@@ -235,6 +235,7 @@ export const MainView = (props: {
 				if (v) {
 					handleCommand(v);
 					setQuery(v);
+					setParam('q', v);
 				}
 				setQuery('');
 				inputElemRef.current?.select();
@@ -268,6 +269,11 @@ export const MainView = (props: {
 			inputElemRef.current?.select();
 	}
 
+	function onChangedParams() {
+		const v = getParam('q');
+		if (v) setQuery(v);
+	}
+
 	function onChangedQuery() {
 		if (query.length === 0)
 			return;
@@ -276,6 +282,13 @@ export const MainView = (props: {
 
 		if (!isFirstRender)
 			deleteParam('sb');
+	}
+
+	function onCommitQueryInput(v: string) {
+		if (v.length > 0) {
+			setQuery(v);
+			setParam('q', v);
+		}
 	}
 
 	function updateChangedSplitQueries() {
@@ -307,6 +320,7 @@ export const MainView = (props: {
 		onResetQueryDelegate.forEach(fn => fn?.());
 		setActiveQueryIndex(0);
 		setQuery(str ?? context.defaultQuery);
+		setParam('q', str ?? context.defaultQuery);
 		setThrobber(false);
 		setUseNumInput(false);
 		deleteParam('sb');
