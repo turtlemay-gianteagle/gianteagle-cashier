@@ -18,6 +18,7 @@ export function App() {
 				<Route path="/l" element={<AppMain />} />
 				<Route path="/prefs" element={<AppMain viewElem={<PrefsView />} />} />
 				<Route path="/info" element={<AppMain viewElem={<InfoView />} />} />
+				<Route path="/info/:pageId" element={<AppMain viewElem={<InfoView />} />} />
 				<Route path="/wcalc" element={<AppMain viewElem={<WeightCalcView />} />} />
 			</Routes>
 		</HashRouter>
