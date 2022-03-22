@@ -17,6 +17,7 @@ import { useMath } from '../hooks/useMath';
 import { useRoundUp } from '../hooks/useRoundUp';
 import { useVisibility } from '../hooks/useVisibility';
 import { useParams } from '../hooks/useParams';
+import { encode, decode } from '../lib/encoding';
 
 export const MainView = (props: {
 	className?: string;
@@ -355,7 +356,8 @@ export const MainView = (props: {
 		const str = getParam('sb');
 		setShowShadowbox(str !== null);
 		try {
-			const data = str && JSON.parse(str);
+			const json = str && decode(str);
+			const data = json && JSON.parse(json);
 			if (data?.value) setShadowboxData(data);
 		} catch (err) {
 			console.error(err);
@@ -368,7 +370,7 @@ export const MainView = (props: {
 	}
 
 	function handlePickShadowBoxElem(jsx: JSX.Element) {
-		setParam('sb', jsx.props['data-json']);
+		setParam('sb', encode(jsx.props['data-json']));
 	}
 
 	function setActiveQueryTo(index: number) {
