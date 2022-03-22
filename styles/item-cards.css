@@ -69,3 +69,11 @@
 .shadowbox__root .itemCards__generatedBarcode {
 	pointer-events: none;
 }
+
+.itemCards__storeItemBarcode[data-error="true"] canvas,
+.itemCards__generatedBarcode[data-error="true"] canvas {
+	height: 2em;
+	width: 10em;
+	background-size: 10px 10px;
+	background-image:  repeating-linear-gradient(to right, black, black 5px, red 1px, white);
+}

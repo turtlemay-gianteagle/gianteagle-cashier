@@ -14,6 +14,7 @@ export function Barcode(props: {
 	const context = React.useContext(AppStateContext);
 	const tabIndex = useTabIndex(0);
 	const canvasElemRef = React.createRef<HTMLCanvasElement>();
+	const [renderSuccess, setRenderSuccess] = React.useState(false);
 
 	const jsBarcodeOpts = {
 		lineColor: 'black',
@@ -37,14 +38,17 @@ export function Barcode(props: {
 			key={`${props.value};${context.getOrganization()}`}
 			tabIndex={tabIndex}
 			onClick={props.onClickBarcode}
-			onKeyDown={handleKeyDown}>
+			onKeyDown={handleKeyDown}
+			data-error={!renderSuccess}>
 			<canvas ref={canvasElemRef} />
 		</div>
 	);
 
 	function updateValue() {
-		if (canvasElemRef.current)
-			renderBarcode(context.getOrganization(), canvasElemRef.current, props.value, jsBarcodeOpts);
+		if (canvasElemRef.current) {
+			const v = renderBarcode(context.getOrganization(), canvasElemRef.current, props.value, jsBarcodeOpts);
+			setRenderSuccess(v);
+		}
 	}
 
 	function handleKeyDown(e: React.KeyboardEvent<HTMLElement>) {
@@ -56,21 +60,25 @@ export function Barcode(props: {
 	}
 }
 
-function renderBarcode(org: string, elem: HTMLElement, value: string, jsBarcodeOpts = {}) {
+function renderBarcode(org: string, elem: HTMLElement, value: string, jsBarcodeOpts = {}): boolean {
 	if (value.match(PLU_REGEX)) {
 		// Target supports QR codes.
 		if (org === 'TARGET') {
-			QRCode.toCanvas(elem, value, err => {
-				if (err) console.error(err);
-			});
-			return;
+			try {
+				QRCode.toCanvas(elem, value, err => { throw err; });
+				return true;
+			} catch (err) {
+				elem.style.width = 'unset';
+				elem.style.height = 'unset';
+				console.error(err);
+			}
 		}
 
 		// Use UPC format for PLU codes.
 		try {
 			const barcodeOpts = Object.assign({}, jsBarcodeOpts, { format: 'upc' });
 			jsbarcode(elem, pluToUpc(value, false), barcodeOpts);
-			return;
+			return true;
 		} catch (err) {
 			console.error(err);
 		}
@@ -80,7 +88,7 @@ function renderBarcode(org: string, elem: HTMLElement, value: string, jsBarcodeO
 		try {
 			const barcodeOpts = Object.assign({}, jsBarcodeOpts, { format: 'upc' });
 			jsbarcode(elem, value.padStart(11, '0'), barcodeOpts);
-			return;
+			return true;
 		} catch (err) {
 			console.error(err);
 		}
@@ -91,13 +99,20 @@ function renderBarcode(org: string, elem: HTMLElement, value: string, jsBarcodeO
 		try {
 			const barcodeOpts = Object.assign({}, jsBarcodeOpts, { format: 'upc' });
 			jsbarcode(elem, skuToUpc(value, false), barcodeOpts);
-			return;
+			return true;
 		} catch (err) {
 			console.error(err);
 		}
 	}
 
 	// Fallback to CODE 128
-	const barcodeOpts = Object.assign({}, jsBarcodeOpts, { format: 'CODE128' });
-	jsbarcode(elem, value, barcodeOpts);
+	try {
+		const barcodeOpts = Object.assign({}, jsBarcodeOpts, { format: 'CODE128' });
+		jsbarcode(elem, value, barcodeOpts);
+		return true;
+	} catch (err) {
+		console.error(err);
+	}
+
+	return false;
 }
