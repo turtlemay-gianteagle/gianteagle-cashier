@@ -65,7 +65,7 @@ function renderBarcode(org: string, elem: HTMLElement, value: string, jsBarcodeO
 		// Target supports QR codes.
 		if (org === 'TARGET') {
 			try {
-				QRCode.toCanvas(elem, value, err => { throw err; });
+				QRCode.toCanvas(elem, value, err => { if (err) throw err; });
 				return true;
 			} catch (err) {
 				elem.style.width = 'unset';
