@@ -397,7 +397,7 @@ export const MainView = (props: {
 		if (searchMatch) {
 			const [, k, s] = searchMatch;
 			const kl = k.toLowerCase();
-			const url = data.search_urls[kl]?.replace('%s', s);
+			const url = data.search_engines[kl]?.url_template?.replace('%s', s);
 			if (url) {
 				window.open(url);
 				return true;

@@ -3,14 +3,38 @@
 		"default_gianteagle": "https://db.gianteagle.turtlemay.us/",
 		"default_target": "https://db.target.turtlemay.us/"
 	},
-	"search_urls": {
-		"g": "https://www.google.com/search?q=%s",
-		"k": "https://www.kroger.com/search?query=%s",
-		"ge": "https://shop.gianteagle.com/search?q=%s",
-		"gec": "https://shop.gianteagle.com/coupons?q=%s",
-		"gea": "https://shop.gianteagle.com/weekly-ad?q=%s",
-		"t": "https://www.target.com/s?searchTerm=%s",
-		"w": "https://www.walmart.com/search?q=%s",
-		"m": "https://www.meijer.com/shopping/search.html?text=%s"
+	"search_engines": {
+		"g": {
+			"name": "Google",
+			"url_template": "https://www.google.com/search?q=%s"
+		},
+		"k": {
+			"name": "Kroger",
+			"url_template": "https://www.kroger.com/search?query=%s"
+		},
+		"ge": {
+			"name": "Giant Eagle",
+			"url_template": "https://shop.gianteagle.com/search?q=%s"
+		},
+		"gec": {
+			"name": "Giant Eagle, Coupons",
+			"url_template": "https://shop.gianteagle.com/coupons?q=%s"
+		},
+		"gea": {
+			"name": "Giant Eagle, Weeky Ad",
+			"url_template": "https://shop.gianteagle.com/weekly-ad?q=%s"
+		},
+		"t": {
+			"name": "Target",
+			"url_template": "https://www.target.com/s?searchTerm=%s"
+		},
+		"w": {
+			"name": "Walmart",
+			"url_template": "https://www.walmart.com/search?q=%s"
+		},
+		"m": {
+			"name": "Meijer",
+			"url_template": "https://www.meijer.com/shopping/search.html?text=%s"
+		}
 	}
 }
