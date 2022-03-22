@@ -4,7 +4,7 @@ import { HashRouter, NavLink, Route, Routes, Navigate, useNavigate, useLocation 
 import { MainView } from './MainView';
 import { PrefsView } from './PrefsView';
 import { AppStateContext, AppStateProvider } from './AppStateProvider';
-import { InfoView } from './InfoView';
+import { InfoView, WebSearchInfoView } from './InfoView';
 import { WeightCalcView } from './WeightCalcView';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { matchKeyCombos } from '../src/keys';
@@ -18,7 +18,7 @@ export function App() {
 				<Route path="/l" element={<AppMain />} />
 				<Route path="/prefs" element={<AppMain viewElem={<PrefsView />} />} />
 				<Route path="/info" element={<AppMain viewElem={<InfoView />} />} />
-				<Route path="/info/:pageId" element={<AppMain viewElem={<InfoView />} />} />
+				<Route path="/info/web-search" element={<AppMain viewElem={<WebSearchInfoView />} />} />
 				<Route path="/wcalc" element={<AppMain viewElem={<WeightCalcView />} />} />
 			</Routes>
 		</HashRouter>
