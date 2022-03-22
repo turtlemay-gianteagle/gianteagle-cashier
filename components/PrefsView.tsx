@@ -233,7 +233,7 @@ export function PrefsView() {
 					}}</PrefsOption>
 
 					<PrefsOption>{{
-						label: "🌎 Web search prefix",
+						label: "🌎 Web search prefix", description: "Require an additional prefix to trigger web searches. (Default none.)",
 						controlNode: <input type="text"
 							className="prefsView__optionTextInput"
 							value={context.searchPrefix}
