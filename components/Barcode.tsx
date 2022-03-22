@@ -105,12 +105,22 @@ function renderBarcode(org: string, elem: HTMLElement, value: string, jsBarcodeO
 		}
 	}
 
-	// Fallback to CODE 128
+	// Fallback to CODE 128.
 	try {
 		const barcodeOpts = Object.assign({}, jsBarcodeOpts, { format: 'CODE128' });
 		jsbarcode(elem, value, barcodeOpts);
 		return true;
 	} catch (err) {
+		console.error(err);
+	}
+
+	// Try QR code before failing.
+	try {
+		QRCode.toCanvas(elem, value, err => { if (err) throw err; });
+		return true;
+	} catch (err) {
+		elem.style.width = 'unset';
+		elem.style.height = 'unset';
 		console.error(err);
 	}
 
