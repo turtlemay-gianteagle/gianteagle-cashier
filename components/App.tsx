@@ -15,7 +15,7 @@ export function App() {
 	return (
 		<HashRouter>
 			<Routes>
-				<Route path="/" element={<AppIndex />} />
+				<Route path="/" element={<Navigate replace to="/l" />} />
 				<Route path="/l" element={<AppMain />} />
 				<Route path="/prefs" element={<AppMain viewElem={<PrefsView />} />} />
 				<Route path="/info" element={<AppMain viewElem={<InfoView />} />} />
@@ -23,12 +23,6 @@ export function App() {
 				<Route path="/wcalc" element={<AppMain viewElem={<WeightCalcView />} />} />
 			</Routes>
 		</HashRouter>
-	);
-}
-
-function AppIndex() {
-	return (
-		<Navigate replace to="/l" />
 	);
 }
 
