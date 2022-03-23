@@ -17,20 +17,20 @@ export function App() {
 			<Routes>
 				<Route path="/" element={<Navigate replace to="/l" />} />
 				<Route path="/l" element={<AppMain />} />
-				<Route path="/prefs" element={<AppMain viewElem={<PrefsView />} />} />
-				<Route path="/info" element={<AppMain viewElem={<InfoView />} />} />
-				<Route path="/info/web-search" element={<AppMain viewElem={<WebSearchInfoView />} />} />
-				<Route path="/wcalc" element={<AppMain viewElem={<WeightCalcView />} />} />
+				<Route path="/prefs" element={<AppMain el={<PrefsView />} />} />
+				<Route path="/info" element={<AppMain el={<InfoView />} />} />
+				<Route path="/info/web-search" element={<AppMain el={<WebSearchInfoView />} />} />
+				<Route path="/wcalc" element={<AppMain el={<WeightCalcView />} />} />
 			</Routes>
 		</HashRouter>
 	);
 }
 
 function AppMain(props: React.PropsWithChildren<{
-	viewElem?: React.ReactElement,
+	el?: React.ReactElement,
 }>) {
 	const location = useLocation();
-	const activateMainView = !props.viewElem;
+	const activateMainView = !props.el;
 	return (
 		<div className="app__layout">
 			<AppStateProvider>
@@ -39,7 +39,7 @@ function AppMain(props: React.PropsWithChildren<{
 						<TransitionGroup component={null}>
 							<MainView className={c('app__viewTransition', { 'active': activateMainView })} active={activateMainView} />
 							<CSSTransition classNames="appViewTransitionAnimation" timeout={250} key={location.pathname}>
-								<React.Fragment children={props.viewElem} />
+								<React.Fragment children={props.el} />
 							</CSSTransition>
 						</TransitionGroup>
 					</div>
