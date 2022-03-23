@@ -20,10 +20,6 @@
 			"name": "Giant Eagle, Coupons",
 			"url_template": "https://shop.gianteagle.com/coupons?q=%s"
 		},
-		"gea": {
-			"name": "Giant Eagle, Weeky Ad",
-			"url_template": "https://shop.gianteagle.com/weekly-ad?q=%s"
-		},
 		"t": {
 			"name": "Target",
 			"url_template": "https://www.target.com/s?searchTerm=%s"
