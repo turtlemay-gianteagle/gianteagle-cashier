@@ -31,7 +31,7 @@ const DEFAULT_PREFS = {
 	compactBarcodes: false,
 	enableSpeech: true,
 	selectQueryTime: 0,
-	searchPrefix: '@',
+	searchPrefix: '',
 	showCounter: false,
 };
 
