@@ -4,6 +4,7 @@ import c from 'classnames';
 import data from '../data/data.json';
 import { focusInputAtEnd } from '../lib/dom';
 import { AppStateContext } from './AppStateProvider';
+import { AppFunContext } from './AppFunContext';
 import { DelayedTextInput } from './DelayedTextInput';
 import { Shadowbox } from './Shadowbox';
 import { useNavigate } from 'react-router-dom';
@@ -25,6 +26,7 @@ export const MainView = (props: {
 }) => {
 	const isFirstRender = useIsFirstRender();
 	const context = React.useContext(AppStateContext);
+	const fcontext = React.useContext(AppFunContext);
 	const navigate = useNavigate();
 	const [params, getParam, setParam, deleteParam] = useParams(onChangedParams);
 	const [query, setQuery] = React.useState(getParam('q') ?? context.defaultQuery);
@@ -390,6 +392,11 @@ export const MainView = (props: {
 		if (str === 'wc') {
 			navigate('/wcalc');
 			return true;
+		}
+
+		if (str === 'resetcount' || str === 'rc') {
+			fcontext?.counter.setValue(0);
+			return true;c
 		}
 
 		const s = context.searchPrefix;
