@@ -3,6 +3,7 @@ import packageJson from '../package.json';
 import { Link, useParams } from 'react-router-dom';
 import { AppStateContext } from './AppStateProvider';
 import data from "../data/data.json";
+import { useRandomName } from '../hooks/useRandomName';
 
 export const InfoView = () => {
 	return (
@@ -49,6 +50,7 @@ export const InfoView = () => {
 };
 
 export const WebSearchInfoView = () => {
+	const [getRandomName] = useRandomName();
 	return (
 		<div className="infoView__root">
 			<div className="infoView__mainContainer">
@@ -56,7 +58,11 @@ export const WebSearchInfoView = () => {
 				<p>The following web searches can be performed from the <Link to="/l">main query box</Link> by typing their shortcut prefix followed by your query:</p>
 				<ul>
 					{Object.entries(data.search_engines).map(([k, v]) => (
-						<li key={k}>{v.name} :: <code>{k}</code> &#123;<i>query</i>&#125;</li>
+						<li key={k}>
+							<Link to={`/l?q=${k} ${getRandomName()}`}>
+								{v.name} :: <code>{k}</code> &#123;<i>query</i>&#125;
+							</Link>
+						</li>
 					))}
 				</ul>
 			</div>
