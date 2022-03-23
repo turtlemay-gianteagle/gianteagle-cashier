@@ -4,9 +4,11 @@ import c from 'classnames';
 import { AppStateContext } from './AppStateProvider';
 import { PrefsOption } from './PrefsOptions';
 import { DelayedTextInput } from './DelayedTextInput';
+import { AppFunContext } from './AppFunContext';
 
 export function PrefsView() {
 	const context = React.useContext(AppStateContext);
+	const fcontext = React.useContext(AppFunContext);
 	const [showThrobber, setThrobber] = React.useState(false);
 	const [itemsPerPage, setItemsPerPage] = React.useState(String(context.itemsPerPage));
 
@@ -208,30 +210,6 @@ export function PrefsView() {
 							value={context.speechStartKey}
 							onChange={e => context.provider.setState({ speechStartKey: e.target.value })} />,
 					}}</PrefsOption>
-
-					<PrefsOption>{{
-						label: "🧮 Counter toggle key",
-						controlNode: <input type="text"
-							className="prefsView__optionTextInput"
-							value={context.appToggleCounterKey}
-							onChange={e => context.provider.setState({ appToggleCounterKey: e.target.value })} />,
-					}}</PrefsOption>
-
-					<PrefsOption>{{
-						label: "➕ Counter up key",
-						controlNode: <input type="text"
-							className="prefsView__optionTextInput"
-							value={context.appCounterUpKey}
-							onChange={e => context.provider.setState({ appCounterUpKey: e.target.value })} />,
-					}}</PrefsOption>
-
-					<PrefsOption>{{
-						label: "➖ Counter down key",
-						controlNode: <input type="text"
-							className="prefsView__optionTextInput"
-							value={context.appCounterDownKey}
-							onChange={e => context.provider.setState({ appCounterDownKey: e.target.value })} />,
-					}}</PrefsOption>
 				</section>
 
 				<section>
@@ -271,6 +249,43 @@ export function PrefsView() {
 							checked={context.showCounter}
 							onChange={e => context.provider.setState({ showCounter: e.target.checked })} />,
 					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "🧮 Counter value",
+						controlNode: <input type="number"
+							className="prefsView__optionTextInput"
+							value={fcontext?.counter.value}
+							min="0" step="1"
+							onClick={e => { (e.target as HTMLInputElement).select(); }}
+							onChange={e => {
+								let n = e.target.valueAsNumber || 0;
+								fcontext?.counter.setValue(n);
+							}} />,
+					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "🧮 Counter toggle key",
+						controlNode: <input type="text"
+							className="prefsView__optionTextInput"
+							value={context.appToggleCounterKey}
+							onChange={e => context.provider.setState({ appToggleCounterKey: e.target.value })} />,
+					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "➕ Counter up key",
+						controlNode: <input type="text"
+							className="prefsView__optionTextInput"
+							value={context.appCounterUpKey}
+							onChange={e => context.provider.setState({ appCounterUpKey: e.target.value })} />,
+					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "➖ Counter down key",
+						controlNode: <input type="text"
+							className="prefsView__optionTextInput"
+							value={context.appCounterDownKey}
+							onChange={e => context.provider.setState({ appCounterDownKey: e.target.value })} />,
+					}}</PrefsOption>
 				</section>
 
 			</div>
@@ -280,6 +295,7 @@ export function PrefsView() {
 					onClick={() => {
 						setItemsPerPage(String(context.defaultPrefs.itemsPerPage));
 						context.provider.resetAll();
+						fcontext?.counter.setValue(0);
 					}}
 				/>
 			</div>
