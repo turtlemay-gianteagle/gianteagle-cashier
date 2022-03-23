@@ -9,7 +9,7 @@ import { WeightCalcView } from './WeightCalcView';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { matchKeyCombos } from '../src/keys';
 import { useKeyDown } from '../hooks/useKeyDown';
-import { useCounter } from '../hooks/useCounter';
+import { AppFunContext, AppFunContextProvider } from './AppFunContext';
 
 export function App() {
 	return (
@@ -34,19 +34,21 @@ function AppMain(props: React.PropsWithChildren<{
 	return (
 		<div className="app__layout">
 			<AppStateProvider>
-				<AppStateConsumer>
-					<div className="app__layoutMain app__viewContainer">
-						<TransitionGroup component={null}>
-							<MainView className={c('app__viewTransition', { 'active': activateMainView })} active={activateMainView} />
-							<CSSTransition classNames="appViewTransitionAnimation" timeout={250} key={location.pathname}>
-								<React.Fragment children={props.el} />
-							</CSSTransition>
-						</TransitionGroup>
-					</div>
-					<div className="app__layoutBottom app__navbarContainer">
-						<NavBar className="app__navbar" />
-					</div>
-				</AppStateConsumer>
+				<AppFunContextProvider>
+					<AppStateConsumer>
+						<div className="app__layoutMain app__viewContainer">
+							<TransitionGroup component={null}>
+								<MainView className={c('app__viewTransition', { 'active': activateMainView })} active={activateMainView} />
+								<CSSTransition classNames="appViewTransitionAnimation" timeout={250} key={location.pathname}>
+									<React.Fragment children={props.el} />
+								</CSSTransition>
+							</TransitionGroup>
+						</div>
+						<div className="app__layoutBottom app__navbarContainer">
+							<NavBar className="app__navbar" />
+						</div>
+					</AppStateConsumer>
+				</AppFunContextProvider>
 			</AppStateProvider>
 		</div>
 	);
@@ -54,15 +56,15 @@ function AppMain(props: React.PropsWithChildren<{
 
 function NavBar(props: React.HTMLAttributes<{}>) {
 	const context = React.useContext(AppStateContext);
-	const [count] = useCounter();
+	const fcontext = React.useContext(AppFunContext);
 	return (
 		<nav className={props.className}>
 			<NavLink className={({ isActive }) => c('app__navItem', { 'app__navItem--active': isActive })} to="/l">
 				<span className="app__navItemIcon">️🛍️</span>
 				<span className="app__navItemLabel">Query</span>
 				{context.showCounter && (
-					<span className="app__navCounter animatePulse" key={count}>
-						«<span className="app__navCounterNumText">{count}</span>»
+					<span className="app__navCounter animatePulse" key={fcontext?.counter.value}>
+						«<span className="app__navCounterNumText">{fcontext?.counter.value}</span>»
 					</span>
 				)}
 			</NavLink>

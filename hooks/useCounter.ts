@@ -9,9 +9,9 @@ import { useLocalStorage } from './useLocalStorage';
 export function useCounter() {
 	const context = React.useContext(AppStateContext);
 	const isFirstRender = useIsFirstRender();
-	const [count, setCount] = useLocalStorage('counter', 0);
+	const [value, setValue] = useLocalStorage('counter', 0);
 
-	React.useEffect(update, [count]);
+	React.useEffect(update, [value]);
 
 	useKeyDown(e => {
 		if (matchKeyCombos(e, context.appToggleCounterKey)) {
@@ -38,14 +38,14 @@ export function useCounter() {
 	}
 
 	function countUp() {
-		setCount(count + 1);
+		setValue(value + 1);
 	}
 
 	function countDown() {
-		let n = count - 1;
+		let n = value - 1;
 		n = lodash.clamp(n, 0, Infinity);
-		setCount(n);
+		setValue(n);
 	}
 
-	return [count] as const;
+	return { value, setValue, countUp, countDown } as const;
 }
