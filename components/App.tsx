@@ -35,19 +35,18 @@ function AppMain(props: React.PropsWithChildren<{
 		<div className="app__layout">
 			<AppStateProvider>
 				<AppFunContextProvider>
-					<AppStateConsumer>
-						<div className="app__layoutMain app__viewContainer">
-							<TransitionGroup component={null}>
-								<MainView className={c('app__viewTransition', { 'active': activateMainView })} active={activateMainView} />
-								<CSSTransition classNames="appViewTransitionAnimation" timeout={250} key={location.pathname}>
-									<React.Fragment children={props.el} />
-								</CSSTransition>
-							</TransitionGroup>
-						</div>
-						<div className="app__layoutBottom app__navbarContainer">
-							<NavBar className="app__navbar" />
-						</div>
-					</AppStateConsumer>
+					<AppKeyHandler />
+					<div className="app__layoutMain app__viewContainer">
+						<TransitionGroup component={null}>
+							<MainView className={c('app__viewTransition', { 'active': activateMainView })} active={activateMainView} />
+							<CSSTransition classNames="appViewTransitionAnimation" timeout={250} key={location.pathname}>
+								<React.Fragment children={props.el} />
+							</CSSTransition>
+						</TransitionGroup>
+					</div>
+					<div className="app__layoutBottom app__navbarContainer">
+						<NavBar className="app__navbar" />
+					</div>
 				</AppFunContextProvider>
 			</AppStateProvider>
 		</div>
@@ -80,7 +79,7 @@ function NavBar(props: React.HTMLAttributes<{}>) {
 	);
 }
 
-function AppStateConsumer(props: React.PropsWithChildren<{}>) {
+function AppKeyHandler() {
 	const navigate = useNavigate();
 	const context = React.useContext(AppStateContext);
 
@@ -101,5 +100,5 @@ function AppStateConsumer(props: React.PropsWithChildren<{}>) {
 		}
 	});
 
-	return <React.Fragment children={props.children} />;
+	return null;
 }
