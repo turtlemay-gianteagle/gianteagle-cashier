@@ -84,3 +84,14 @@
 	font: 1rem sans-serif;
 	color: white;
 }
+
+.app__navCounter {
+	font: 1em monospace;
+	color: #999;
+	margin: 0 0.25em;
+	opacity: 0.5;
+}
+
+.app__navCounterNumText {
+	color: white;
+}

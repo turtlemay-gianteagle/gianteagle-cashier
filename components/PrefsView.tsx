@@ -208,6 +208,30 @@ export function PrefsView() {
 							value={context.speechStartKey}
 							onChange={e => context.provider.setState({ speechStartKey: e.target.value })} />,
 					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "🧮 Counter toggle key",
+						controlNode: <input type="text"
+							className="prefsView__optionTextInput"
+							value={context.appToggleCounterKey}
+							onChange={e => context.provider.setState({ appToggleCounterKey: e.target.value })} />,
+					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "➕ Counter up key",
+						controlNode: <input type="text"
+							className="prefsView__optionTextInput"
+							value={context.appCounterUpKey}
+							onChange={e => context.provider.setState({ appCounterUpKey: e.target.value })} />,
+					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "➖ Counter down key",
+						controlNode: <input type="text"
+							className="prefsView__optionTextInput"
+							value={context.appCounterDownKey}
+							onChange={e => context.provider.setState({ appCounterDownKey: e.target.value })} />,
+					}}</PrefsOption>
 				</section>
 
 				<section>
@@ -238,6 +262,14 @@ export function PrefsView() {
 							className="prefsView__optionTextInput"
 							value={context.searchPrefix}
 							onChange={e => context.provider.setState({ searchPrefix: e.target.value })} />,
+					}}</PrefsOption>
+
+					<PrefsOption>{{
+						label: "🧮 Show counter",
+						controlNode: <input type="checkbox"
+							className="prefsView__optionCheckbox"
+							checked={context.showCounter}
+							onChange={e => context.provider.setState({ showCounter: e.target.checked })} />,
 					}}</PrefsOption>
 				</section>
 

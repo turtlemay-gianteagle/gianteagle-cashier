@@ -4,6 +4,17 @@
 	}
 }
 
+@keyframes pulse-animation {
+	10% {
+		transform: scale(0.85);
+	}
+}
+
+.animatePulse {
+	animation-name: pulse-animation;
+	animation-duration: 250ms;
+}
+
 /* -------------------------------------------------------------------------------- */
 
 .appViewTransitionAnimation-enter {

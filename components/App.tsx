@@ -9,6 +9,7 @@ import { WeightCalcView } from './WeightCalcView';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { matchKeyCombos } from '../src/keys';
 import { useKeyDown } from '../hooks/useKeyDown';
+import { useCounter } from '../hooks/useCounter';
 
 export function App() {
 	return (
@@ -48,25 +49,38 @@ function AppMain(props: React.PropsWithChildren<{
 							</CSSTransition>
 						</TransitionGroup>
 					</div>
+					<div className="app__layoutBottom app__navbarContainer">
+						<NavBar className="app__navbar" />
+					</div>
 				</AppStateConsumer>
 			</AppStateProvider>
-			<div className="app__layoutBottom app__navbarContainer">
-				<nav className="app__navbar">
-					<NavLink className={({ isActive }) => c('app__navItem', { 'app__navItem--active': isActive })} to="/l">
-						<span className="app__navItemIcon">️🛍️</span>
-						<span className="app__navItemLabel">Query</span>
-					</NavLink>
-					<NavLink className={({ isActive }) => c('app__navItem', { 'app__navItem--active': isActive })} to="/info">
-						<span className="app__navItemIcon">📄</span>
-						<span className="app__navItemLabel">Info</span>
-					</NavLink>
-					<NavLink className={({ isActive }) => c('app__navItem', { 'app__navItem--active': isActive })} to="/prefs">
-						<span className="app__navItemIcon">️⚙️</span>
-						<span className="app__navItemLabel">Settings</span>
-					</NavLink>
-				</nav>
-			</div>
 		</div>
+	);
+}
+
+function NavBar(props: React.HTMLAttributes<{}>) {
+	const context = React.useContext(AppStateContext);
+	const [count] = useCounter();
+	return (
+		<nav className={props.className}>
+			<NavLink className={({ isActive }) => c('app__navItem', { 'app__navItem--active': isActive })} to="/l">
+				<span className="app__navItemIcon">️🛍️</span>
+				<span className="app__navItemLabel">Query</span>
+				{context.showCounter && (
+					<span className="app__navCounter animatePulse" key={count}>
+						«<span className="app__navCounterNumText">{count}</span>»
+					</span>
+				)}
+			</NavLink>
+			<NavLink className={({ isActive }) => c('app__navItem', { 'app__navItem--active': isActive })} to="/info">
+				<span className="app__navItemIcon">📄</span>
+				<span className="app__navItemLabel">Info</span>
+			</NavLink>
+			<NavLink className={({ isActive }) => c('app__navItem', { 'app__navItem--active': isActive })} to="/prefs">
+				<span className="app__navItemIcon">️⚙️</span>
+				<span className="app__navItemLabel">Settings</span>
+			</NavLink>
+		</nav>
 	);
 }
 

@@ -23,12 +23,16 @@ const DEFAULT_PREFS = {
 	appNavViewLeftKey: '[',
 	appNavViewRightKey: ']',
 	appRestartKey: '+Space',
+	appToggleCounterKey: '!c',
+	appCounterUpKey: '!w',
+	appCounterDownKey: '!s',
 	noCheat: false,
 	overrideOrganizationId: '',
 	compactBarcodes: false,
 	enableSpeech: true,
 	selectQueryTime: 0,
 	searchPrefix: '@',
+	showCounter: false,
 };
 
 type IPrefs = typeof DEFAULT_PREFS;
