@@ -396,7 +396,7 @@ export const MainView = (props: {
 
 		if (str === 'resetcount' || str === 'rc') {
 			fcontext?.counter.setValue(0);
-			return true;c
+			return true;
 		}
 
 		const s = context.searchPrefix;
