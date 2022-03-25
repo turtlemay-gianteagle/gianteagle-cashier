@@ -1,6 +1,6 @@
 import { extendWith, isMatch, pick } from 'lodash';
 
-function getKeyCombo(str: string): IKeyCombo {
+function getKeyCombo(str: string) {
 	const match = str.match(/^((?:\^?|!?|\+?|#?)*)(.+)$/);
 	const modifiers = match?.[1];
 	const key = match?.[2];
@@ -25,13 +25,4 @@ function matchKeyCombo(event: KeyboardEvent, str: string): boolean {
 export function matchKeyCombos(event: KeyboardEvent, str: string): boolean {
 	const keys: string[] = str.split(/[\s,]+/);
 	return keys.some(v => matchKeyCombo(event, v));
-}
-
-export interface IKeyCombo {
-	ctrlKey?: boolean;
-	altKey?: boolean;
-	shiftKey?: boolean;
-	metaKey?: boolean;
-	key?: string;
-	code?: string;
 }
