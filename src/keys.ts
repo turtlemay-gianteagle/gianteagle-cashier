@@ -24,11 +24,7 @@ function matchKeyCombo(event: KeyboardEvent, str: string): boolean {
 
 export function matchKeyCombos(event: KeyboardEvent, str: string): boolean {
 	const keys: string[] = str.split(/[\s,]+/);
-	for (const v of keys) {
-		if (matchKeyCombo(event, v))
-			return true;
-	}
-	return false;
+	return keys.some(v => matchKeyCombo(event, v));
 }
 
 export interface IKeyCombo {
