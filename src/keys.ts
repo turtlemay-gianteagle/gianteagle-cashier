@@ -1,4 +1,4 @@
-import { isMatch, pick } from 'lodash';
+import { extendWith, isMatch, pick } from 'lodash';
 
 function getKeyCombo(str: string): IKeyCombo {
 	const match = str.match(/^((?:\^?|!?|\+?|#?)*)(.+)$/);
@@ -16,8 +16,9 @@ function getKeyCombo(str: string): IKeyCombo {
 
 function matchKeyCombo(event: KeyboardEvent, str: string): boolean {
 	const kc = getKeyCombo(str);
-	const matchedKey = isMatch(event, pick(kc, ['key', 'ctrlKey', 'altKey', 'shiftKey', 'metaKey']));
-	const matchedCode = isMatch(event, pick(kc, ['code', 'ctrlKey', 'altKey', 'shiftKey', 'metaKey']));
+	const ev = extendWith({}, event, (_v, v, k) => k === 'key' ? v.toLowerCase?.() : v);
+	const matchedKey = isMatch(ev, pick(kc, ['key', 'ctrlKey', 'altKey', 'shiftKey', 'metaKey']));
+	const matchedCode = isMatch(ev, pick(kc, ['code', 'ctrlKey', 'altKey', 'shiftKey', 'metaKey']));
 	return matchedKey || matchedCode;
 }
 
