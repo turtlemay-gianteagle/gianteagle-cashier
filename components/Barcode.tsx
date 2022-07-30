@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as QRCode from 'qrcode';
 import jsbarcode from 'jsbarcode';
 import { useTabIndex } from '../lib/tabindex';
+import { useVisibility } from '../hooks/useVisibility';
 import { AppStateContext } from './AppStateProvider';
 import { UPC_REGEX, PLU_REGEX, SKU_REGEX, pluToUpc, skuToUpc } from '../lib/barcode';
 
@@ -32,6 +33,8 @@ export function Barcode(props: {
 		context.dbInfo,
 		context.getOrganization(),
 	]);
+
+	useVisibility(updateValue);
 
 	return (
 		<div role="button" className={props.className}
