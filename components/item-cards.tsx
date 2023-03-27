@@ -46,8 +46,14 @@ export function GeneratedItemCard(props: {
 	value: string;
 	onPick?: (jsx: JSX.Element) => void;
 }) {
-	const upc = pluToUpc(props.value) ?? skuToUpc(props.value);
-	const value = upc ?? props.value;
+	const context = React.useContext(AppStateContext);
+
+	let value = props.value;
+	if (context.getOrganization() === 'GIANT_EAGLE') {
+		const upc = pluToUpc(props.value) ?? skuToUpc(props.value);
+		value = upc ?? props.value;
+	}
+
 	const jsx = (
 		<div className="itemCards__generatedBarcodeCard"
 			data-json={JSON.stringify({ value: value })}>
