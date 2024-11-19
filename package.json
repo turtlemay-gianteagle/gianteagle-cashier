@@ -7,7 +7,7 @@
 		"build": "webpack --mode production"
 	},
 	"browserslist": [
-		"last 1 Chrome versions"
+		"defaults"
 	],
 	"dependencies": {
 		"classnames": "^2.3.1",
