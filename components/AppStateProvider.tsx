@@ -99,6 +99,9 @@ export class AppStateProvider extends React.Component<{}, IState> {
 
 	componentDidMount() {
 		this._updateRemoteItemDataState();
+
+		if (!BROWSER_SUPPORT_SPEECH)
+			this.setState({ enableSpeech: false });
 	}
 
 	componentDidUpdate(prevProps: AppStateProvider['props'], prevState: AppStateProvider['state']) {
@@ -117,9 +120,6 @@ export class AppStateProvider extends React.Component<{}, IState> {
 
 		if (this.state.compiledItemData !== prevState.compiledItemData)
 			this._fuse = this._createFuse(this.state.compiledItemData);
-
-		if (!BROWSER_SUPPORT_SPEECH)
-			this.setState({ enableSpeech: false });
 	}
 
 	_search = (query: string): IItemData[] => {
