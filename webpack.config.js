@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const OfflinePlugin = require('@lcdp/offline-plugin');
 
 module.exports = {
@@ -61,6 +62,9 @@ module.exports = {
 			hash: true,
 		}),
 		new OfflinePlugin({ ServiceWorker: { events: true } }),
+		new CopyPlugin({
+			patterns: ['public'],
+		}),
 	],
 };
 
